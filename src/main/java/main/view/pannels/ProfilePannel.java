@@ -1,5 +1,14 @@
 package main.view.pannels;
 
-public class ProfilePannel {
+import java.util.List;
 
+import javax.swing.JPanel;
+
+public class ProfilePannel extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+
+	public ProfilePannel(List<JPanel> pannels) {
+
+	}
 }
