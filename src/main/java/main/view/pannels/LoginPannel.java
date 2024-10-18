@@ -105,7 +105,7 @@ public class LoginPannel extends JPanel {
 	}
 
 	private boolean userIsCorrect() {
-		if (!userTextField.getText().isEmpty() && !passwordField.getText().isEmpty()) {
+		if (!userTextField.getText().isBlank() && !passwordField.getText().isBlank()) {
 			// deberia calcularse con base de datos aparte
 			JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!", JOptionPane.INFORMATION_MESSAGE);
 			return true;
