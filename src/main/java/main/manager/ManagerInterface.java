@@ -13,7 +13,7 @@ public interface ManagerInterface<T> {
 	 * @throws Exception
 	 * @throws SQLException
 	 */
-	public List<T> getAll() throws SQLException, Exception;
+	public List<T> getAll() throws Exception;
 
 	/**
 	 * Inserts the object to the database
@@ -22,7 +22,7 @@ public interface ManagerInterface<T> {
 	 * @throws Exception
 	 * @throws SQLException
 	 */
-	public void insert(T t) throws SQLException, Exception;
+	public void insert(T t) throws Exception;
 
 	/**
 	 * Search the object to the database
@@ -31,7 +31,7 @@ public interface ManagerInterface<T> {
 	 * @throws Exception
 	 * @throws SQLException
 	 */
-	public T getOne(T t) throws SQLException, Exception;
+	public T getOne(T t) throws Exception;
 
 	/**
 	 * Modifies table from the database
@@ -40,7 +40,7 @@ public interface ManagerInterface<T> {
 	 * @throws Exception
 	 * @throws SQLException
 	 */
-	public void modify(T t, String data) throws SQLException, Exception;
+	public void modify(T t) throws Exception;
 
 	/**
 	 * Deletes a Row from the database
@@ -50,5 +50,5 @@ public interface ManagerInterface<T> {
 	 * @throws SQLException
 	 */
 	public void delete(T t) throws SQLException, Exception;
-	
+
 }
