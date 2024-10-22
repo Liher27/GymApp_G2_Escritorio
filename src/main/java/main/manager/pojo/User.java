@@ -11,15 +11,6 @@ public class User {
 	private Date birthDate = null;
 	private boolean isTrainer = false;
 
-	public User(String name, String password, String mail, String surname, Date birthDate, boolean isTrainer) {
-		this.name=name;
-		this.password=password;
-		this.mail=mail;
-		this.surname=surname;
-		this.birthDate=birthDate;
-		this.isTrainer=isTrainer;
-	}
-
 	public String getName() {
 		return name;
 	}

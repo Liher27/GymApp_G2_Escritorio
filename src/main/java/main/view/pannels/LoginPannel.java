@@ -6,7 +6,12 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+import main.controller.LoginController;
+
 import java.awt.Font;
+import java.awt.HeadlessException;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
@@ -69,6 +74,8 @@ public class LoginPannel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (userIsCorrect()) {
+					JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!",
+							JOptionPane.INFORMATION_MESSAGE);
 					pannels.get(0).setVisible(false);
 					pannels.get(1).setVisible(false);
 					pannels.get(2).setVisible(true);
@@ -106,12 +113,20 @@ public class LoginPannel extends JPanel {
 
 	private boolean userIsCorrect() {
 		if (!userTextField.getText().isBlank() && !passwordField.getText().isBlank()) {
-			// deberia calcularse con base de datos aparte
-			JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!", JOptionPane.INFORMATION_MESSAGE);
-			return true;
+			try {
+				if (new LoginController().loginUser(userTextField.getText(), passwordField.getText())) {
+					return true;
+				} else
+					JOptionPane.showMessageDialog(null, "No se ha encontrado el usuario...", "Error!",
+							JOptionPane.ERROR_MESSAGE);
+			} catch (HeadlessException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return false;
 		} else {
-			JOptionPane.showMessageDialog(null, "No se ha encontrado el usuario...", "Error!",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Los campos estan vacios", "Error!", JOptionPane.ERROR_MESSAGE);
 		}
 		return false;
 	}
