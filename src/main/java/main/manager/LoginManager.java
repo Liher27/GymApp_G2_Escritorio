@@ -20,7 +20,7 @@ public class LoginManager implements ManagerInterface<User> {
 
 	public LoginManager() throws Exception {
 		FileInputStream serviceAccount = new FileInputStream(
-				"C:\\Users\\Usuario\\git\\GymApp_G2_Escritorio\\src\\main\\resources\\reto-1-grupo-2.json");
+				"C:\\Users\\in2dm3-v\\git\\GymAppEscritorio\\src\\main\\resources\\reto-1-grupo-2.json");
 
 		FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
 				.setProjectId("reto-1-grupo-2").setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
@@ -54,8 +54,8 @@ public class LoginManager implements ManagerInterface<User> {
 	}
 
 	@Override
-	public void insert(User user) throws Exception {
-
+	public boolean insert(User user) throws Exception {
+		return false;
 	}
 
 	@Override
@@ -72,9 +72,4 @@ public class LoginManager implements ManagerInterface<User> {
 	public void delete(User user) throws Exception {
 
 	}
-
-	public User getUserByCredentials(User user) {
-		return null;
-	}
-
 }

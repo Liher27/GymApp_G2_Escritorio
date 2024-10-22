@@ -4,16 +4,25 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import main.controller.RegisterController;
+import main.manager.pojo.User;
+import main.manager.pojo.Workout;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 
 public class RegisterPannel extends JPanel {
 
@@ -30,6 +39,9 @@ public class RegisterPannel extends JPanel {
 	private JLabel personalInfoTitle = null;
 	private JLabel lblCountOpt = null;
 	private JLabel lblNewLabel = null;
+
+	private JDatePickerImpl datePicker = null;
+	private Date selectedDate = null;
 
 	private JTextField passwordField = null;
 	private JTextField emailTextField = null;
@@ -82,10 +94,19 @@ public class RegisterPannel extends JPanel {
 		add(lblConfirmPasswd);
 
 		lblRegisterBirthDate = new JLabel("Fecha de Nacimiento");
-		lblRegisterBirthDate.setBounds(664, 266, 230, 32);
+		lblRegisterBirthDate.setBounds(659, 266, 187, 32);
 		lblRegisterBirthDate.setForeground(new Color(255, 255, 255));
 		lblRegisterBirthDate.setFont(new Font("Segoe UI Semilight", Font.BOLD, 17));
 		add(lblRegisterBirthDate);
+
+		datePicker = new JDatePickerImpl(new JDatePanelImpl(null));
+		datePicker.setBounds(850, 266, 230, 32);
+
+		datePicker.addActionListener(e -> {
+			GregorianCalendar calendar = (GregorianCalendar) datePicker.getModel().getValue();
+			selectedDate = calendar.getTime();
+		});
+		add(datePicker);
 
 		emailTextField = new JTextField();
 		emailTextField.setBounds(738, 230, 288, 20);
@@ -102,20 +123,10 @@ public class RegisterPannel extends JPanel {
 		add(surnameTextField);
 		surnameTextField.setColumns(10);
 
-		birthDateField = new JTextField();
-		birthDateField.setBounds(850, 272, 176, 20);
-		add(birthDateField);
-		birthDateField.setColumns(10);
-
 		userTypeComboBox = new JComboBox<String>();
 		userTypeComboBox.setBounds(491, 554, 239, 29);
 		userTypeComboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Cliente", "Entrenador" }));
 		add(userTypeComboBox);
-		userTypeComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-
-		});
 
 		lblRegisterUserType = new JLabel("Tipo de Usuario");
 		lblRegisterUserType.setBounds(357, 553, 176, 31);
@@ -150,13 +161,17 @@ public class RegisterPannel extends JPanel {
 		confirmBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (checkRegister()) {
-					pannels.get(0).setVisible(true);
-					pannels.get(1).setVisible(false);
-					pannels.get(2).setVisible(false);
-					pannels.get(3).setVisible(false);
-					pannels.get(4).setVisible(false);
-					pannels.get(5).setVisible(false);
+				try {
+					if (checkRegister()) {
+						pannels.get(0).setVisible(true);
+						pannels.get(1).setVisible(false);
+						pannels.get(2).setVisible(false);
+						pannels.get(3).setVisible(false);
+						pannels.get(4).setVisible(false);
+						pannels.get(5).setVisible(false);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -186,13 +201,41 @@ public class RegisterPannel extends JPanel {
 
 	}
 
-	private boolean checkRegister() {
-		if (!nameField.getText().isEmpty() && !surnameTextField.getText().isEmpty()
-				&& !passwordField.getText().isEmpty() && !confirmPassField.getText().isEmpty()
-				&& !birthDateField.getText().isEmpty() && !emailTextField.getText().isEmpty()) {
-			return true;
+	private boolean checkRegister() throws Exception {
+		if (areAllEmpty()) {
+			User newUser = createUser();
+			return new RegisterController().registerUser(newUser);
+		} else {
+			JOptionPane.showMessageDialog(null, "Hay campos no completos", "Error!", JOptionPane.ERROR_MESSAGE);
 		}
-
 		return false;
+	}
+
+	private User createUser() {
+		boolean trainer = false;
+		List<Workout> workouts = new ArrayList<Workout>();
+		if (userTypeComboBox.getSelectedIndex() == 0) {
+			trainer = false;
+		} else if (userTypeComboBox.getSelectedIndex() == 1) {
+			trainer = true;
+		}
+		User user = new User();
+		user.setName(nameField.getText());
+		user.setPassword(passwordField.getText());
+		user.setMail(emailTextField.getText());
+		user.setSurname(surnameTextField.getText());
+		user.setBirthDate(selectedDate);
+		user.setTrainer(trainer);
+		user.setWorkouts(workouts);
+		return user;
+	}
+
+	private boolean areAllEmpty() {
+		if (!nameField.getText().isEmpty() && !surnameTextField.getText().isEmpty()
+				&& !passwordField.getText().isEmpty() && !confirmPassField.getText().isEmpty() && null != selectedDate
+				&& !emailTextField.getText().isEmpty())
+			return true;
+		else
+			return false;
 	}
 }

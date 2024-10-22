@@ -22,7 +22,7 @@ public interface ManagerInterface<T> {
 	 * @throws Exception
 	 * @throws SQLException
 	 */
-	public void insert(T t) throws Exception;
+	public boolean insert(T t) throws Exception;
 
 	/**
 	 * Search the object to the database

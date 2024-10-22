@@ -2,19 +2,12 @@ package main.manager.pojo;
 
 import java.util.Objects;
 
-public class Workout {
+public class Workout extends Exercise{
 
 	private int workoutLvl = 0;
 	private String workoutName = null;
 	private int exerciseNumber = 0;
 	private String videoURL = null;
-
-	public Workout(int workoutLvl, String workoutName, int exerciseNumber, String videoURL) {
-		this.workoutLvl = workoutLvl;
-		this.workoutName = workoutName;
-		this.exerciseNumber = exerciseNumber;
-		this.videoURL = videoURL;
-	}
 
 	@Override
 	public String toString() {

@@ -11,13 +11,6 @@ public class Exercise {
 	private ImageIcon exerciseImage = null;
 	private int rest = 0;
 
-	public Exercise(String exerciseName, int seriesNumber, ImageIcon exerciseImage, int rest) {
-		this.exerciseName = exerciseName;
-		this.seriesNumber = seriesNumber;
-		this.exerciseImage = exerciseImage;
-		this.rest = rest;
-	}
-
 	@Override
 	public String toString() {
 		return "Exercise [exerciseName=" + exerciseName + ", seriesNumber=" + seriesNumber + ", exerciseImage="

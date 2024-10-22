@@ -10,7 +10,6 @@ import javax.swing.SwingConstants;
 import main.controller.LoginController;
 
 import java.awt.Font;
-import java.awt.HeadlessException;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -73,15 +72,20 @@ public class LoginPannel extends JPanel {
 		continueButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (userIsCorrect()) {
-					JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!",
-							JOptionPane.INFORMATION_MESSAGE);
-					pannels.get(0).setVisible(false);
-					pannels.get(1).setVisible(false);
-					pannels.get(2).setVisible(true);
-					pannels.get(3).setVisible(false);
-					pannels.get(4).setVisible(false);
-					pannels.get(5).setVisible(false);
+				try {
+					if (userIsCorrect()) {
+						JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!",
+								JOptionPane.INFORMATION_MESSAGE);
+						pannels.get(0).setVisible(false);
+						pannels.get(1).setVisible(false);
+						pannels.get(2).setVisible(true);
+						pannels.get(3).setVisible(false);
+						pannels.get(4).setVisible(false);
+						pannels.get(5).setVisible(false);
+					}
+				} catch (Exception exception) {
+					JOptionPane.showMessageDialog(null, "Ha habido un error en la base de datos", "Error!",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -111,23 +115,15 @@ public class LoginPannel extends JPanel {
 
 	}
 
-	private boolean userIsCorrect() {
+	private boolean userIsCorrect() throws Exception {
 		if (!userTextField.getText().isBlank() && !passwordField.getText().isBlank()) {
-			try {
-				if (new LoginController().loginUser(userTextField.getText(), passwordField.getText())) {
-					return true;
-				} else
-					JOptionPane.showMessageDialog(null, "No se ha encontrado el usuario...", "Error!",
-							JOptionPane.ERROR_MESSAGE);
-			} catch (HeadlessException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		} else {
+			if (new LoginController().loginUser(userTextField.getText(), passwordField.getText())) {
+				return true;
+			} else
+				JOptionPane.showMessageDialog(null, "No se ha encontrado el usuario...", "Error!",
+						JOptionPane.ERROR_MESSAGE);
+		} else
 			JOptionPane.showMessageDialog(null, "Los campos estan vacios", "Error!", JOptionPane.ERROR_MESSAGE);
-		}
 		return false;
 	}
 

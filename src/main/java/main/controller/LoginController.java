@@ -6,33 +6,9 @@ import java.util.List;
 import main.manager.LoginManager;
 import main.manager.pojo.User;
 
-public class LoginController implements ControllerInterface {
+public class LoginController implements ControllerInterface<User> {
 
 	private LoginManager loginManager;
-
-	@Override
-	public List getAll() throws SQLException, Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void insert(Object t) throws SQLException, Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void update(Object t) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void delete(Object t) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public boolean loginUser(String username, String password) throws Exception {
 		loginManager = new LoginManager();
@@ -45,5 +21,35 @@ public class LoginController implements ControllerInterface {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public List<User> getAll() throws SQLException, Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void insert(User t) throws SQLException, Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void update(User t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void delete(User t) {
+		// TODO Auto-generated method stub
+		
 	}
 }
