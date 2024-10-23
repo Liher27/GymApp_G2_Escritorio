@@ -30,7 +30,6 @@ public class LoginManager implements ManagerInterface<User> {
 
 	public boolean validateUser(User user) throws Exception {
 		CollectionReference usersRef = db.collection("users");
-		System.out.println("Buscando usuario con nombre: " + user.getName());
 
 		ApiFuture<QuerySnapshot> query = usersRef.whereEqualTo("name", user.getName()).get();
 		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
@@ -40,7 +39,7 @@ public class LoginManager implements ManagerInterface<User> {
 
 			String storedPassword = document.getString("pass");
 
-			if (storedPassword.equals(user.getPassword())) {
+			if (storedPassword.equals(user.getPass())) {
 				return true;
 			}
 		}
@@ -64,8 +63,8 @@ public class LoginManager implements ManagerInterface<User> {
 	}
 
 	@Override
-	public void modify(User user) throws Exception {
-
+	public boolean modify(User user) throws Exception {
+		return false;
 	}
 
 	@Override

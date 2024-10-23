@@ -40,7 +40,7 @@ public interface ManagerInterface<T> {
 	 * @throws Exception
 	 * @throws SQLException
 	 */
-	public void modify(T t) throws Exception;
+	public boolean modify(T t) throws Exception;
 
 	/**
 	 * Deletes a Row from the database

@@ -8,9 +8,12 @@ public class HistoricPannel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public HistoricPannel(List<JPanel> pannels) {
+	public HistoricPannel() {
 		setLayout(null);
 		setBounds(100, 100, 1215, 666);
 
+	}
+	public JPanel getHistoricPannel() {
+		return this;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import main.manager.pojo.User;
 
-public class ExerciseManager implements ManagerInterface<User>{
+public class ExerciseManager implements ManagerInterface<User> {
 
 	@Override
 	public List<User> getAll() throws Exception {
@@ -26,15 +26,14 @@ public class ExerciseManager implements ManagerInterface<User>{
 	}
 
 	@Override
-	public void modify(User t) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public boolean modify(User t) throws Exception {
+		return false;
 	}
 
 	@Override
 	public void delete(User t) throws SQLException, Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

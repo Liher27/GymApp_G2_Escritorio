@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import main.controller.RegisterController;
+import main.manager.StatusSingleton;
 import main.manager.pojo.User;
 import main.manager.pojo.Workout;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
@@ -47,14 +48,13 @@ public class RegisterPannel extends JPanel {
 	private JTextField emailTextField = null;
 	private JTextField nameField = null;
 	private JTextField surnameTextField = null;
-	private JTextField birthDateField = null;
 
 	private JComboBox<String> userTypeComboBox = null;
 	private JButton cancelBtn = null;
 	private JButton confirmBtn = null;
 	private JTextField confirmPassField = null;
 
-	public RegisterPannel(List<JPanel> pannels) {
+	public RegisterPannel() {
 		setBounds(0, 0, 1215, 666);
 		setLayout(null);
 		setBackground(new Color(57, 57, 57));
@@ -145,12 +145,7 @@ public class RegisterPannel extends JPanel {
 		cancelBtn.setBounds(16, 622, 98, 33);
 		cancelBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pannels.get(0).setVisible(true);
-				pannels.get(1).setVisible(false);
-				pannels.get(2).setVisible(false);
-				pannels.get(3).setVisible(false);
-				pannels.get(4).setVisible(false);
-				pannels.get(5).setVisible(false);
+				StatusSingleton.getInstance().changeToLoginPannel();
 			}
 
 		});
@@ -163,15 +158,13 @@ public class RegisterPannel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if (checkRegister()) {
-						pannels.get(0).setVisible(true);
-						pannels.get(1).setVisible(false);
-						pannels.get(2).setVisible(false);
-						pannels.get(3).setVisible(false);
-						pannels.get(4).setVisible(false);
-						pannels.get(5).setVisible(false);
+						JOptionPane.showMessageDialog(null, "Usuario registrado correctamente!", "Bienvenido!!",
+								JOptionPane.INFORMATION_MESSAGE);
+						StatusSingleton.getInstance().changeToLoginPannel();
+						clearFields();
 					}
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Este usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -205,8 +198,6 @@ public class RegisterPannel extends JPanel {
 		if (areAllEmpty()) {
 			User newUser = createUser();
 			return new RegisterController().registerUser(newUser);
-		} else {
-			JOptionPane.showMessageDialog(null, "Hay campos no completos", "Error!", JOptionPane.ERROR_MESSAGE);
 		}
 		return false;
 	}
@@ -221,7 +212,7 @@ public class RegisterPannel extends JPanel {
 		}
 		User user = new User();
 		user.setName(nameField.getText());
-		user.setPassword(passwordField.getText());
+		user.setPass(passwordField.getText());
 		user.setMail(emailTextField.getText());
 		user.setSurname(surnameTextField.getText());
 		user.setBirthDate(selectedDate);
@@ -233,9 +224,26 @@ public class RegisterPannel extends JPanel {
 	private boolean areAllEmpty() {
 		if (!nameField.getText().isEmpty() && !surnameTextField.getText().isEmpty()
 				&& !passwordField.getText().isEmpty() && !confirmPassField.getText().isEmpty() && null != selectedDate
-				&& !emailTextField.getText().isEmpty())
-			return true;
-		else
-			return false;
+				&& !emailTextField.getText().isEmpty()) {
+			if (passwordField.getText().equals(confirmPassField.getText())) {
+				return true;
+			} else
+				JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden", "Error!",
+						JOptionPane.ERROR_MESSAGE);
+		} else
+			JOptionPane.showMessageDialog(null, "Hay campos no completos", "Error!", JOptionPane.ERROR_MESSAGE);
+		return false;
+	}
+
+	private void clearFields() {
+		nameField.setText(null);
+		surnameTextField.setText(null);
+		passwordField.setText(null);
+		confirmPassField.setText(null);
+		emailTextField.setText(null);
+	}
+	
+	public JPanel getRegisterPannel() {
+		return this;
 	}
 }

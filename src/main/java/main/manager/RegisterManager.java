@@ -1,7 +1,6 @@
 package main.manager;
 
 import java.io.FileInputStream;
-import java.sql.SQLException;
 import java.util.List;
 
 import com.google.api.core.ApiFuture;
@@ -29,40 +28,36 @@ public class RegisterManager implements ManagerInterface<User> {
 
 	@Override
 	public List<User> getAll() throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean insert(User user) throws Exception {
-		DocumentReference recordRef = db.collection("users").document(user.getName());
 
-		ApiFuture<WriteResult> writeResult = recordRef.set(user);
+		ApiFuture<WriteResult> writeResult = db.collection("users").document(user.getName()).create(user);
 
 		if (null != writeResult.get()) {
 			db.close();
 			return true;
 		} else
 			db.close();
+
 		return false;
 
 	}
 
 	@Override
-	public User getOne(User t) throws Exception {
-		// TODO Auto-generated method stub
+	public User getOne(User user) throws Exception {
 		return null;
 	}
 
 	@Override
-	public void modify(User t) throws Exception {
-		// TODO Auto-generated method stub
-
+	public boolean modify(User user) throws Exception {
+		return false;
 	}
 
 	@Override
-	public void delete(User t) throws SQLException, Exception {
-		// TODO Auto-generated method stub
+	public void delete(User user) throws Exception {
 
 	}
 }

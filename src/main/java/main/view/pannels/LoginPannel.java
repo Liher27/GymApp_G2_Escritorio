@@ -1,13 +1,12 @@
 package main.view.pannels;
 
-import java.util.List;
-
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import main.controller.LoginController;
+import main.manager.StatusSingleton;
 
 import java.awt.Font;
 
@@ -30,7 +29,7 @@ public class LoginPannel extends JPanel {
 	private JButton registerButton = null;
 	private JLabel noAccountLbl = null;
 
-	public LoginPannel(List<JPanel> pannels) {
+	public LoginPannel() {
 		setLayout(null);
 		setBounds(0, 0, 1230, 700);
 
@@ -76,12 +75,7 @@ public class LoginPannel extends JPanel {
 					if (userIsCorrect()) {
 						JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!",
 								JOptionPane.INFORMATION_MESSAGE);
-						pannels.get(0).setVisible(false);
-						pannels.get(1).setVisible(false);
-						pannels.get(2).setVisible(true);
-						pannels.get(3).setVisible(false);
-						pannels.get(4).setVisible(false);
-						pannels.get(5).setVisible(false);
+						StatusSingleton.getInstance().changeToWorkoutsPannel();
 					}
 				} catch (Exception exception) {
 					JOptionPane.showMessageDialog(null, "Ha habido un error en la base de datos", "Error!",
@@ -96,12 +90,7 @@ public class LoginPannel extends JPanel {
 		registerButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pannels.get(0).setVisible(false);
-				pannels.get(1).setVisible(true);
-				pannels.get(2).setVisible(false);
-				pannels.get(3).setVisible(false);
-				pannels.get(4).setVisible(false);
-				pannels.get(5).setVisible(false);
+				StatusSingleton.getInstance().changeToRegisterPannel();
 			}
 		});
 		registerButton.setBounds(10, 621, 140, 34);
@@ -127,4 +116,7 @@ public class LoginPannel extends JPanel {
 		return false;
 	}
 
+	public JPanel getLoginPanel() {
+		return this;
+	}
 }

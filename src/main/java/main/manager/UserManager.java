@@ -26,9 +26,10 @@ public class UserManager implements ManagerInterface<User> {
 	}
 
 	@Override
-	public void modify(User t) throws Exception {
-		// TODO Auto-generated method stub
+	public boolean modify(User t) throws Exception {
 		
+		
+		return false;
 	}
 
 	@Override
@@ -36,5 +37,6 @@ public class UserManager implements ManagerInterface<User> {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

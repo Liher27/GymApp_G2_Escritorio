@@ -15,7 +15,7 @@ public class LoginController implements ControllerInterface<User> {
 		try {
 			User user = new User();
 			user.setName(username);
-			user.setPassword(password);
+			user.setPass(password);
 			return loginManager.validateUser(user);
 		} catch (Exception e) {
 			e.printStackTrace();

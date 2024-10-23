@@ -10,6 +10,7 @@ public class User {
 	private String mail = null;
 	private String surname = null;
 	private Date birthDate = null;
+	private int userLevel = 0;
 	private boolean trainer = false;
 	private List<Workout> workouts = null;
 
@@ -21,12 +22,20 @@ public class User {
 		this.name = name;
 	}
 
-	public String getPassword() {
+	public String getPass() {
 		return pass;
 	}
 
-	public void setPassword(String password) {
+	public void setPass(String password) {
 		this.pass = password;
+	}
+
+	public int getUserLevel() {
+		return userLevel;
+	}
+
+	public void setUserLevel(int userLevel) {
+		this.userLevel = userLevel;
 	}
 
 	public String getMail() {
@@ -61,35 +70,6 @@ public class User {
 		this.trainer = isTrainer;
 	}
 
-	@Override
-	public String toString() {
-		return "User [name=" + name + ", pass=" + pass + ", mail=" + mail + ", surname=" + surname + ", birthDate="
-				+ birthDate + ", trainer=" + trainer + ", workouts=" + workouts + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(birthDate, mail, name, pass, surname, trainer, workouts);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		return Objects.equals(birthDate, other.birthDate) && Objects.equals(mail, other.mail)
-				&& Objects.equals(name, other.name) && Objects.equals(pass, other.pass)
-				&& Objects.equals(surname, other.surname) && trainer == other.trainer
-				&& Objects.equals(workouts, other.workouts);
-	}
-
 	public List<Workout> getWorkouts() {
 		return workouts;
 	}
@@ -97,5 +77,32 @@ public class User {
 	public void setWorkouts(List<Workout> workouts) {
 		this.workouts = workouts;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(birthDate, mail, name, pass, surname, trainer, userLevel, workouts);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(birthDate, other.birthDate) && Objects.equals(mail, other.mail)
+				&& Objects.equals(name, other.name) && Objects.equals(pass, other.pass)
+				&& Objects.equals(surname, other.surname) && trainer == other.trainer && userLevel == other.userLevel
+				&& Objects.equals(workouts, other.workouts);
+	}
+
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", pass=" + pass + ", mail=" + mail + ", surname=" + surname + ", birthDate="
+				+ birthDate + ", userLevel=" + userLevel + ", trainer=" + trainer + ", workouts=" + workouts + "]";
+	}
+	
 
 }

@@ -2,8 +2,8 @@ package main.view;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
+import main.manager.StatusSingleton;
 import main.view.pannels.ExercisePannel;
 import main.view.pannels.HistoricPannel;
 import main.view.pannels.LoginPannel;
@@ -11,35 +11,16 @@ import main.view.pannels.ProfilePannel;
 import main.view.pannels.RegisterPannel;
 import main.view.pannels.WorkoutsPannel;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Frame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 
-	private List<JPanel> pannels = null;
-
-	/**
-	 * Launch the application.
-	 */
-	public void run() {
-		try {
-			Frame frame = new Frame();
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public Frame() {
-
-		pannels = new ArrayList<JPanel>();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1230, 700);
@@ -52,35 +33,46 @@ public class Frame extends JFrame {
 		setContentPane(contentPanel);
 		contentPanel.setLayout(null);
 
-		LoginPannel loginPannel = new LoginPannel(pannels);
+		// 0
+		LoginPannel loginPannel = new LoginPannel();
 		loginPannel.setVisible(true);
 		contentPanel.add(loginPannel);
-		pannels.add(loginPannel);
+		add(loginPannel);
+		StatusSingleton.getInstance().setLoginPannel(loginPannel);
 
-		RegisterPannel registerPannel = new RegisterPannel(pannels);
+		// 1
+		RegisterPannel registerPannel = new RegisterPannel();
 		registerPannel.setVisible(false);
 		contentPanel.add(registerPannel);
-		pannels.add(registerPannel);
+		add(registerPannel);
+		StatusSingleton.getInstance().setRegisterPannel(registerPannel);
 
-		WorkoutsPannel workoutPannel = new WorkoutsPannel(pannels);
+		// 2
+		WorkoutsPannel workoutPannel = new WorkoutsPannel();
 		workoutPannel.setVisible(false);
 		contentPanel.add(workoutPannel);
-		pannels.add(workoutPannel);
+		add(workoutPannel);
+		StatusSingleton.getInstance().setWorkoutsPannel(workoutPannel);
 
-		ProfilePannel profilePannel = new ProfilePannel(pannels);
+		// 3
+		ProfilePannel profilePannel = new ProfilePannel();
 		profilePannel.setVisible(false);
 		contentPanel.add(profilePannel);
-		pannels.add(profilePannel);
+		add(profilePannel);
+		StatusSingleton.getInstance().setProfilePannel(profilePannel);
 
-		HistoricPannel historicPannel = new HistoricPannel(pannels);
+		// 4
+		HistoricPannel historicPannel = new HistoricPannel();
 		historicPannel.setVisible(false);
 		contentPanel.add(historicPannel);
-		pannels.add(historicPannel);
+		add(historicPannel);
+		StatusSingleton.getInstance().setHistoricPannel(historicPannel);
 
-		ExercisePannel exercisePannel = new ExercisePannel(pannels);
+		// 5
+		ExercisePannel exercisePannel = new ExercisePannel();
 		exercisePannel.setVisible(false);
 		contentPanel.add(exercisePannel);
-		pannels.add(exercisePannel);
-
+		add(exercisePannel);
+		StatusSingleton.getInstance().setExercisePannel(exercisePannel);
 	}
 }
