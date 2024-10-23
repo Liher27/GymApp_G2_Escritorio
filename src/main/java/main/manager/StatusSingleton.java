@@ -18,6 +18,7 @@ public class StatusSingleton {
 	private ProfilePannel profilePannel = new ProfilePannel();
 	private RegisterPannel registerPannel = new RegisterPannel();
 	private WorkoutsPannel workoutsPannel = new WorkoutsPannel();
+	private User user = new User();
 
 	public static StatusSingleton getInstance() {
 		if (null == statusSingleton) {
@@ -74,8 +75,13 @@ public class StatusSingleton {
 		this.registerPannel = registerPannel;
 	}
 
-	public User getLogedUser() {
+	public User getUser() {
 		return null;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+		
 	}
 
 	public void changeToLoginPannel() {

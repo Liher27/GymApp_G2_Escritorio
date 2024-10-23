@@ -75,7 +75,7 @@ public class LoginPannel extends JPanel {
 					if (userIsCorrect()) {
 						JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!",
 								JOptionPane.INFORMATION_MESSAGE);
-						StatusSingleton.getInstance().changeToWorkoutsPannel();
+						StatusSingleton.getInstance().changeToProfilePannel();
 					}
 				} catch (Exception exception) {
 					JOptionPane.showMessageDialog(null, "Ha habido un error en la base de datos", "Error!",

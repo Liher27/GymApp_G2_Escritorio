@@ -15,6 +15,7 @@ import java.awt.Color;
 import javax.swing.SwingConstants;
 
 import main.controller.UserController;
+import main.manager.StatusSingleton;
 import main.manager.pojo.User;
 
 public class ProfilePannel extends JPanel {
@@ -163,7 +164,7 @@ public class ProfilePannel extends JPanel {
 	}
 
 	public void showUserInfor() {
-		userProfile = userController.getUserInfo();
+		userProfile = StatusSingleton.getInstance().getUser();
 		if (null != userProfile) {
 			lblRegisterName.setText("Nombre usuario: " + userProfile.getName());
 			lblRegisterPasswd.setText("Contrasena: " + userProfile.getPass());
@@ -175,7 +176,7 @@ public class ProfilePannel extends JPanel {
 		}
 
 	}
-	
+
 	public JPanel getProfilePanel() {
 		return this;
 	}

@@ -40,6 +40,13 @@ public class LoginManager implements ManagerInterface<User> {
 			String storedPassword = document.getString("pass");
 
 			if (storedPassword.equals(user.getPass())) {
+				user.setBirthDate(document.getDate("birthDate"));
+				user.setMail(document.getString("mail"));
+				user.setName(document.getString("name"));
+				user.setPass(document.getString("pass"));
+				user.setSurname(document.getString("surname"));
+				user.setTrainer(document.getBoolean("trainer"));
+				StatusSingleton.getInstance().setUser(user);
 				return true;
 			}
 		}
