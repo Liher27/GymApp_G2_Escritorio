@@ -103,7 +103,8 @@ public class RegisterPannel extends JPanel {
 		datePicker.setBounds(850, 266, 230, 32);
 
 		datePicker.addActionListener(e -> {
-			selectedDate = (Date) datePicker.getModel().getValue();
+			GregorianCalendar calendar = (GregorianCalendar) datePicker.getModel().getValue();
+			selectedDate = calendar.getTime();
 		});
 		
 		add(datePicker);

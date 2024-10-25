@@ -196,35 +196,36 @@ public class ProfilePannel extends JPanel {
 	private void changeUserData(String option) {
 		newInfoToInsert = JOptionPane.showInputDialog("Ingrese el nuevo nombre de usuario: ");
 		newInfoConfirm = JOptionPane.showInputDialog("Por favor, repita el nuevo nombre de usuario: ");
+		try {
+			if (newInfoToInsert.equals(newInfoConfirm)) {
 
-		if (newInfoToInsert.equals(newInfoConfirm)) {
+				switch (option) {
+				case ("name"):
+					userProfile.setName(newInfoConfirm);
+					break;
+				case ("pass"):
+					userProfile.setPass(newInfoConfirm);
+					break;
+				case ("mail"):
+					userProfile.setMail(newInfoConfirm);
+					break;
+				case ("surname"):
+					userProfile.setSurname(newInfoConfirm);
 
-			switch (option) {
-			case ("name"):
-				userProfile.setName(newInfoConfirm);
-				break;
-			case ("pass"):
-				userProfile.setPass(newInfoConfirm);
-				break;
-			case ("mail"):
-				userProfile.setMail(newInfoConfirm);
-				break;
-			case ("surname"):
-				userProfile.setSurname(newInfoConfirm);
+				}
 
-			}
-			try {
 				if (userController.changeUser(userProfile)) {
 					JOptionPane.showMessageDialog(null, "Nombre de usuario cambiado correctamente", "OK!!",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
-			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, "No se ha podido cambiar la contraseña", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		} else
-			JOptionPane.showMessageDialog(null, "No se ha introducido la misma contraseña en los dos campos", "Error",
+
+			} else
+				JOptionPane.showMessageDialog(null, "No se ha introducido la misma contraseña en los dos campos",
+						"Error", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, "No se ha podido cambiar la contraseña", "Error",
 					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void changeDate() {
