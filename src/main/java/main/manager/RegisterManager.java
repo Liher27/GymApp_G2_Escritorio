@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
@@ -18,7 +17,7 @@ public class RegisterManager implements ManagerInterface<User> {
 
 	public RegisterManager() throws Exception {
 		FileInputStream serviceAccount = new FileInputStream(
-				"C:\\Users\\in2dm3-v\\git\\GymAppEscritorio\\src\\main\\resources\\reto-1-grupo-2.json");
+				"src/main/resources/reto-1-grupo-2.json");
 
 		FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
 				.setProjectId("reto-1-grupo-2").setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();

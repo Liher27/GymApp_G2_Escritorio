@@ -20,7 +20,7 @@ public class LoginManager implements ManagerInterface<User> {
 
 	public LoginManager() throws Exception {
 		FileInputStream serviceAccount = new FileInputStream(
-				"C:\\Users\\in2dm3-v\\git\\GymAppEscritorio\\src\\main\\resources\\reto-1-grupo-2.json");
+				"src/main/resources/reto-1-grupo-2.json");
 
 		FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
 				.setProjectId("reto-1-grupo-2").setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
@@ -40,14 +40,13 @@ public class LoginManager implements ManagerInterface<User> {
 			String storedPassword = document.getString("pass");
 
 			if (storedPassword.equals(user.getPass())) {
-				User logedUser = user;
-				logedUser.setBirthDate(document.getDate("birthDate"));
-				logedUser.setMail(document.getString("mail"));
-				logedUser.setName(document.getString("name"));
-				logedUser.setPass(document.getString("pass"));
-				logedUser.setSurname(document.getString("surname"));
-				logedUser.setTrainer(document.getBoolean("trainer"));
-				StatusSingleton.getInstance().setUser(logedUser);
+				user.setBirthDate(document.getDate("birthDate"));
+				user.setMail(document.getString("mail"));
+				user.setName(document.getString("name"));
+				user.setPass(document.getString("pass"));
+				user.setSurname(document.getString("surname"));
+				user.setTrainer(document.getBoolean("trainer"));
+				StatusSingleton.getInstance().setUser(user);
 				return true;
 			}
 		}

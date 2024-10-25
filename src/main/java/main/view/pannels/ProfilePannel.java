@@ -10,12 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.util.Properties;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
 import main.controller.UserController;
 import main.manager.StatusSingleton;
 import main.manager.pojo.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class ProfilePannel extends JPanel {
 
@@ -38,8 +45,8 @@ public class ProfilePannel extends JPanel {
 	private JButton backBtn = null;
 	private JButton btnCambiarContrasea = null;
 
-	private String newPasswordToInsert = null;
-	private String newPasswordConfirm = null;
+	private String newInfoToInsert = null;
+	private String newInfoConfirm = null;
 
 	/**
 	 * Create the panel.
@@ -95,24 +102,39 @@ public class ProfilePannel extends JPanel {
 		lblRegisterName.setForeground(Color.WHITE);
 		lblRegisterName.setFont(new Font("Segoe UI Semilight", Font.BOLD, 17));
 		lblRegisterName.setBounds(90, 303, 365, 27);
+		lblRegisterName.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				changeUserData("name");
+			}
+		});
 		add(lblRegisterName);
 
 		lblRegisterFirstSurname = new JLabel("Primer apellido: ");
 		lblRegisterFirstSurname.setForeground(Color.WHITE);
 		lblRegisterFirstSurname.setFont(new Font("Segoe UI Semilight", Font.BOLD, 17));
 		lblRegisterFirstSurname.setBounds(90, 350, 365, 32);
+		lblRegisterFirstSurname.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				changeUserData("surname");
+			}
+		});
 		add(lblRegisterFirstSurname);
 
 		lblRegisterMail = new JLabel("Correo electronico: ");
 		lblRegisterMail.setForeground(Color.WHITE);
 		lblRegisterMail.setFont(new Font("Segoe UI Semilight", Font.BOLD, 17));
-		lblRegisterMail.setBounds(90, 400, 355, 43);
+		lblRegisterMail.setBounds(90, 400, 465, 43);
+		lblRegisterMail.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				changeUserData("mail");
+			}
+		});
 		add(lblRegisterMail);
 
 		lblRegisterBirthDate = new JLabel("Fecha de Nacimiento: ");
 		lblRegisterBirthDate.setForeground(Color.WHITE);
 		lblRegisterBirthDate.setFont(new Font("Segoe UI Semilight", Font.BOLD, 17));
-		lblRegisterBirthDate.setBounds(90, 458, 355, 32);
+		lblRegisterBirthDate.setBounds(90, 458, 555, 32);
 		add(lblRegisterBirthDate);
 
 		lblCountOpt = new JLabel("DATOS DE LA CUENTA: ");
@@ -126,6 +148,11 @@ public class ProfilePannel extends JPanel {
 		lblRegisterPasswd.setForeground(Color.WHITE);
 		lblRegisterPasswd.setFont(new Font("Segoe UI Semilight", Font.BOLD, 17));
 		lblRegisterPasswd.setBounds(679, 301, 324, 31);
+		lblRegisterPasswd.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				changeUserData("pass");
+			}
+		});
 		add(lblRegisterPasswd);
 
 		lblRegisterUserType = new JLabel("Tipo de Usuario: ");
@@ -134,29 +161,12 @@ public class ProfilePannel extends JPanel {
 		lblRegisterUserType.setBounds(679, 362, 324, 31);
 		add(lblRegisterUserType);
 
-		btnCambiarContrasea = new JButton("Cambiar contraseña");
+		btnCambiarContrasea = new JButton("Cambiar fecha");
 		btnCambiarContrasea.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				newPasswordToInsert = JOptionPane.showInputDialog("Ingrese la nueva contraseña: ");
-				newPasswordConfirm = JOptionPane.showInputDialog("Por favor, repita la contraseña: ");
-
-				if (newPasswordToInsert.equals(newPasswordConfirm)) {
-					userProfile.setPass(newPasswordConfirm);
-					try {
-						if (userController.changeUserPassword(userProfile)) {
-							JOptionPane.showMessageDialog(null, "Contrasenya cambiada correctamente", "OK!!",
-									JOptionPane.INFORMATION_MESSAGE);
-						}
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, "No se ha podido cambiar la contraseña", "Error",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				} else
-					JOptionPane.showMessageDialog(null, "No se ha introducido la misma contraseña en los dos campos",
-							"Error", JOptionPane.ERROR_MESSAGE);
+				changeDate();
 			}
-
 		});
 		btnCambiarContrasea.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnCambiarContrasea.setBounds(80, 599, 192, 33);
@@ -166,11 +176,86 @@ public class ProfilePannel extends JPanel {
 
 	public void showUserInfor() {
 		userProfile = new User();
-		lblRegisterName.setText("Nombre usuario: " + userProfile.getName());
-		lblRegisterPasswd.setText("Contrasena: " + userProfile.getPass());
-		lblRegisterMail.setText("Correo electronico: " + userProfile.getMail());
-		lblRegisterFirstSurname.setText("Apellido: " + userProfile.getSurname());
-		lblRegisterBirthDate.setText("Fecha de nacimiento: " + userProfile.getBirthDate().toString());
+		userProfile = StatusSingleton.getInstance().getUser();
+		if (null != userProfile) {
+			lblRegisterName.setText("Nombre usuario: " + userProfile.getName());
+			lblRegisterPasswd.setText("Contrasena: " + userProfile.getPass());
+			lblRegisterMail.setText("Correo electronico: " + userProfile.getMail());
+			lblRegisterFirstSurname.setText("Apellido: " + userProfile.getSurname());
+			lblRegisterBirthDate.setText("Fecha de nacimiento: " + userProfile.getBirthDate().toString());
+			if (userProfile.isTrainer()) {
+				lblRegisterUserType.setText("Tipo de usuario: Entrenador");
+			} else if (!userProfile.isTrainer())
+				lblRegisterUserType.setText("Tipo de usuario: Cliente");
+		} else
+			JOptionPane.showMessageDialog(null, "No se ha podido cargar la información.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+
+	}
+
+	private void changeUserData(String option) {
+		newInfoToInsert = JOptionPane.showInputDialog("Ingrese el nuevo nombre de usuario: ");
+		newInfoConfirm = JOptionPane.showInputDialog("Por favor, repita el nuevo nombre de usuario: ");
+
+		if (newInfoToInsert.equals(newInfoConfirm)) {
+
+			switch (option) {
+			case ("name"):
+				userProfile.setName(newInfoConfirm);
+				break;
+			case ("pass"):
+				userProfile.setPass(newInfoConfirm);
+				break;
+			case ("mail"):
+				userProfile.setMail(newInfoConfirm);
+				break;
+			case ("surname"):
+				userProfile.setSurname(newInfoConfirm);
+
+			}
+			try {
+				if (userController.changeUser(userProfile)) {
+					JOptionPane.showMessageDialog(null, "Nombre de usuario cambiado correctamente", "OK!!",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "No se ha podido cambiar la contraseña", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		} else
+			JOptionPane.showMessageDialog(null, "No se ha introducido la misma contraseña en los dos campos", "Error",
+					JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void changeDate() {
+
+		UtilDateModel model = new UtilDateModel();
+
+		JDatePickerImpl datePicker = new JDatePickerImpl(new JDatePanelImpl(model));
+
+		int result = JOptionPane.showConfirmDialog(null, datePicker, "Selecciona una fecha",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		if (result == JOptionPane.OK_OPTION) {
+			Date selectedDate = (Date) datePicker.getModel().getValue();
+
+			if (selectedDate != null) {
+				userProfile.setBirthDate(selectedDate);
+
+				try {
+					if (userController.changeUser(userProfile)) {
+						JOptionPane.showMessageDialog(null, "Fecha cambiada correctamente", "OK!!",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "No se ha podido cambiar la fecha", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Por favor, selecciona una fecha válida", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
 
 	}
 

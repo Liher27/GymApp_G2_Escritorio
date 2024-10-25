@@ -76,12 +76,11 @@ public class StatusSingleton {
 	}
 
 	public User getUser() {
-		return null;
+		return user;
 	}
-	
+
 	public void setUser(User user) {
 		this.user = user;
-		
 	}
 
 	public void changeToLoginPannel() {

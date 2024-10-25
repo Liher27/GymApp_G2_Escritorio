@@ -7,25 +7,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>GymApp_Grupo2</name>
 	<dependencies>
-
 		<dependency>
 			<groupId>com.google.firebase</groupId>
 			<artifactId>firebase-admin</artifactId>
 			<version>9.1.1</version>
 		</dependency>
-
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>2.1.0-alpha1</version>
-		</dependency>
-
-
 	</dependencies>
 </project>
