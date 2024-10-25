@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.List;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
@@ -52,8 +51,10 @@ public class ProfilePannel extends JPanel {
 		setLayout(null);
 
 		addComponentListener(new ComponentAdapter() {
+
 			public void componentShown(ComponentEvent c) {
 				try {
+					StatusSingleton.getInstance().getUser().toString();
 					showUserInfor();
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "Error en el programa", "Error", JOptionPane.ERROR_MESSAGE);
@@ -74,7 +75,7 @@ public class ProfilePannel extends JPanel {
 		add(backBtn);
 		backBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				StatusSingleton.getInstance().changeToLoginPannel();
 			}
 		});
 
@@ -164,16 +165,12 @@ public class ProfilePannel extends JPanel {
 	}
 
 	public void showUserInfor() {
-		userProfile = StatusSingleton.getInstance().getUser();
-		if (null != userProfile) {
-			lblRegisterName.setText("Nombre usuario: " + userProfile.getName());
-			lblRegisterPasswd.setText("Contrasena: " + userProfile.getPass());
-			lblRegisterMail.setText("Correo electronico: ");
-			lblRegisterFirstSurname.setText("Apellido: " + userProfile.getSurname());
-			lblRegisterBirthDate.setText("Fecha de nacimiento: " + userProfile.getBirthDate().toString());
-		} else {
-			JOptionPane.showMessageDialog(null, "No se ha cargado la informacion", "Error", JOptionPane.ERROR_MESSAGE);
-		}
+		userProfile = new User();
+		lblRegisterName.setText("Nombre usuario: " + userProfile.getName());
+		lblRegisterPasswd.setText("Contrasena: " + userProfile.getPass());
+		lblRegisterMail.setText("Correo electronico: " + userProfile.getMail());
+		lblRegisterFirstSurname.setText("Apellido: " + userProfile.getSurname());
+		lblRegisterBirthDate.setText("Fecha de nacimiento: " + userProfile.getBirthDate().toString());
 
 	}
 
