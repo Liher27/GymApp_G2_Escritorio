@@ -49,8 +49,8 @@ public class UserManager implements ManagerInterface<User> {
 	@Override
 	public boolean modify(User user) throws Exception {
 
-		DocumentReference frankDocRef = db.collection("users").document(user.getName());
-		ApiFuture<WriteResult> initialResult = frankDocRef.set(user);
+		DocumentReference userRef = db.collection("users").document(user.getName());
+		ApiFuture<WriteResult> initialResult = userRef.set(user);
 		initialResult.get();
 
 		Map<String, Object> updates = new HashMap<>();
@@ -61,7 +61,7 @@ public class UserManager implements ManagerInterface<User> {
 		updates.put("surname", user.getSurname());
 		updates.put("trainer", user.isTrainer());
 
-		ApiFuture<WriteResult> writeResult = frankDocRef.update(updates);
+		ApiFuture<WriteResult> writeResult = userRef.update(updates);
 
 		if (null != writeResult.get()) {
 			db.close();

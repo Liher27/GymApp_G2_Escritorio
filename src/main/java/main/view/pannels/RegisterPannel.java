@@ -204,7 +204,6 @@ public class RegisterPannel extends JPanel {
 
 	private User createUser() {
 		boolean trainer = false;
-		List<Workout> workouts = new ArrayList<Workout>();
 		if (userTypeComboBox.getSelectedIndex() == 0) {
 			trainer = false;
 		} else if (userTypeComboBox.getSelectedIndex() == 1) {
@@ -217,7 +216,6 @@ public class RegisterPannel extends JPanel {
 		user.setSurname(surnameTextField.getText());
 		user.setBirthDate(selectedDate);
 		user.setTrainer(trainer);
-		user.setWorkouts(workouts);
 		return user;
 	}
 
