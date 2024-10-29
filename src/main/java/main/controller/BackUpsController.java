@@ -31,11 +31,11 @@ public class BackUpsController {
 		
 		workouts.setAttribute("id", "" +i);
 		elem = xmldoc.createElement("Workoutname");
-		elem.setTextContent(workout.getExerciseName());
+		elem.setTextContent(workout.getWorkoutName());
 		workouts.appendChild(elem);
 		
 		elem = xmldoc.createElement("nivel");
-		elem.setTextContent("" +workout.getWorkoutLvl());
+		elem.setTextContent("" +workout.getLevel());
 		workouts.appendChild(elem);
 		
 		elem = xmldoc.createElement("exercise number");

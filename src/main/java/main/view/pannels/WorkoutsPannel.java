@@ -2,7 +2,6 @@ package main.view.pannels;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -18,7 +17,7 @@ public class WorkoutsPannel extends JPanel {
 	private WorkoutManager workoutManager;
 	private static final long serialVersionUID = 1L;
 	private JTable table;
-	private DefaultTableModel tableModel;
+	private DefaultTableModel workoutTable = null;
 	private List<Workout> workout = null;
 
 	public WorkoutsPannel() {
@@ -32,12 +31,13 @@ public class WorkoutsPannel extends JPanel {
 		
 		try {
 			workoutManager = new WorkoutManager();
-			tableModel = new DefaultTableModel();
-			tableModel.addColumn("Workout Name");
-			tableModel.addColumn("Exercice Number");
-			tableModel.addColumn("Level");
-			tableModel.addColumn("Video");
-			table = new JTable(tableModel);
+			workoutTable = new DefaultTableModel();
+			getWorkoutTable().addColumn("Workout Name");
+			getWorkoutTable().addColumn("Exercice Number");
+			getWorkoutTable().addColumn("Level");
+			getWorkoutTable().addColumn("Video");
+			table = new JTable(workoutTable);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,9 +46,8 @@ public class WorkoutsPannel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				try {
-					
 					workout = workoutManager.getAll();
-					fillWorkoutPanel(tableModel,workout);
+					fillWorkoutPanel(workoutTable, workout);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -59,11 +58,10 @@ public class WorkoutsPannel extends JPanel {
 		
 	private void fillWorkoutPanel(DefaultTableModel workoutTable, List<Workout> workout) {
 		try {
-			workout = new ArrayList<Workout>();
-			if (tableModel.getRowCount() == 0) {
+			if (workoutTable.getRowCount() == 0) {
 				for (Workout workouts: workout) {
-					Object[] linea = { workouts.getWorkoutName(), workouts.getExerciseNumber(), workouts.getWorkoutLvl(),
-							workouts.getVideoURL()};
+					Object[] linea = { workouts.getWorkoutName(), workouts.getExerciseNumber(), workouts.getLevel(),
+							workouts.getVideo()};
 
 					workoutTable.addRow(linea);
 
@@ -79,4 +77,12 @@ public class WorkoutsPannel extends JPanel {
 		return this;
 	}
 
+	public DefaultTableModel getWorkoutTable() {
+		return workoutTable;
+	}
+
+	public void setWorkoutTable(DefaultTableModel workoutTable) {
+		this.workoutTable = workoutTable;
+	}
+	
 }

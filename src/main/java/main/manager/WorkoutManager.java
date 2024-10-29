@@ -2,6 +2,7 @@ package main.manager;
 
 import java.io.FileInputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.core.ApiFuture;
@@ -26,13 +27,20 @@ public class WorkoutManager implements ManagerInterface<Workout>{
 		db = firestoreOptions.getService();
 	}
 	
-	@Override
 	public List<Workout> getAll() throws Exception {
 		ApiFuture<QuerySnapshot> future = db.collection("workouts").get();
 		List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+		List <Workout> ret = new ArrayList<Workout>();
 		for (QueryDocumentSnapshot document : documents) {
-		  System.out.println(document.getId() + " => " + document.toObject(Workout.class));		}
-		return null;
+			
+			Workout workout = new Workout();
+			workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
+			workout.setLevel(((Number) document.get("level")).intValue());;
+			workout.setVideo(document.getString("video"));
+			workout.setWorkoutName(document.getString("workoutName"));
+			ret.add(workout);
+		}
+		return ret;
 	}
 
 	@Override
