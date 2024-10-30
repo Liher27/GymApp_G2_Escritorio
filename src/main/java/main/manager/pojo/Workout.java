@@ -12,7 +12,6 @@ public class Workout {
 	private String video = null;
 	private List<Exercise> exercises;
 	
-	
 	public int getLevel() {
 		return level;
 	}

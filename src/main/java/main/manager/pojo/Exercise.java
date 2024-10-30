@@ -8,7 +8,7 @@ public class Exercise {
 
 	private String exerciseName = null;
 	private int seriesNumber = 0;
-	private ImageIcon exerciseImage = null;
+	private String exerciseImage = null;
 	private int rest = 0;
 
 	@Override
@@ -51,12 +51,12 @@ public class Exercise {
 		this.seriesNumber = seriesNumber;
 	}
 
-	public ImageIcon getExerciseImage() {
+	public String getExerciseImage() {
 		return exerciseImage;
 	}
 
-	public void setExerciseImage(ImageIcon exerciseImage) {
-		this.exerciseImage = exerciseImage;
+	public void setExerciseImage(String string) {
+		this.exerciseImage = string;
 	}
 
 	public int getRest() {

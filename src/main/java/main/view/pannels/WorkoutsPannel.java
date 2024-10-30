@@ -9,39 +9,104 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import main.manager.ExerciseManager;
 import main.manager.WorkoutManager;
+import main.manager.pojo.Exercise;
 import main.manager.pojo.Workout;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class WorkoutsPannel extends JPanel {
 	
 	private WorkoutManager workoutManager;
+	private ExerciseManager exerciseManager;
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private DefaultTableModel workoutTable = null;
+	private DefaultTableModel exerciseTable = null;
 	private List<Workout> workout = null;
+	private List<Exercise> exercise = null;
 
 	public WorkoutsPannel() {
 
 		setLayout(null);
-		setBounds(100, 100, 1215, 666);
+		setBounds(0, 0, 1230, 700);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 243, 576, 199);
-		add(scrollPane);
+		JScrollPane workoutScrollPane = new JScrollPane();
 		
-		try {
-			workoutManager = new WorkoutManager();
-			workoutTable = new DefaultTableModel();
-			getWorkoutTable().addColumn("Workout Name");
-			getWorkoutTable().addColumn("Exercice Number");
-			getWorkoutTable().addColumn("Level");
-			getWorkoutTable().addColumn("Video");
-			table = new JTable(workoutTable);
+		workoutScrollPane.setBounds(32, 449, 576, 199);
+		add(workoutScrollPane);
+		
+			try {
+				workoutManager = new WorkoutManager();
+				workoutTable = new DefaultTableModel();
+				workoutTable.addColumn("Workout Name");
+				workoutTable.addColumn("Exercice Number");
+				workoutTable.addColumn("Level");
+				workoutTable.addColumn("Video");
+				table = new JTable(workoutTable);
+				table.addMouseListener(new java.awt.event.MouseAdapter() {
+					public void mouseClicked(java.awt.event.MouseEvent e) {
+						
+					}
+
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		scrollPane.setViewportView(table);
+		workoutScrollPane.setViewportView(table);
+		
+		JScrollPane exerciceScrollPane = new JScrollPane();
+		exerciceScrollPane.setBounds(32, 229, 576, 199);
+		add(exerciceScrollPane);
+		
+			try {
+				exerciseManager = new ExerciseManager();
+				exerciseTable = new DefaultTableModel();
+				exerciseTable.addColumn("Exercise Name");
+				exerciseTable.addColumn("Image");
+				exerciseTable.addColumn("restTime");
+				exerciseTable.addColumn("seriesNumber");
+				table = new JTable(exerciseTable);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		exerciceScrollPane.setViewportView(table);
+		
+		JLabel lblCronometro = new JLabel("00:00:00");
+		lblCronometro.setFont(new Font("Tahoma", Font.PLAIN, 36));
+		lblCronometro.setBounds(32, 50, 157, 64);
+		add(lblCronometro);
+		
+		JButton btnNewButton = new JButton("Salir");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(1030, 584, 157, 64);
+		add(btnNewButton);
+		
+		JButton btnPausar = new JButton("Pausar");
+		btnPausar.setBounds(745, 584, 157, 64);
+		add(btnPausar);
+		
+		JButton btnNewButton_1_1 = new JButton("Iniciar");
+		btnNewButton_1_1.setBounds(745, 449, 157, 64);
+		add(btnNewButton_1_1);
+		
+		JButton btnNewButton_1_1_1 = new JButton("Parar");
+		btnNewButton_1_1_1.setBounds(1030, 449, 157, 64);
+		add(btnNewButton_1_1_1);
+		
+		JLabel lblNewLabel = new JLabel("Cronometro Workout");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel.setBounds(32, 11, 157, 41);
+		add(lblNewLabel);
 		
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
@@ -54,8 +119,20 @@ public class WorkoutsPannel extends JPanel {
 				
 			}
 		});
+		this.addComponentListener(new ComponentAdapter() {
+			public void componentShown(ComponentEvent e) {
+				try {
+					exercise = exerciseManager.getAll();
+					fillExercisePanel(exerciseTable, exercise);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 	}
-		
+	
+	
 	private void fillWorkoutPanel(DefaultTableModel workoutTable, List<Workout> workout) {
 		try {
 			if (workoutTable.getRowCount() == 0) {
@@ -73,16 +150,24 @@ public class WorkoutsPannel extends JPanel {
 		}
 
 	}
-	public JPanel getWorkoutsPannel() {
-		return this;
-	}
+	private void fillExercisePanel(DefaultTableModel exerciseTable, List<Exercise> exercises) {
+		try {
+			if (exerciseTable.getRowCount() == 0) {
+				for (Exercise exercise: exercises) {
+					Object[] linea = { exercise.getExerciseName(), exercise.getExerciseImage(), exercise.getRest(),
+							exercise.getSeriesNumber()};
 
-	public DefaultTableModel getWorkoutTable() {
-		return workoutTable;
-	}
+					exerciseTable.addRow(linea);
 
+				}
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
 	public void setWorkoutTable(DefaultTableModel workoutTable) {
 		this.workoutTable = workoutTable;
 	}
-	
 }
