@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import main.manager.ExerciseManager;
+import main.manager.StatusSingleton;
 import main.manager.WorkoutManager;
 import main.manager.pojo.Exercise;
 import main.manager.pojo.Workout;
@@ -37,7 +38,7 @@ public class WorkoutsPannel extends JPanel {
 
 		JScrollPane workoutScrollPane = new JScrollPane();
 		
-		workoutScrollPane.setBounds(32, 449, 576, 199);
+		workoutScrollPane.setBounds(32, 212, 576, 199);
 		add(workoutScrollPane);
 		
 			try {
@@ -61,7 +62,7 @@ public class WorkoutsPannel extends JPanel {
 		workoutScrollPane.setViewportView(table);
 		
 		JScrollPane exerciceScrollPane = new JScrollPane();
-		exerciceScrollPane.setBounds(32, 229, 576, 199);
+		exerciceScrollPane.setBounds(32, 446, 576, 199);
 		add(exerciceScrollPane);
 		
 			try {
@@ -77,6 +78,15 @@ public class WorkoutsPannel extends JPanel {
 			}
 			
 		exerciceScrollPane.setViewportView(table);
+		
+		JButton btnPerfil = new JButton("Perfil");
+		btnPerfil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StatusSingleton.getInstance().changeToProfilePannel();
+			}
+		});
+		btnPerfil.setBounds(1089, 11, 131, 64);
+		add(btnPerfil);
 		
 		JLabel lblCronometro = new JLabel("00:00:00");
 		lblCronometro.setFont(new Font("Tahoma", Font.PLAIN, 36));

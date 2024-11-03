@@ -31,7 +31,7 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 		DocumentReference workout = db.collection("workouts").document("workout_1");
 		CollectionReference exercice = workout.collection("workoutExercises");
 		List <Exercise> ret = new ArrayList<Exercise>();
-		 List<QueryDocumentSnapshot> documentos = exercice.get().get().getDocuments();
+		List<QueryDocumentSnapshot> documentos = exercice.get().get().getDocuments();
 			for (QueryDocumentSnapshot document : documentos) {
 				
 				Exercise exercise = new Exercise();

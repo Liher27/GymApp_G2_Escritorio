@@ -9,9 +9,11 @@ import java.util.Map;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
+import com.google.firestore.v1.Document;
 
 import main.manager.pojo.User;
 
@@ -42,8 +44,21 @@ public class UserManager implements ManagerInterface<User> {
 
 	@Override
 	public User getOne(User user) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	    DocumentReference getUserRef = db.collection("users").document(user.getName());
+	    ApiFuture<DocumentSnapshot> future = getUserRef.get();
+	    DocumentSnapshot document = future.get();
+
+	    if (document.exists()) {
+	        user.setName(document.getString("name"));
+	        user.setBirthDate(document.getDate("birthDate"));
+	        user.setMail(document.getString("mail"));
+	        user.setPass(document.getString("pass"));
+	        user.setSurname(document.getString("surname"));
+	        user.setUserLevel(((Number) document.get("level")).intValue());
+	        return user;
+	    } else {
+	        throw new Exception("User not found");
+	    }
 	}
 
 	@Override
