@@ -23,7 +23,7 @@ public class Frame extends JFrame {
 	public Frame() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1230, 700);
+		setBounds(0, 0, 1230, 700);
 		setResizable(false);
 		setTitle("GYMAPP G2");
 		setLocationRelativeTo(null);
@@ -34,45 +34,39 @@ public class Frame extends JFrame {
 		contentPanel.setLayout(null);
 
 		// 0
-		LoginPannel loginPannel = new LoginPannel();
+		LoginPannel loginPannel = StatusSingleton.getInstance().getLoginPannel();
 		loginPannel.setVisible(true);
 		contentPanel.add(loginPannel);
 		add(loginPannel);
-		StatusSingleton.getInstance().setLoginPannel(loginPannel);
 
 		// 1
-		RegisterPannel registerPannel = new RegisterPannel();
+		RegisterPannel registerPannel = StatusSingleton.getInstance().getRegisterPannel();
 		registerPannel.setVisible(false);
 		contentPanel.add(registerPannel);
 		add(registerPannel);
-		StatusSingleton.getInstance().setRegisterPannel(registerPannel);
 
 		// 2
-		WorkoutsPannel workoutPannel = new WorkoutsPannel();
+		WorkoutsPannel workoutPannel = StatusSingleton.getInstance().getWorkoutsPannel();
 		workoutPannel.setVisible(false);
 		contentPanel.add(workoutPannel);
 		add(workoutPannel);
-		StatusSingleton.getInstance().setWorkoutsPannel(workoutPannel);
 
 		// 3
-		ProfilePannel profilePannel = new ProfilePannel();
+		ProfilePannel profilePannel = StatusSingleton.getInstance().getProfilePannel();
 		profilePannel.setVisible(false);
 		contentPanel.add(profilePannel);
 		add(profilePannel);
-		StatusSingleton.getInstance().setProfilePannel(profilePannel);
 
 		// 4
-		HistoricPannel historicPannel = new HistoricPannel();
+		HistoricPannel historicPannel = StatusSingleton.getInstance().getHistoricPannel();
 		historicPannel.setVisible(false);
 		contentPanel.add(historicPannel);
 		add(historicPannel);
-		StatusSingleton.getInstance().setHistoricPannel(historicPannel);
 
 		// 5
-		ExercisePannel exercisePannel = new ExercisePannel();
+		ExercisePannel exercisePannel = StatusSingleton.getInstance().getExercisePannel();
 		exercisePannel.setVisible(false);
 		contentPanel.add(exercisePannel);
 		add(exercisePannel);
-		StatusSingleton.getInstance().setExercisePannel(exercisePannel);
 	}
 }

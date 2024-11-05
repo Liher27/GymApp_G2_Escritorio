@@ -30,6 +30,7 @@ public class LoginPannel extends JPanel {
 	private JLabel noAccountLbl = null;
 
 	public LoginPannel() {
+		
 		setLayout(null);
 		setBounds(0, 0, 1230, 700);
 

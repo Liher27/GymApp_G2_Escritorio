@@ -55,7 +55,7 @@ public class RegisterPannel extends JPanel {
 	private JTextField confirmPassField = null;
 
 	public RegisterPannel() {
-		setBounds(0, 0, 1215, 666);
+		setBounds(0, 0, 1230, 700);
 		setLayout(null);
 		setBackground(new Color(57, 57, 57));
 

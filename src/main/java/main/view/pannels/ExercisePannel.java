@@ -29,38 +29,47 @@ public class ExercisePannel extends JPanel {
 	private JTable table;
 	private List<Exercise> exercise = null;
 	private User userLevel = null;
+	private JLabel lblCronometro = null;
+	private JLabel lblCronometroWorkout = null;
+	private JLabel lblWorkoutlevel = null;
+	private JLabel lblEjercicios = null;
+	private JButton btnIniciar = null;
+	private JButton btnPausar = null;
+	private JButton btnParar = null;
+	private JButton btnVolver = null;
 
 	public ExercisePannel() {
+
 		setLayout(null);
-		setBounds(100, 100, 1230, 700);
+		setBounds(0, 0, 1230, 700);
 
 		JScrollPane exerciceScrollPane = new JScrollPane();
 		exerciceScrollPane.setBounds(319, 233, 576, 199);
 		add(exerciceScrollPane);
 
-		JLabel lblCronometro = new JLabel("00:00:00");
+		lblCronometro = new JLabel("00:00:00");
 		lblCronometro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCronometro.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		lblCronometro.setBounds(529, 593, 157, 64);
 		add(lblCronometro);
 
-		JButton btnPausar = new JButton("Pausar");
+		btnPausar = new JButton("Pausar");
 		btnPausar.setBounds(529, 443, 157, 64);
 		add(btnPausar);
 
-		JButton btnNewButton_1_1 = new JButton("Iniciar");
-		btnNewButton_1_1.setBounds(316, 443, 157, 64);
-		add(btnNewButton_1_1);
+		btnIniciar = new JButton("Iniciar");
+		btnIniciar.setBounds(316, 443, 157, 64);
+		add(btnIniciar);
 
-		JButton btnNewButton_1_1_1 = new JButton("Parar");
-		btnNewButton_1_1_1.setBounds(738, 443, 157, 64);
-		add(btnNewButton_1_1_1);
+		btnParar = new JButton("Parar");
+		btnParar.setBounds(738, 443, 157, 64);
+		add(btnParar);
 
-		JLabel lblNewLabel = new JLabel("Cronometro Workout");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel.setBounds(529, 536, 157, 46);
-		add(lblNewLabel);
+		lblCronometroWorkout = new JLabel("Cronometro Workout");
+		lblCronometroWorkout.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCronometroWorkout.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblCronometroWorkout.setBounds(529, 536, 157, 46);
+		add(lblCronometroWorkout);
 
 		try {
 			exerciseManager = new ExerciseManager();
@@ -76,33 +85,33 @@ public class ExercisePannel extends JPanel {
 
 		exerciceScrollPane.setViewportView(table);
 
-		JLabel lblNewLabel_1 = new JLabel("WORKOUT 0,1,2,3,4");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblNewLabel_1.setBounds(459, 153, 296, 52);
-		add(lblNewLabel_1);
+		lblWorkoutlevel = new JLabel("WORKOUT 0,1,2,3,4");
+		lblWorkoutlevel.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		lblWorkoutlevel.setBounds(459, 153, 296, 52);
+		add(lblWorkoutlevel);
 
-		JLabel lblNewLabel_2 = new JLabel("EJERCICIOS");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 38));
-		lblNewLabel_2.setBounds(504, 62, 207, 64);
-		add(lblNewLabel_2);
+		lblEjercicios = new JLabel("EJERCICIOS");
+		lblEjercicios.setFont(new Font("Tahoma", Font.PLAIN, 38));
+		lblEjercicios.setBounds(504, 62, 207, 64);
+		add(lblEjercicios);
 
-		JButton btnNewButton_1_1_1_1 = new JButton("VOLVER ");
-		btnNewButton_1_1_1_1.addActionListener(new ActionListener() {
+		btnVolver = new JButton("VOLVER ");
+		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiarTabla();
 				StatusSingleton.getInstance().changeToWorkoutsPannel();
 			}
 
 		});
-		btnNewButton_1_1_1_1.setBounds(1063, 625, 157, 64);
-		add(btnNewButton_1_1_1_1);
+		btnVolver.setBounds(1063, 625, 157, 64);
+		add(btnVolver);
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				try {
 					userLevel = StatusSingleton.getInstance().getUser();
 					int userLevelInt = userLevel.getUserLevel();
 					System.out.println(userLevel.getUserLevel());
-					exercise = exerciseManager.getExercisesFromWorkout(userLevelInt); 
+					exercise = exerciseManager.getExercisesFromWorkout(userLevelInt);
 					fillExercisePanel(exerciseTable, exercise);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -128,8 +137,9 @@ public class ExercisePannel extends JPanel {
 		} catch (Exception e) {
 			throw e;
 		}
-		
+
 	}
+
 	private void limpiarTabla() {
 		// TODO Auto-generated method stub
 	}
