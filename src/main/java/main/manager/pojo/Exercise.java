@@ -10,16 +10,17 @@ public class Exercise {
 	private int seriesNumber = 0;
 	private String exerciseImage = null;
 	private int rest = 0;
+	private int execiseId = 0;
 
 	@Override
 	public String toString() {
 		return "Exercise [exerciseName=" + exerciseName + ", seriesNumber=" + seriesNumber + ", exerciseImage="
-				+ exerciseImage + ", rest=" + rest + "]";
+				+ exerciseImage + ", rest=" + rest + ", execiseId=" + execiseId + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(exerciseImage, exerciseName, rest, seriesNumber);
+		return Objects.hash(exerciseImage, exerciseName, execiseId, rest, seriesNumber);
 	}
 
 	@Override
@@ -32,7 +33,15 @@ public class Exercise {
 			return false;
 		Exercise other = (Exercise) obj;
 		return Objects.equals(exerciseImage, other.exerciseImage) && Objects.equals(exerciseName, other.exerciseName)
-				&& rest == other.rest && seriesNumber == other.seriesNumber;
+				&& execiseId == other.execiseId && rest == other.rest && seriesNumber == other.seriesNumber;
+	}
+
+	public int getExeciseId() {
+		return execiseId;
+	}
+
+	public void setExeciseId(int execiseId) {
+		this.execiseId = execiseId;
 	}
 
 	public String getExerciseName() {
@@ -66,6 +75,5 @@ public class Exercise {
 	public void setRest(int rest) {
 		this.rest = rest;
 	}
-	
-	
+
 }

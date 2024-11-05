@@ -15,7 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import main.manager.ExerciseManager;
 import main.manager.StatusSingleton;
 import main.manager.pojo.Exercise;
-import main.manager.pojo.User;
 
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
@@ -28,7 +27,6 @@ public class ExercisePannel extends JPanel {
 	private DefaultTableModel exerciseTable = null;
 	private JTable table;
 	private List<Exercise> exercise = null;
-	private User userLevel = null;
 	private JLabel lblCronometro = null;
 	private JLabel lblCronometroWorkout = null;
 	private JLabel lblWorkoutlevel = null;
@@ -108,15 +106,12 @@ public class ExercisePannel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				try {
-					userLevel = StatusSingleton.getInstance().getUser();
-					int userLevelInt = userLevel.getUserLevel();
-					System.out.println(userLevel.getUserLevel());
-					exercise = exerciseManager.getExercisesFromWorkout(userLevelInt);
+					int row = StatusSingleton.getInstance().getSelectedRow();
+					exercise = exerciseManager.getExercisesForWorkout(row);
 					fillExercisePanel(exerciseTable, exercise);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-
 			}
 		});
 

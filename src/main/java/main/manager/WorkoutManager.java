@@ -5,13 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
@@ -23,8 +26,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 	private Firestore db = null;
 
 	public WorkoutManager() throws Exception {
-		FileInputStream serviceAccount = new FileInputStream(
-				"src/main/resources/reto-1-grupo-2.json");
+		FileInputStream serviceAccount = new FileInputStream("src/main/resources/reto-1-grupo-2.json");
 
 		FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
 				.setProjectId("reto-1-grupo-2").setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
@@ -49,7 +51,6 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			db.close();
 		}
 		return ret;
 	}
@@ -59,6 +60,29 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	public List<Workout> getWorkoutsForUserLevel(int userLevel) throws ExecutionException, InterruptedException {
+
+	    CollectionReference workoutsRef = db.collection("workouts");
+	    Query query = workoutsRef.whereLessThanOrEqualTo("level", userLevel);
+
+	    List<QueryDocumentSnapshot> workoutDocuments = query.get().get().getDocuments();
+	    List<Workout> workouts = new ArrayList<>();
+
+	    for (QueryDocumentSnapshot document : workoutDocuments) {
+	        Workout workout = document.toObject(Workout.class);
+	        workout.setWorkoutId(((Number) document.get("workoutId")).intValue());
+	        workout.setWorkoutName(document.getString("workoutName"));
+	        workout.setLevel(((Number) document.get("level")).intValue());
+	        workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
+	        workout.setVideo(document.getString("video"));
+	        workouts.add(workout);
+	    }
+
+	    return workouts;
+	}
+
+
+	
 
 	@Override
 	public Workout getOne(Workout workout) throws Exception {
@@ -91,7 +115,6 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			db.close();
 		}
 		return workout;
 	}

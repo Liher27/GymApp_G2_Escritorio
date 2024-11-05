@@ -54,11 +54,12 @@ public class UserManager implements ManagerInterface<User> {
 	        user.setMail(document.getString("mail"));
 	        user.setPass(document.getString("pass"));
 	        user.setSurname(document.getString("surname"));
-	        user.setUserLevel(((Number) document.get("level")).intValue());
-	        return user;
+	        user.setUserLevel(((Number) document.get("userLevel")).intValue());
+	        
 	    } else {
 	        throw new Exception("User not found");
 	    }
+	    return user;
 	}
 
 	@Override

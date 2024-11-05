@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -11,6 +12,7 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
@@ -50,12 +52,34 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			if (db != null) {
-				db.close();
-			}
 		}
 		return ret;
 	}
+	public List<Exercise> getExercisesForWorkout(int workoutId) throws ExecutionException, InterruptedException {
+	    
+		DocumentReference workoutDoc = db.collection("workouts").document();
+	    CollectionReference exercisesRef = workoutDoc.collection("workoutExercises");
+	    Query query = exercisesRef.whereEqualTo("exerciseId", workoutId);
+	    System.out.println(workoutId);
+	    List<QueryDocumentSnapshot> exerciseDocuments = query.get().get().getDocuments();
+	    
+	    List<Exercise> exercises = new ArrayList<>();
+	    
+	    for (QueryDocumentSnapshot document : exerciseDocuments) {
+	        Exercise exercise = document.toObject(Exercise.class);
+	        
+	        exercise.setExeciseId(((Number) document.get("exerciseId")).intValue()); 
+	        exercise.setExerciseName((String) document.get("exerciseName"));
+	        exercise.setSeriesNumber(((Number) document.get("seriesNumber")).intValue());
+	        exercise.setRest(((Number) document.get("rest")).intValue());
+	        exercise.setExerciseImage((String) document.get("image"));
+	        
+	        exercises.add(exercise);
+	    }
+	    
+	    return exercises;
+	}
+
 
 	@Override
 	public boolean insert(Exercise t) throws Exception {
@@ -108,9 +132,6 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			if (db != null) {
-				db.close();
-			}
 		}
 		return allExercises;
 	}

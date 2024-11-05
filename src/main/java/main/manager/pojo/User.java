@@ -1,7 +1,6 @@
 package main.manager.pojo;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -12,6 +11,14 @@ public class User {
 	private Date birthDate = null;
 	private int userLevel = 0;
 	private boolean trainer = false;
+
+	public int getUserLevel() {
+		return userLevel;
+	}
+
+	public void setUserLevel(int userLevel) {
+		this.userLevel = userLevel;
+	}
 
 	public String getName() {
 		return name;
@@ -27,14 +34,6 @@ public class User {
 
 	public void setPass(String password) {
 		this.pass = password;
-	}
-
-	public int getUserLevel() {
-		return userLevel;
-	}
-
-	public void setUserLevel(int userLevel) {
-		this.userLevel = userLevel;
 	}
 
 	public String getMail() {
@@ -93,8 +92,4 @@ public class User {
 		return "User [name=" + name + ", pass=" + pass + ", mail=" + mail + ", surname=" + surname + ", birthDate="
 				+ birthDate + ", userLevel=" + userLevel + ", trainer=" + trainer + "]";
 	}
-
-	
-	
-
 }
