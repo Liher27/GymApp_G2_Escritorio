@@ -41,6 +41,8 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		try {
 			for (QueryDocumentSnapshot document : documents) {
 				Workout workout = new Workout();
+				System.out.println(document.getId());
+				workout.setWorkoutUID(document.getId());
 				workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
 				workout.setLevel(((Number) document.get("level")).intValue());
 				workout.setVideo(document.getString("video"));
@@ -70,6 +72,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 
 	    for (QueryDocumentSnapshot document : workoutDocuments) {
 	        Workout workout = document.toObject(Workout.class);
+			workout.setWorkoutUID(document.getId());
 	        workout.setWorkoutId(((Number) document.get("workoutId")).intValue());
 	        workout.setWorkoutName(document.getString("workoutName"));
 	        workout.setLevel(((Number) document.get("level")).intValue());
@@ -103,8 +106,8 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 					Exercise exercise = new Exercise();
 					exercise.setExerciseName((String) exerciseData.get("exerciseName"));
 					exercise.setSeriesNumber(((Number) exerciseData.get("seriesNumber")).intValue());
-					exercise.setRest(((Number) exerciseData.get("rest")).intValue());
-					exercise.setExerciseImage((String) exerciseData.get("image"));
+					exercise.setRestTime(((Number) exerciseData.get("rest")).intValue());
+					exercise.setImage((String) exerciseData.get("image"));
 
 					exercises.add(exercise);
 				}

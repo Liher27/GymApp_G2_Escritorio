@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import main.manager.ExerciseManager;
 import main.manager.StatusSingleton;
+import main.manager.WorkoutManager;
 import main.manager.pojo.Exercise;
 
 import javax.swing.SwingConstants;
@@ -24,6 +25,7 @@ public class ExercisePannel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private ExerciseManager exerciseManager;
+	private WorkoutManager workoutManager;
 	private DefaultTableModel exerciseTable = null;
 	private JTable table;
 	private List<Exercise> exercise = null;
@@ -106,8 +108,8 @@ public class ExercisePannel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				try {
-					int row = StatusSingleton.getInstance().getSelectedRow();
-					exercise = exerciseManager.getExercisesForWorkout(row);
+					String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
+					exercise = exerciseManager.getExercisesForWorkout(id);
 					fillExercisePanel(exerciseTable, exercise);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -121,7 +123,7 @@ public class ExercisePannel extends JPanel {
 		try {
 			if (exerciseTable.getRowCount() == 0) {
 				for (Exercise exercise : exercises) {
-					Object[] linea = { exercise.getExerciseName(), exercise.getExerciseImage(), exercise.getRest(),
+					Object[] linea = { exercise.getExerciseName(), exercise.getImage(), exercise.getRestTime(),
 							exercise.getSeriesNumber() };
 
 					exerciseTable.addRow(linea);

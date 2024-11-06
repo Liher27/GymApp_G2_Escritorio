@@ -49,7 +49,7 @@ public class WorkoutsPannel extends JPanel {
             table = new JTable(workoutTable);
             table.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                    StatusSingleton.getInstance().setSelectedRow(table.getSelectedRow());
+                    StatusSingleton.getInstance().setWorkout(workouts.get(table.getSelectedRow()));
                     StatusSingleton.getInstance().changeToExercisePannel();
                 }
             });

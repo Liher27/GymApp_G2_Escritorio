@@ -43,8 +43,8 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 
 				Exercise exercise = new Exercise();
 				exercise.setExerciseName(document.getString("exerciseName"));
-				exercise.setExerciseImage(document.getString("image"));
-				exercise.setRest(((Number) document.get("restTime")).intValue());
+				exercise.setImage(document.getString("image"));
+				exercise.setRestTime(((Number) document.get("restTime")).intValue());
 				exercise.setSeriesNumber(((Number) document.get("seriesNumber")).intValue());
 				ret.add(exercise);
 			}
@@ -55,24 +55,25 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 		}
 		return ret;
 	}
-	public List<Exercise> getExercisesForWorkout(int workoutId) throws ExecutionException, InterruptedException {
+	public List<Exercise> getExercisesForWorkout(String workoutId) throws ExecutionException, InterruptedException {
 	    
-		DocumentReference workoutDoc = db.collection("workouts").document();
-	    CollectionReference exercisesRef = workoutDoc.collection("workoutExercises");
-	    Query query = exercisesRef.whereEqualTo("exerciseId", workoutId);
-	    System.out.println(workoutId);
-	    List<QueryDocumentSnapshot> exerciseDocuments = query.get().get().getDocuments();
+		 CollectionReference workoutsRef = db.collection("workouts");
+		 
+		 DocumentReference workoutExercisesRef = workoutsRef.document(workoutId);
+		 
+		 CollectionReference a = workoutExercisesRef.collection("workoutExercises");
+		
+	    List<QueryDocumentSnapshot> exerciseDocuments = a.get().get().getDocuments();
 	    
 	    List<Exercise> exercises = new ArrayList<>();
 	    
 	    for (QueryDocumentSnapshot document : exerciseDocuments) {
 	        Exercise exercise = document.toObject(Exercise.class);
 	        
-	        exercise.setExeciseId(((Number) document.get("exerciseId")).intValue()); 
 	        exercise.setExerciseName((String) document.get("exerciseName"));
 	        exercise.setSeriesNumber(((Number) document.get("seriesNumber")).intValue());
-	        exercise.setRest(((Number) document.get("rest")).intValue());
-	        exercise.setExerciseImage((String) document.get("image"));
+	        exercise.setRestTime(((Number) document.get("restTime")).intValue());
+	        exercise.setImage((String) document.get("image"));
 	        
 	        exercises.add(exercise);
 	    }
@@ -120,8 +121,8 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 					Exercise exercise = new Exercise();
 
 					exercise.setExerciseName(exerciseDocument.getString("exerciseName"));
-					exercise.setExerciseImage(exerciseDocument.getString("image"));
-					exercise.setRest(exerciseDocument.getLong("restTime").intValue());
+					exercise.setImage(exerciseDocument.getString("image"));
+					exercise.setRestTime(exerciseDocument.getLong("restTime").intValue());
 					exercise.setSeriesNumber(exerciseDocument.getLong("seriesNumber").intValue());
 
 					allExercises.add(exercise);
