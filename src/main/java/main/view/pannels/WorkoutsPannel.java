@@ -1,3 +1,4 @@
+
 package main.view.pannels;
 
 import java.awt.event.ComponentAdapter;

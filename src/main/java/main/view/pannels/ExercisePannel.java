@@ -12,10 +12,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import main.controller.BackUpsController;
 import main.manager.ExerciseManager;
 import main.manager.StatusSingleton;
 import main.manager.WorkoutManager;
 import main.manager.pojo.Exercise;
+import main.manager.pojo.User;
+import main.manager.pojo.Workout;
 
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
@@ -26,6 +29,9 @@ public class ExercisePannel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private ExerciseManager exerciseManager;
 	private WorkoutManager workoutManager;
+	private Workout workout = null;
+	private User user = null;
+	private Exercise exercise1 = null;
 	private DefaultTableModel exerciseTable = null;
 	private JTable table;
 	private List<Exercise> exercise = null;
@@ -46,6 +52,27 @@ public class ExercisePannel extends JPanel {
 		JScrollPane exerciceScrollPane = new JScrollPane();
 		exerciceScrollPane.setBounds(319, 233, 576, 199);
 		add(exerciceScrollPane);
+		
+		
+		try {
+			exerciseManager = new ExerciseManager();
+			exerciseTable = new DefaultTableModel();
+			exerciseTable.addColumn("Exercise Name");
+			exerciseTable.addColumn("Image");
+			exerciseTable.addColumn("restTime");
+			exerciseTable.addColumn("seriesNumber");
+			table = new JTable(exerciseTable);
+			
+			table.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    StatusSingleton.getInstance().setExercise(exercise.get(table.getSelectedRow()));
+         
+                }
+            });
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 
 		lblCronometro = new JLabel("00:00:00");
 		lblCronometro.setHorizontalAlignment(SwingConstants.CENTER);
@@ -57,9 +84,7 @@ public class ExercisePannel extends JPanel {
 		btnPausar.setBounds(529, 443, 157, 64);
 		add(btnPausar);
 
-		btnIniciar = new JButton("Iniciar");
-		btnIniciar.setBounds(316, 443, 157, 64);
-		add(btnIniciar);
+		
 
 		btnParar = new JButton("Parar");
 		btnParar.setBounds(738, 443, 157, 64);
@@ -71,19 +96,22 @@ public class ExercisePannel extends JPanel {
 		lblCronometroWorkout.setBounds(529, 536, 157, 46);
 		add(lblCronometroWorkout);
 
-		try {
-			exerciseManager = new ExerciseManager();
-			exerciseTable = new DefaultTableModel();
-			exerciseTable.addColumn("Exercise Name");
-			exerciseTable.addColumn("Image");
-			exerciseTable.addColumn("restTime");
-			exerciseTable.addColumn("seriesNumber");
-			table = new JTable(exerciseTable);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 
 		exerciceScrollPane.setViewportView(table);
+		
+		btnIniciar = new JButton("Iniciar");
+		btnIniciar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BackUpsController backUpsController = new BackUpsController();
+				workout =StatusSingleton.getInstance().getWorkout();
+				user = StatusSingleton.getInstance().getUser();
+				exercise1 = StatusSingleton.getInstance().getExercise();
+				backUpsController.userBackups(workout, user,exercise1);
+			}
+		});
+		btnIniciar.setBounds(316, 443, 157, 64);
+		add(btnIniciar);
 
 		lblWorkoutlevel = new JLabel("WORKOUT 0,1,2,3,4");
 		lblWorkoutlevel.setFont(new Font("Tahoma", Font.PLAIN, 32));

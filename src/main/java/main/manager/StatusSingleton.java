@@ -1,5 +1,6 @@
 package main.manager;
 
+import main.manager.pojo.Exercise;
 import main.manager.pojo.User;
 import main.manager.pojo.Workout;
 import main.view.pannels.ExercisePannel;
@@ -20,6 +21,7 @@ public class StatusSingleton {
 	private WorkoutsPannel workoutsPannel = null;
 	private User user = null;
 	private Workout workout = null;
+	private Exercise exercise = null;
 	private int selectedRow = 0;
 
 	public StatusSingleton() {
@@ -31,6 +33,15 @@ public class StatusSingleton {
 		workoutsPannel = new WorkoutsPannel();
 		user = new User();
 		workout = new Workout();
+		exercise = new Exercise();
+	}
+
+	public Exercise getExercise() {
+		return exercise;
+	}
+
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
 	}
 
 	public static StatusSingleton getInstance() {

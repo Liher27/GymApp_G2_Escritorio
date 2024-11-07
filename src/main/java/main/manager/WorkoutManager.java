@@ -73,7 +73,6 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 	    for (QueryDocumentSnapshot document : workoutDocuments) {
 	        Workout workout = document.toObject(Workout.class);
 			workout.setWorkoutUID(document.getId());
-	        workout.setWorkoutId(((Number) document.get("workoutId")).intValue());
 	        workout.setWorkoutName(document.getString("workoutName"));
 	        workout.setLevel(((Number) document.get("level")).intValue());
 	        workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
@@ -83,7 +82,28 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 
 	    return workouts;
 	}
+	
+	public Workout getWorkoutFromLevel(int userLevel) throws ExecutionException, InterruptedException{
+		CollectionReference workoutsRef = db.collection("workouts");
+		   Query query = workoutsRef.whereLessThanOrEqualTo("level", userLevel);
 
+		   List<QueryDocumentSnapshot> workoutDocuments = query.get().get().getDocuments();
+		   
+		   Workout workout = new Workout();
+		   
+		 for (QueryDocumentSnapshot document : workoutDocuments) {
+
+		       workout.setWorkoutId(((Number) document.get("workoutId")).intValue());
+		       workout.setWorkoutName(document.getString("workoutName"));
+		       workout.setLevel(((Number) document.get("level")).intValue());
+		       workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
+		       workout.setVideo(document.getString("video"));
+		       StatusSingleton.getInstance().setWorkout(workout);
+		   }
+
+		return workout;
+
+		}
 
 	
 
