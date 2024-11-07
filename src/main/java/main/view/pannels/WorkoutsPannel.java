@@ -27,6 +27,8 @@ public class WorkoutsPannel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JTable table;
     private DefaultTableModel workoutTable = null;
+    private JLabel lblNewLabel_2 = null;
+    private JLabel lblNewLabel_3 = null;
 
     private List<Workout> workouts = null;
 
@@ -88,7 +90,7 @@ public class WorkoutsPannel extends JPanel {
         lblNewLabel_1.setBounds(513, 102, 203, 40);
         add(lblNewLabel_1);
         
-        JLabel lblNewLabel_2 = new JLabel("BIENVENIDO:");
+        lblNewLabel_2 = new JLabel("BIENVENIDO:");
         lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 32));
         lblNewLabel_2.setBounds(10, 53, 352, 40);
         add(lblNewLabel_2);
@@ -97,7 +99,7 @@ public class WorkoutsPannel extends JPanel {
         btnHistorial.setBounds(167, 583, 131, 64);
         add(btnHistorial);
         
-        JLabel lblNewLabel_3 = new JLabel("NIVEL ACTUAL:");
+        lblNewLabel_3 = new JLabel("NIVEL ACTUAL:");
         lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 32));
         lblNewLabel_3.setBounds(10, 102, 352, 40);
         add(lblNewLabel_3);
@@ -106,7 +108,10 @@ public class WorkoutsPannel extends JPanel {
             public void componentShown(ComponentEvent e) {
                 try {
             		userProfile = StatusSingleton.getInstance().getUser();
-                	int userLevel = userProfile.getUserLevel(); 
+                	int userLevel = userProfile.getUserLevel();
+                	lblNewLabel_3.setText("NIVEL ACTUAL: " + userLevel);
+                	System.out.println(userLevel);
+                	lblNewLabel_2.setText("BIENVENIDO, " + userProfile.getName().toUpperCase());
                 	workouts = workoutManager.getWorkoutsForUserLevel(userLevel);
                 	fillWorkoutPanel(workoutTable, workouts);
 

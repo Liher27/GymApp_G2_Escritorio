@@ -24,7 +24,7 @@ public class BackUpsController {
 
 	public void userBackups(Workout workout, User user, Exercise exercise1) {
 		File file = new File(
-				"C:\\Users\\yifei\\Documents\\" + user.getName() + ".xml");
+				"C:\\Trastero\\" + user.getName() + ".xml");
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = factory.newDocumentBuilder();

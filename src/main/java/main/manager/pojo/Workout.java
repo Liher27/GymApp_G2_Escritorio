@@ -11,15 +11,6 @@ public class Workout {
 	private int exerciseNumber = 0;
 	private String video = null;
 	private List<Exercise> exercises;
-	private int workoutId = 0;
-	
-	public int getWorkoutId() {
-		return workoutId;
-	}
-
-	public void setWorkoutId(int workoutId) {
-		this.workoutId = workoutId;
-	}
 
 	public String getWorkoutUID() {
 		return workoutUID;
@@ -72,12 +63,12 @@ public class Workout {
 	@Override
 	public String toString() {
 		return "Workout [level=" + level + ", workoutName=" + workoutName + ", exerciseNumber=" + exerciseNumber
-				+ ", video=" + video + ", id=" + workoutId + ", exercises=" + exercises + "]";
+				+ ", video=" + video + ", exercises=" + exercises + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(exerciseNumber, exercises, workoutId, level, video, workoutName);
+		return Objects.hash(exerciseNumber, exercises, level, video, workoutName);
 	}
 
 	@Override
@@ -89,7 +80,7 @@ public class Workout {
 		if (getClass() != obj.getClass())
 			return false;
 		Workout other = (Workout) obj;
-		return exerciseNumber == other.exerciseNumber && Objects.equals(exercises, other.exercises) && workoutId == other.workoutId
+		return exerciseNumber == other.exerciseNumber && Objects.equals(exercises, other.exercises)
 				&& level == other.level && Objects.equals(video, other.video)
 				&& Objects.equals(workoutName, other.workoutName);
 	}

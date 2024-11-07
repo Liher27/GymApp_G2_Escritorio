@@ -83,30 +83,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 	    return workouts;
 	}
 	
-	public Workout getWorkoutFromLevel(int userLevel) throws ExecutionException, InterruptedException{
-		CollectionReference workoutsRef = db.collection("workouts");
-		   Query query = workoutsRef.whereLessThanOrEqualTo("level", userLevel);
-
-		   List<QueryDocumentSnapshot> workoutDocuments = query.get().get().getDocuments();
-		   
-		   Workout workout = new Workout();
-		   
-		 for (QueryDocumentSnapshot document : workoutDocuments) {
-
-		       workout.setWorkoutId(((Number) document.get("workoutId")).intValue());
-		       workout.setWorkoutName(document.getString("workoutName"));
-		       workout.setLevel(((Number) document.get("level")).intValue());
-		       workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
-		       workout.setVideo(document.getString("video"));
-		       StatusSingleton.getInstance().setWorkout(workout);
-		   }
-
-		return workout;
-
-		}
-
 	
-
 	@Override
 	public Workout getOne(Workout workout) throws Exception {
 		DocumentReference getUserRef = db.collection("workouts").document(workout.getWorkoutName());
