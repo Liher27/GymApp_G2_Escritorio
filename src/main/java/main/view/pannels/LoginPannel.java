@@ -8,9 +8,11 @@ import javax.swing.SwingConstants;
 import main.controller.LoginController;
 import main.manager.StatusSingleton;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,7 +24,7 @@ public class LoginPannel extends JPanel {
 	private JTextField passwordField;
 	private JLabel logoImage = null;
 	private JLabel logInTitle = null;
-	private JLabel appTitle = null;
+	private JLabel appTitleLbl = null;
 	private JLabel userLbl = null;
 	private JLabel passwordLbl = null;
 	private JButton continueButton = null;
@@ -32,23 +34,27 @@ public class LoginPannel extends JPanel {
 	public LoginPannel() {
 		
 		setLayout(null);
+		setBackground(new Color(48,48,48));
 		setBounds(0, 0, 1230, 700);
 
-		logoImage = new JLabel("Logo aqui");
-		logoImage.setBounds(38, 27, 87, 87);
+		logoImage = new JLabel();
+		logoImage.setIcon(new ImageIcon("src/main/resources/logo.png"));
+		logoImage.setBounds(38, 27, 112, 112);
 		add(logoImage);
 
 		logInTitle = new JLabel("Login");
 		logInTitle.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 24));
+		logInTitle.setForeground(new Color(255, 193, 7));
 		logInTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		logInTitle.setBounds(417, 189, 219, 39);
 		add(logInTitle);
 
-		appTitle = new JLabel("ERREKAFIT");
-		appTitle.setFont(new Font("Segoe UI Semibold", Font.BOLD, 64));
-		appTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		appTitle.setBounds(344, 27, 487, 56);
-		add(appTitle);
+		appTitleLbl = new JLabel("ERREKAFIT");
+		appTitleLbl.setFont(new Font("Segoe UI Semibold", Font.BOLD, 64));
+		appTitleLbl.setForeground(new Color(255, 193, 7));
+		appTitleLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		appTitleLbl.setBounds(344, 27, 487, 56);
+		add(appTitleLbl);
 
 		userTextField = new JTextField();
 		userTextField.setBounds(493, 289, 219, 20);
@@ -62,10 +68,12 @@ public class LoginPannel extends JPanel {
 
 		userLbl = new JLabel("Usuario");
 		userLbl.setBounds(493, 264, 81, 14);
+		userLbl.setForeground(Color.white);
 		add(userLbl);
 
 		passwordLbl = new JLabel("Contraseña");
 		passwordLbl.setBounds(493, 395, 81, 14);
+		passwordLbl.setForeground(Color.white);
 		add(passwordLbl);
 
 		continueButton = new JButton("Continuar");
@@ -100,6 +108,7 @@ public class LoginPannel extends JPanel {
 
 		noAccountLbl = new JLabel("¿No tienes cuenta?");
 		noAccountLbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		noAccountLbl.setForeground(Color.white);
 		noAccountLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		noAccountLbl.setBounds(10, 596, 140, 14);
 		add(noAccountLbl);

@@ -5,8 +5,7 @@ import javax.swing.JPanel;
 
 import main.manager.StatusSingleton;
 import main.view.pannels.ExercisePannel;
-import main.view.pannels.HistoricPannel;
-import main.view.pannels.HistoryPanel;
+import main.view.pannels.HistoricPanel;
 import main.view.pannels.LoginPannel;
 import main.view.pannels.ProfilePannel;
 import main.view.pannels.RegisterPannel;
@@ -24,7 +23,7 @@ public class Frame extends JFrame {
 	public Frame() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 1250, 700);
+		setBounds(0, 0, 1230, 700);
 		setResizable(false);
 		setTitle("GYMAPP G2");
 		setLocationRelativeTo(null);
@@ -59,7 +58,7 @@ public class Frame extends JFrame {
 		add(profilePannel);
 
 		// 4
-		HistoryPanel historyPannel = StatusSingleton.getInstance().getHistoryPannel();
+		HistoricPanel historyPannel = StatusSingleton.getInstance().getHistoryPannel();
 		historyPannel.setVisible(false);
 		contentPanel.add(historyPannel);
 		add(historyPannel);

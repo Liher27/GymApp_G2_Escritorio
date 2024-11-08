@@ -1,12 +1,15 @@
 package main.view.pannels;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,33 +27,49 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class ExercisePannel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
+
+	private DefaultTableModel exerciseTable = null;
+	private JScrollPane exerciceScrollPane = null;
+	private JTable table;
+
+	private JLabel exerciseCronoLbl = null;
+	private JLabel exerciseTimeLbl = null;
+	private JLabel restTimeCronoLbl = null;
+	private JLabel restTimeLbl = null;
+	private JLabel logoImage = null;
+	private JLabel workoutCronoLbl;
+	private JLabel workoutTimeLbl = null;
+	private JLabel lblExerciseName = null;
+	private JLabel lblWorkoutName = null;
+
+	private JButton workoutStartBtn = null;
+	private JButton workoutPauseBtn = null;
+	private JButton endBtn = null;
+	private JButton exercisesBackButton = null;
+	private JButton seriesStartBtn = null;
+	private JButton seriesPauseBtn = null;
+
 	private ExerciseManager exerciseManager;
 	private Workout workout = null;
 	private User user = null;
 	private Exercise exercise1 = null;
-	private DefaultTableModel exerciseTable = null;
-	private JTable table;
-	private List<Exercise> exercise = null;
-	private JLabel lblCronometro = null;
-	private JLabel lblCronometroWorkoutTime;
-	private JLabel lblCronometroWorkout = null;
-	private JLabel lblWorkoutlevel = null;
-	private JLabel lblEjercicios = null;
-	private JButton btnIniciar = null;
-	private JButton btnPausar = null;
-	private JButton btnParar = null;
-	private JButton btnVolver = null;
+	private List<Exercise> exercises = null;
 
 	public ExercisePannel() {
 
 		setLayout(null);
 		setBounds(0, 0, 1230, 700);
+		setBackground(new Color(47, 47, 47));
 
-		JScrollPane exerciceScrollPane = new JScrollPane();
-		exerciceScrollPane.setBounds(275, 202, 680, 296);
+		exerciceScrollPane = new JScrollPane();
+		exerciceScrollPane.setBounds(319, 233, 576, 272);
 		add(exerciceScrollPane);
+
+		logoImage = new JLabel();
+		logoImage.setIcon(new ImageIcon("src/main/resources/logo.png"));
+		logoImage.setBounds(38, 27, 112, 112);
+		add(logoImage);
 
 		try {
 			exerciseManager = new ExerciseManager();
@@ -63,38 +82,40 @@ public class ExercisePannel extends JPanel {
 
 			table.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
-					StatusSingleton.getInstance().setExercise(exercise.get(table.getSelectedRow()));
+					StatusSingleton.getInstance().setExercise(exercises.get(table.getSelectedRow()));
 
 				}
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
+					JOptionPane.ERROR_MESSAGE);
 		}
+		workoutCronoLbl = new JLabel("00:00:00");
+		workoutCronoLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		workoutCronoLbl.setFont(new Font("Tahoma", Font.PLAIN, 36));
+		workoutCronoLbl.setForeground(Color.white);
+		workoutCronoLbl.setBounds(64, 286, 176, 64);
+		add(workoutCronoLbl);
 
-		lblCronometroWorkoutTime = new JLabel("00:00:00");
-		lblCronometroWorkoutTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCronometroWorkoutTime.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		lblCronometroWorkoutTime.setBounds(36, 68, 157, 64);
-		add(lblCronometroWorkoutTime);
+		workoutPauseBtn = new JButton("Pausar");
+		workoutPauseBtn.setBounds(164, 361, 76, 41);
+		add(workoutPauseBtn);
 
-		btnPausar = new JButton("Pausar");
-		btnPausar.setBounds(117, 353, 76, 41);
-		add(btnPausar);
+		endBtn = new JButton("Parar");
+		endBtn.setBounds(38, 640, 160, 34);
+		add(endBtn);
 
-		btnParar = new JButton("Parar");
-		btnParar.setBounds(78, 404, 76, 41);
-		add(btnParar);
-
-		lblCronometroWorkout = new JLabel("Cronometro Workout");
-		lblCronometroWorkout.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCronometroWorkout.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblCronometroWorkout.setBounds(36, 22, 157, 46);
-		add(lblCronometroWorkout);
+		workoutTimeLbl = new JLabel("Cronometro Workout");
+		workoutTimeLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		workoutTimeLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		workoutTimeLbl.setBounds(78, 233, 157, 46);
+		workoutTimeLbl.setForeground(Color.white);
+		add(workoutTimeLbl);
 
 		exerciceScrollPane.setViewportView(table);
 
-		btnIniciar = new JButton("Iniciar");
-		btnIniciar.addActionListener(new ActionListener() {
+		workoutStartBtn = new JButton("Iniciar");
+		workoutStartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				BackUpsController backUpsController = new BackUpsController();
 				workout = StatusSingleton.getInstance().getWorkout();
@@ -103,72 +124,83 @@ public class ExercisePannel extends JPanel {
 				backUpsController.userBackups(workout, user, exercise1);
 			}
 		});
-		btnIniciar.setBounds(32, 353, 76, 40);
-		add(btnIniciar);
+		workoutStartBtn.setBounds(64, 361, 76, 40);
+		add(workoutStartBtn);
 
-		lblWorkoutlevel = new JLabel("WORKOUT 0,1,2,3,4");
-		lblWorkoutlevel.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblWorkoutlevel.setBounds(447, 131, 296, 52);
-		add(lblWorkoutlevel);
+		lblExerciseName = new JLabel("SERIE ...");
+		lblExerciseName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblExerciseName.setForeground(new Color(255, 193, 7));
+		lblExerciseName.setFont(new Font("Segoe UI Semibold", Font.BOLD, 47));
+		lblExerciseName.setBounds(358, 138, 487, 56);
+		add(lblExerciseName);
 
-		lblEjercicios = new JLabel("EJERCICIOS");
-		lblEjercicios.setFont(new Font("Tahoma", Font.PLAIN, 38));
-		lblEjercicios.setBounds(496, 56, 207, 64);
-		add(lblEjercicios);
+		lblWorkoutName = new JLabel("WORKOUTNAME");
+		lblWorkoutName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblWorkoutName.setForeground(new Color(255, 193, 7));
+		lblWorkoutName.setFont(new Font("Segoe UI Semibold", Font.BOLD, 64));
+		lblWorkoutName.setBounds(324, 27, 532, 56);
+		add(lblWorkoutName);
 
-		btnVolver = new JButton("VOLVER ");
-		btnVolver.addActionListener(new ActionListener() {
+		exercisesBackButton = new JButton("Volver");
+		exercisesBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				clearTable();
 				StatusSingleton.getInstance().changeToWorkoutsPannel();
 			}
+
 		});
-		btnVolver.setBounds(1015, 594, 157, 64);
-		add(btnVolver);
-		
-		JLabel lblCronometroExercise = new JLabel("Cronometro Ejercicio");
-		lblCronometroExercise.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCronometroExercise.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblCronometroExercise.setBounds(36, 254, 157, 19);
-		add(lblCronometroExercise);
-		
-		JLabel lblCronometroExerciseTime = new JLabel("00:00:00");
-		lblCronometroExerciseTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCronometroExerciseTime.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		lblCronometroExerciseTime.setBounds(36, 284, 157, 64);
-		add(lblCronometroExerciseTime);
-		
-		JLabel lblCronometroRest = new JLabel("Cronometro Descanso");
-		lblCronometroRest.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCronometroRest.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblCronometroRest.setBounds(36, 496, 157, 46);
-		add(lblCronometroRest);
-		
-		JLabel lblCronometroRestTime = new JLabel("00:00:00");
-		lblCronometroRestTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCronometroRestTime.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		lblCronometroRestTime.setBounds(36, 535, 157, 64);
-		add(lblCronometroRestTime);
-		
-		JButton btnIniciar_1 = new JButton("Iniciar");
-		btnIniciar_1.setBounds(36, 146, 76, 40);
-		add(btnIniciar_1);
-		
-		JButton btnPausar_1 = new JButton("Pausar");
-		btnPausar_1.setBounds(117, 146, 76, 41);
-		add(btnPausar_1);
-		
-		JButton btnParar_1 = new JButton("Parar");
-		btnParar_1.setBounds(78, 197, 76, 41);
-		add(btnParar_1);
+		exercisesBackButton.setBounds(1048, 640, 160, 34);
+		add(exercisesBackButton);
+
+		seriesStartBtn = new JButton("Iniciar");
+		seriesStartBtn.setBounds(995, 361, 76, 40);
+		add(seriesStartBtn);
+
+		seriesPauseBtn = new JButton("Pausar");
+		seriesPauseBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		seriesPauseBtn.setBounds(1093, 361, 76, 41);
+		add(seriesPauseBtn);
+
+		exerciseCronoLbl = new JLabel("00:00:00");
+		exerciseCronoLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		exerciseCronoLbl.setForeground(Color.WHITE);
+		exerciseCronoLbl.setFont(new Font("Tahoma", Font.PLAIN, 36));
+		exerciseCronoLbl.setBounds(995, 286, 174, 64);
+		add(exerciseCronoLbl);
+
+		exerciseTimeLbl = new JLabel("Cronometro Serie");
+		exerciseTimeLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		exerciseTimeLbl.setForeground(Color.WHITE);
+		exerciseTimeLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		exerciseTimeLbl.setBounds(998, 240, 157, 46);
+		add(exerciseTimeLbl);
+
+		restTimeCronoLbl = new JLabel("00:00:00");
+		restTimeCronoLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		restTimeCronoLbl.setForeground(Color.WHITE);
+		restTimeCronoLbl.setFont(new Font("Tahoma", Font.PLAIN, 36));
+		restTimeCronoLbl.setBounds(529, 590, 157, 64);
+		add(restTimeCronoLbl);
+
+		restTimeLbl = new JLabel("Cronometro de descanso");
+		restTimeLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		restTimeLbl.setForeground(Color.WHITE);
+		restTimeLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		restTimeLbl.setBounds(513, 544, 189, 46);
+		add(restTimeLbl);
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				exerciseTable.setRowCount(0);
 				try {
 					String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
-					exercise = exerciseManager.getExercisesForWorkout(id);
-					fillExercisePanel(exerciseTable, exercise);
+					exercises = exerciseManager.getExercisesForWorkout(id);
+					fillExercisePanel(exerciseTable, exercises);
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -176,21 +208,20 @@ public class ExercisePannel extends JPanel {
 	}
 
 	private void fillExercisePanel(DefaultTableModel exerciseTable, List<Exercise> exercises) {
-
 		try {
 			if (exerciseTable.getRowCount() == 0) {
 				for (Exercise exercise : exercises) {
 					Object[] linea = { exercise.getExerciseName(), exercise.getImage(), exercise.getRestTime(),
 							exercise.getSeriesNumber() };
-
 					exerciseTable.addRow(linea);
-
 				}
 			}
-
 		} catch (Exception e) {
-			throw e;
+			JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion de la tabla...",
+					JOptionPane.ERROR_MESSAGE);
 		}
+	}
 
+	private void clearTable() {
 	}
 }

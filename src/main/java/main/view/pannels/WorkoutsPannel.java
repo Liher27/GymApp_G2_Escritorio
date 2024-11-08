@@ -3,6 +3,8 @@ package main.view.pannels;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -16,135 +18,162 @@ import main.manager.pojo.User;
 import main.manager.pojo.Workout;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Color;
 import java.awt.Font;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class WorkoutsPannel extends JPanel {
+	private static final long serialVersionUID = 1L;
+
+	private JTable table;
+
+	private JLabel welcomeUserLbl = null;
+	private JLabel userLvlBtn = null;
+	private JLabel profileBtn = null;
+	private JLabel logoImage = null;
+	private JLabel chooseWorkoutLbl = null;
+	private JLabel appTitleLbl = null;
+
+	private JButton exitBtn = null;
+	private JButton historicBtn = null;
+
+	private JScrollPane workoutScrollPane = null;
+	private DefaultTableModel workoutTable = null;
+
+	private WorkoutManager workoutManager = null;
+
 	private User userProfile = null;
-    private WorkoutManager workoutManager;
-    private static final long serialVersionUID = 1L;
-    private JTable table;
-    private DefaultTableModel workoutTable = null;
-    private JLabel lblNewLabel_2 = null;
-    private JLabel lblNewLabel_3 = null;
+	private List<Workout> workouts = null;
 
-    private List<Workout> workouts = null;
+	public WorkoutsPannel() {
+		setLayout(null);
+		setBackground(new Color(48, 48, 48));
+		setBounds(0, 0, 1230, 700);
 
-    public WorkoutsPannel() {
+		logoImage = new JLabel();
+		logoImage.setIcon(new ImageIcon("src/main/resources/logo.png"));
+		logoImage.setBounds(28, 11, 112, 112);
+		add(logoImage);
 
-        setLayout(null);
-        setBounds(0, 0, 1230, 700);
+		workoutScrollPane = new JScrollPane();
+		workoutScrollPane.setBounds(222, 267, 789, 279);
+		add(workoutScrollPane);
 
-        JScrollPane workoutScrollPane = new JScrollPane();
-        workoutScrollPane.setBounds(220, 210, 789, 279);
-        add(workoutScrollPane);
+		try {
+			workoutManager = new WorkoutManager();
+			workoutTable = new DefaultTableModel();
+			workoutTable.addColumn("Workout Name");
+			workoutTable.addColumn("Exercise Number");
+			workoutTable.addColumn("Level");
+			workoutTable.addColumn("Video");
 
-        try {
-            workoutManager = new WorkoutManager();
-            workoutTable = new DefaultTableModel();
-            workoutTable.addColumn("Workout Name");
-            workoutTable.addColumn("Exercise Number");
-            workoutTable.addColumn("Level");
-            workoutTable.addColumn("Video");
+			table = new JTable(workoutTable);
+			table.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					StatusSingleton.getInstance().setWorkout(workouts.get(table.getSelectedRow()));
+					StatusSingleton.getInstance().changeToExercisePannel();
+				}
+			});
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, null, "No hay workouts...", JOptionPane.ERROR_MESSAGE);
+		}
 
-            table = new JTable(workoutTable);
-            table.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent e) {
-                    StatusSingleton.getInstance().setWorkout(workouts.get(table.getSelectedRow()));
-                    StatusSingleton.getInstance().changeToExercisePannel();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		workoutScrollPane.setViewportView(table);
 
-        workoutScrollPane.setViewportView(table);
+		profileBtn = new JLabel();
+		profileBtn.setIcon(new ImageIcon("src/main/resources/profile.png"));
+		profileBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				StatusSingleton.getInstance().changeToProfilePannel();
+			}
+		});
+		profileBtn.setBounds(1087, 11, 90, 90);
+		add(profileBtn);
 
-        JButton btnPerfil = new JButton("Perfil");
-        btnPerfil.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                StatusSingleton.getInstance().changeToProfilePannel();
-            }
-        });
-        btnPerfil.setBounds(10, 583, 131, 64);
-        add(btnPerfil);
+		exitBtn = new JButton("Cerrar sesion");
+		exitBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, null, "Adios!!", JOptionPane.INFORMATION_MESSAGE);
+				StatusSingleton.getInstance().changeToLoginPannel();
+			}
+		});
+		exitBtn.setBounds(1069, 621, 140, 34);
+		add(exitBtn);
 
-        JButton btnNewButton = new JButton("Salir");
-        btnNewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0); 
-            }
-        });
-        btnNewButton.setBounds(1089, 583, 131, 64);
-        add(btnNewButton);
-        
-        JLabel lblNewLabel = new JLabel("ELIGE EL WORKOUT ");
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        lblNewLabel.setBounds(463, 159, 303, 40);
-        add(lblNewLabel);
-        
-        JLabel lblNewLabel_1 = new JLabel("ERREKAFIT");
-        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 38));
-        lblNewLabel_1.setBounds(513, 102, 203, 40);
-        add(lblNewLabel_1);
-        
-        lblNewLabel_2 = new JLabel("BIENVENIDO:");
-        lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        lblNewLabel_2.setBounds(10, 53, 352, 40);
-        add(lblNewLabel_2);
-        
-        JButton btnHistorial = new JButton("HISTORIAL");
-        btnHistorial.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		  StatusSingleton.getInstance().changeToHistoricPannel();
-        	}
-        });
-        btnHistorial.setBounds(167, 583, 131, 64);
-        add(btnHistorial);
-        
-        lblNewLabel_3 = new JLabel("NIVEL ACTUAL:");
-        lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        lblNewLabel_3.setBounds(10, 102, 352, 40);
-        add(lblNewLabel_3);
+		chooseWorkoutLbl = new JLabel("ELIGE EL WORKOUT ");
+		chooseWorkoutLbl.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		chooseWorkoutLbl.setForeground(Color.white);
+		chooseWorkoutLbl.setBounds(457, 187, 303, 40);
+		add(chooseWorkoutLbl);
 
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentShown(ComponentEvent e) {
-                try {
-            		userProfile = StatusSingleton.getInstance().getUser();
-                	int userLevel = userProfile.getUserLevel();
-                	lblNewLabel_3.setText("NIVEL ACTUAL: " + userLevel);
-                	System.out.println(userLevel);
-                	lblNewLabel_2.setText("BIENVENIDO, " + userProfile.getName().toUpperCase());
-                	workouts = workoutManager.getWorkoutsForUserLevel(userLevel);
-                	fillWorkoutPanel(workoutTable, workouts);
+		welcomeUserLbl = new JLabel("BIENVENIDO:");
+		welcomeUserLbl.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		welcomeUserLbl.setForeground(Color.white);
+		welcomeUserLbl.setBounds(457, 83, 352, 40);
+		add(welcomeUserLbl);
 
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-    }
+		historicBtn = new JButton("Historial");
+		historicBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StatusSingleton.getInstance().changeToHistoricPannel();
+			}
+		});
+		historicBtn.setBounds(28, 621, 140, 34);
+		add(historicBtn);
 
-    private void fillWorkoutPanel(DefaultTableModel workoutTable, List<Workout> workouts) {
-        workoutTable.setRowCount(0); 
-        try {
-            for (Workout workout : workouts) {
-                Object[] linea = {
-                    workout.getWorkoutName(),
-                    workout.getExerciseNumber(),
-                    workout.getLevel(),
-                    workout.getVideo()
-                };
-                workoutTable.addRow(linea);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+		userLvlBtn = new JLabel("NIVEL ACTUAL:");
+		userLvlBtn.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		userLvlBtn.setForeground(Color.white);
+		userLvlBtn.setBounds(457, 136, 352, 40);
+		add(userLvlBtn);
 
-    public void setWorkoutTable(DefaultTableModel workoutTable) {
-        this.workoutTable = workoutTable;
-    }
+		appTitleLbl = new JLabel("ERREKAFIT");
+		appTitleLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		appTitleLbl.setForeground(new Color(255, 193, 7));
+		appTitleLbl.setFont(new Font("Segoe UI Semibold", Font.BOLD, 64));
+		appTitleLbl.setBounds(346, 11, 487, 56);
+		add(appTitleLbl);
+
+		this.addComponentListener(new ComponentAdapter() {
+			public void componentShown(ComponentEvent e) {
+				try {
+					userProfile = StatusSingleton.getInstance().getUser();
+					int userLevel = userProfile.getUserLevel();
+					userLvlBtn.setText("NIVEL ACTUAL: " + userLevel);
+					System.out.println(userLevel);
+					welcomeUserLbl.setText("BIENVENIDO, " + userProfile.getName().toUpperCase());
+					workouts = workoutManager.getWorkoutsForUserLevel(userLevel);
+					fillWorkoutTable(workoutTable, workouts);
+
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+	}
+
+	private void fillWorkoutTable(DefaultTableModel workoutTable, List<Workout> workouts) {
+		workoutTable.setRowCount(0);
+		try {
+			for (Workout workout : workouts) {
+				Object[] line = { workout.getWorkoutName(), workout.getExerciseNumber(), workout.getLevel(),
+						workout.getVideo() };
+				workoutTable.addRow(line);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, null, "No se ha podido llenar la tabla...", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	public void setWorkoutTable(DefaultTableModel workoutTable) {
+		this.workoutTable = workoutTable;
+	}
 }

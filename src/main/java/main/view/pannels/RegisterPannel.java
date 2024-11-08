@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -35,7 +36,7 @@ public class RegisterPannel extends JPanel {
 	private JLabel registerTitleLbl = null;
 	private JLabel personalInfoTitle = null;
 	private JLabel lblCountOpt = null;
-	private JLabel lblNewLabel = null;
+	private JLabel logoImage = null;
 
 	private JDatePickerImpl datePicker = null;
 	private Date selectedDate = null;
@@ -53,12 +54,13 @@ public class RegisterPannel extends JPanel {
 	public RegisterPannel() {
 		setBounds(0, 0, 1230, 700);
 		setLayout(null);
-		setBackground(new Color(57, 57, 57));
+		setBackground(new Color(48,48,48));
 
-		lblNewLabel = new JLabel("Logo aqui");
-		lblNewLabel.setBounds(38, 27, 87, 87);
-		add(lblNewLabel);
-
+		logoImage = new JLabel();
+		logoImage.setIcon(new ImageIcon("src/main/resources/logo.png"));
+		logoImage.setBounds(38, 27, 112, 112);
+		add(logoImage);
+		
 		lblRegisterEmail = new JLabel("E-mail");
 		lblRegisterEmail.setBounds(664, 220, 86, 43);
 		lblRegisterEmail.setForeground(new Color(255, 255, 255));
@@ -102,7 +104,7 @@ public class RegisterPannel extends JPanel {
 			GregorianCalendar calendar = (GregorianCalendar) datePicker.getModel().getValue();
 			selectedDate = calendar.getTime();
 		});
-
+		
 		add(datePicker);
 
 		emailTextField = new JTextField();
@@ -134,7 +136,7 @@ public class RegisterPannel extends JPanel {
 		registerTitleLbl = new JLabel("REGISTRATE");
 		registerTitleLbl.setBounds(401, 11, 349, 64);
 		registerTitleLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		registerTitleLbl.setForeground(new Color(190, 30, 255));
+		registerTitleLbl.setForeground(new Color(255, 193, 7));
 		registerTitleLbl.setFont(new Font("Segoe UI Black", Font.BOLD, 41));
 		add(registerTitleLbl);
 
@@ -176,16 +178,16 @@ public class RegisterPannel extends JPanel {
 		add(confirmPassField);
 
 		personalInfoTitle = new JLabel("DATOS PERSONALES");
-		personalInfoTitle.setBounds(345, 128, 365, 64);
+		personalInfoTitle.setBounds(389, 126, 365, 64);
 		personalInfoTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		personalInfoTitle.setForeground(new Color(190, 30, 255));
+		personalInfoTitle.setForeground(new Color(255, 193, 7));
 		personalInfoTitle.setFont(new Font("Segoe UI Black", Font.PLAIN, 30));
 		add(personalInfoTitle);
 
 		lblCountOpt = new JLabel("DATOS DE LA CUENTA");
 		lblCountOpt.setBounds(348, 376, 365, 64);
 		lblCountOpt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCountOpt.setForeground(new Color(190, 30, 255));
+		lblCountOpt.setForeground(new Color(255, 193, 7));
 		lblCountOpt.setFont(new Font("Segoe UI Black", Font.PLAIN, 30));
 		add(lblCountOpt);
 
@@ -237,5 +239,8 @@ public class RegisterPannel extends JPanel {
 		confirmPassField.setText(null);
 		emailTextField.setText(null);
 	}
-
+	
+	public JPanel getRegisterPannel() {
+		return this;
+	}
 }

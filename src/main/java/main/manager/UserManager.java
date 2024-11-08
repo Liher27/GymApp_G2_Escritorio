@@ -13,8 +13,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
-import com.google.firestore.v1.Document;
-
 import main.manager.pojo.User;
 
 public class UserManager implements ManagerInterface<User> {
