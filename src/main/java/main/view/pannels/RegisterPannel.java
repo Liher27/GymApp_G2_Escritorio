@@ -55,7 +55,7 @@ public class RegisterPannel extends JPanel {
 	private JTextField confirmPassField = null;
 
 	public RegisterPannel() {
-		setBounds(0, 0, 1215, 666);
+		setBounds(0, 0, 1230, 700);
 		setLayout(null);
 		setBackground(new Color(57, 57, 57));
 
@@ -205,7 +205,6 @@ public class RegisterPannel extends JPanel {
 
 	private User createUser() {
 		boolean trainer = false;
-		List<Workout> workouts = new ArrayList<Workout>();
 		if (userTypeComboBox.getSelectedIndex() == 0) {
 			trainer = false;
 		} else if (userTypeComboBox.getSelectedIndex() == 1) {
@@ -218,7 +217,6 @@ public class RegisterPannel extends JPanel {
 		user.setSurname(surnameTextField.getText());
 		user.setBirthDate(selectedDate);
 		user.setTrainer(trainer);
-		user.setWorkouts(workouts);
 		return user;
 	}
 

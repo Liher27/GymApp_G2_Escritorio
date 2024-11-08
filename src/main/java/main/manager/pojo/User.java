@@ -1,7 +1,6 @@
 package main.manager.pojo;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -12,7 +11,14 @@ public class User {
 	private Date birthDate = null;
 	private int userLevel = 0;
 	private boolean trainer = false;
-	private List<Workout> workouts = null;
+
+	public int getUserLevel() {
+		return userLevel;
+	}
+
+	public void setUserLevel(int userLevel) {
+		this.userLevel = userLevel;
+	}
 
 	public String getName() {
 		return name;
@@ -28,14 +34,6 @@ public class User {
 
 	public void setPass(String password) {
 		this.pass = password;
-	}
-
-	public int getUserLevel() {
-		return userLevel;
-	}
-
-	public void setUserLevel(int userLevel) {
-		this.userLevel = userLevel;
 	}
 
 	public String getMail() {
@@ -70,17 +68,9 @@ public class User {
 		this.trainer = isTrainer;
 	}
 
-	public List<Workout> getWorkouts() {
-		return workouts;
-	}
-
-	public void setWorkouts(List<Workout> workouts) {
-		this.workouts = workouts;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(birthDate, mail, name, pass, surname, trainer, userLevel, workouts);
+		return Objects.hash(birthDate, mail, name, pass, surname, trainer, userLevel);
 	}
 
 	@Override
@@ -94,15 +84,12 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(birthDate, other.birthDate) && Objects.equals(mail, other.mail)
 				&& Objects.equals(name, other.name) && Objects.equals(pass, other.pass)
-				&& Objects.equals(surname, other.surname) && trainer == other.trainer && userLevel == other.userLevel
-				&& Objects.equals(workouts, other.workouts);
+				&& Objects.equals(surname, other.surname) && trainer == other.trainer && userLevel == other.userLevel;
 	}
 
 	@Override
 	public String toString() {
 		return "User [name=" + name + ", pass=" + pass + ", mail=" + mail + ", surname=" + surname + ", birthDate="
-				+ birthDate + ", userLevel=" + userLevel + ", trainer=" + trainer + ", workouts=" + workouts + "]";
+				+ birthDate + ", userLevel=" + userLevel + ", trainer=" + trainer + "]";
 	}
-	
-
 }

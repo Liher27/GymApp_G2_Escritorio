@@ -30,6 +30,7 @@ public class LoginPannel extends JPanel {
 	private JLabel noAccountLbl = null;
 
 	public LoginPannel() {
+		
 		setLayout(null);
 		setBounds(0, 0, 1230, 700);
 
@@ -37,7 +38,7 @@ public class LoginPannel extends JPanel {
 		logoImage.setBounds(38, 27, 87, 87);
 		add(logoImage);
 
-		logInTitle = new JLabel("Log In");
+		logInTitle = new JLabel("Login");
 		logInTitle.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 24));
 		logInTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		logInTitle.setBounds(417, 189, 219, 39);
@@ -73,10 +74,10 @@ public class LoginPannel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					if (userIsCorrect()) {
-						JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Log in OK!",
+						JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Login OK!",
 								JOptionPane.INFORMATION_MESSAGE);
-						
-						StatusSingleton.getInstance().changeToProfilePannel();
+
+						StatusSingleton.getInstance().changeToWorkoutsPannel();
 					}
 				} catch (Exception exception) {
 					JOptionPane.showMessageDialog(null, "Ha habido un error en la base de datos", "Error!",

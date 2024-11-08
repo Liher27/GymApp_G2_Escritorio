@@ -1,8 +1,11 @@
 package main.manager;
 
+import main.manager.pojo.Exercise;
 import main.manager.pojo.User;
+import main.manager.pojo.Workout;
 import main.view.pannels.ExercisePannel;
 import main.view.pannels.HistoricPannel;
+import main.view.pannels.HistoryPanel;
 import main.view.pannels.LoginPannel;
 import main.view.pannels.ProfilePannel;
 import main.view.pannels.RegisterPannel;
@@ -11,20 +14,69 @@ import main.view.pannels.WorkoutsPannel;
 public class StatusSingleton {
 
 	private static StatusSingleton statusSingleton = null;
+	private ExercisePannel exercisePannel = null;
+	private HistoricPannel historicPannel = null;
+	private LoginPannel loginPannel = null;
+	private ProfilePannel profilePannel = null;
+	private RegisterPannel registerPannel = null;
+	private WorkoutsPannel workoutsPannel = null;
+	private HistoryPanel historyPannel = null;
+	private User user = null;
+	private Workout workout = null;
+	private Exercise exercise = null;
+	private int selectedRow = 0;
 
-	private ExercisePannel exercisePannel = new ExercisePannel();
-	private HistoricPannel historicPannel = new HistoricPannel();
-	private LoginPannel loginPannel = new LoginPannel();
-	private ProfilePannel profilePannel = new ProfilePannel();
-	private RegisterPannel registerPannel = new RegisterPannel();
-	private WorkoutsPannel workoutsPannel = new WorkoutsPannel();
-	private User user = new User();
+	public StatusSingleton() {
+		exercisePannel = new ExercisePannel();
+		historicPannel = new HistoricPannel();
+		loginPannel = new LoginPannel();
+		profilePannel = new ProfilePannel();
+		registerPannel = new RegisterPannel();
+		workoutsPannel = new WorkoutsPannel();
+		historyPannel = new HistoryPanel();
+		user = new User();
+		workout = new Workout();
+		exercise = new Exercise();
+	}
+
+	public Exercise getExercise() {
+		return exercise;
+	}
+
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
+	}
+	
+
+	public HistoryPanel getHistoryPannel() {
+		return historyPannel;
+	}
+
+	public void setHistoryPannel(HistoryPanel historyPannel) {
+		this.historyPannel = historyPannel;
+	}
 
 	public static StatusSingleton getInstance() {
 		if (null == statusSingleton) {
 			statusSingleton = new StatusSingleton();
 		}
 		return statusSingleton;
+	}
+	
+	public int getSelectedRow() {
+		return selectedRow;
+	}
+
+	public void setSelectedRow(int selectedRow) {
+		this.selectedRow = selectedRow;
+	}
+
+	public Workout getWorkout() {
+		return workout;
+	}
+
+	public void setWorkout(Workout workout) {
+		this.workout = workout;
 	}
 
 	public ExercisePannel getExercisePannel() {
@@ -88,8 +140,9 @@ public class StatusSingleton {
 		getRegisterPannel().setVisible(false);
 		getWorkoutsPannel().setVisible(false);
 		getExercisePannel().setVisible(false);
-		getHistoricPannel().setVisible(false);
 		getProfilePannel().setVisible(false);
+		getHistoryPannel().setVisible(false);
+		
 	}
 
 	public void changeToRegisterPannel() {
@@ -97,8 +150,8 @@ public class StatusSingleton {
 		getRegisterPannel().setVisible(true);
 		getWorkoutsPannel().setVisible(false);
 		getExercisePannel().setVisible(false);
-		getHistoricPannel().setVisible(false);
 		getProfilePannel().setVisible(false);
+		getHistoryPannel().setVisible(false);
 	}
 
 	public void changeToWorkoutsPannel() {
@@ -106,8 +159,8 @@ public class StatusSingleton {
 		getRegisterPannel().setVisible(false);
 		getWorkoutsPannel().setVisible(true);
 		getExercisePannel().setVisible(false);
-		getHistoricPannel().setVisible(false);
 		getProfilePannel().setVisible(false);
+		getHistoryPannel().setVisible(false);
 	}
 
 	public void changeToExercisePannel() {
@@ -115,8 +168,8 @@ public class StatusSingleton {
 		getRegisterPannel().setVisible(false);
 		getWorkoutsPannel().setVisible(false);
 		getExercisePannel().setVisible(true);
-		getHistoricPannel().setVisible(false);
 		getProfilePannel().setVisible(false);
+		getHistoryPannel().setVisible(false);
 	}
 
 	public void changeToHistoricPannel() {
@@ -124,7 +177,7 @@ public class StatusSingleton {
 		getRegisterPannel().setVisible(false);
 		getWorkoutsPannel().setVisible(false);
 		getExercisePannel().setVisible(false);
-		getHistoricPannel().setVisible(true);
+		getHistoryPannel().setVisible(true);
 		getProfilePannel().setVisible(false);
 	}
 
@@ -133,8 +186,8 @@ public class StatusSingleton {
 		getRegisterPannel().setVisible(false);
 		getWorkoutsPannel().setVisible(false);
 		getExercisePannel().setVisible(false);
-		getHistoricPannel().setVisible(false);
 		getProfilePannel().setVisible(true);
+		getHistoryPannel().setVisible(false);
 	}
 
 }

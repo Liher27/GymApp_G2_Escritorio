@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<User user="Raul">
+    <Workouts>
+        <Workout>
+            <WorkoutName>leg</WorkoutName>
+            <Nivel>1</Nivel>
+            <ExerciseNumber>2</ExerciseNumber>
+            <Exercise>
+                <ExerciseName>exerciseName 1</ExerciseName>
+                <Rest>rest1</Rest>
+                <SerieNumber>serie3</SerieNumber>
+            </Exercise>
+        </Workout>
+    </Workouts>
+</User>

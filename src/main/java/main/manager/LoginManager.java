@@ -46,6 +46,7 @@ public class LoginManager implements ManagerInterface<User> {
 				user.setPass(document.getString("pass"));
 				user.setSurname(document.getString("surname"));
 				user.setTrainer(document.getBoolean("trainer"));
+				user.setUserLevel(document.getLong("userLevel").intValue());
 				StatusSingleton.getInstance().setUser(user);
 				return true;
 			}

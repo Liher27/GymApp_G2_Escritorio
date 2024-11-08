@@ -10,7 +10,7 @@ public class HistoricPannel extends JPanel {
 
 	public HistoricPannel() {
 		setLayout(null);
-		setBounds(100, 100, 1215, 666);
+		setBounds(0, 0, 1215, 666);
 
 	}
 	public JPanel getHistoricPannel() {

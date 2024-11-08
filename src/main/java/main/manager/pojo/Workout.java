@@ -1,26 +1,32 @@
 package main.manager.pojo;
 
+import java.util.List;
 import java.util.Objects;
 
-public class Workout extends Exercise{
+public class Workout {
 
-	private int workoutLvl = 0;
+	
+	private String workoutUID = null;
+	private int level = 0;
 	private String workoutName = null;
 	private int exerciseNumber = 0;
-	private String videoURL = null;
+	private String video = null;
+	private List<Exercise> exercises;
 
-	@Override
-	public String toString() {
-		return "Workout [workoutLvl=" + workoutLvl + ", workoutName=" + workoutName + ", exerciseNumber="
-				+ exerciseNumber + ", videoURL=" + videoURL + "]";
+	public String getWorkoutUID() {
+		return workoutUID;
 	}
 
-	public int getWorkoutLvl() {
-		return workoutLvl;
+	public void setWorkoutUID(String workoutUID) {
+		this.workoutUID = workoutUID;
 	}
 
-	public void setWorkoutLvl(int workoutLvl) {
-		this.workoutLvl = workoutLvl;
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public String getWorkoutName() {
@@ -39,17 +45,31 @@ public class Workout extends Exercise{
 		this.exerciseNumber = exerciseNumber;
 	}
 
-	public String getVideoURL() {
-		return videoURL;
+	public String getVideo() {
+		return video;
 	}
 
-	public void setVideoURL(String videoURL) {
-		this.videoURL = videoURL;
+	public void setVideo(String video) {
+		this.video = video;
+	}
+
+	public List<Exercise> getExercises() {
+		return exercises;
+	}
+
+	public void setExercises(List<Exercise> exercises) {
+		this.exercises = exercises;
+	}
+
+	@Override
+	public String toString() {
+		return "Workout [level=" + level + ", workoutName=" + workoutName + ", exerciseNumber=" + exerciseNumber
+				+ ", video=" + video + ", exercises=" + exercises + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(exerciseNumber, videoURL, workoutLvl, workoutName);
+		return Objects.hash(exerciseNumber, exercises, level, video, workoutName);
 	}
 
 	@Override
@@ -61,8 +81,9 @@ public class Workout extends Exercise{
 		if (getClass() != obj.getClass())
 			return false;
 		Workout other = (Workout) obj;
-		return exerciseNumber == other.exerciseNumber && Objects.equals(videoURL, other.videoURL)
-				&& workoutLvl == other.workoutLvl && Objects.equals(workoutName, other.workoutName);
+		return exerciseNumber == other.exerciseNumber && Objects.equals(exercises, other.exercises)
+				&& level == other.level && Objects.equals(video, other.video)
+				&& Objects.equals(workoutName, other.workoutName);
 	}
 
 }

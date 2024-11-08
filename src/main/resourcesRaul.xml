@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><user user="Raul">
+                        
+    
+    
+    
+    
+    <workouts>
+                                                
+        
+        
+        
+        
+        <workout>
+                                                                        
+            
+            
+            
+            
+            <WorkoutName>leg</WorkoutName>
+                                                                        
+            
+            
+            
+            
+            <nivel>1</nivel>
+                                                                        
+            
+            
+            
+            
+            <exerciseNumber>2</exerciseNumber>
+                                                                        
+            
+            
+            
+            
+            <exercise>
+                                                                                                
+                
+                
+                
+                
+                <exerciseName>exerciseName 1</exerciseName>
+                                                                                                
+                
+                
+                
+                
+                <rest>rest1</rest>
+                                                                                                
+                
+                
+                
+                
+                <serieNumber>serie3</serieNumber>
+                                                                                            
+            
+            
+            
+            
+            </exercise>
+                                                                    
+        
+        
+        
+        
+        </workout>
+                                            
+    
+    
+    
+    
+    </workouts>
+                    
+    
+    
+    
+    
+    <workouts>
+                                        
+        
+        
+        
+        <workout>
+                                                            leg
+            
+            
+            
+            
+            <nivel>1</nivel>
+                                                            
+            
+            
+            
+            <exerciseNumber>2</exerciseNumber>
+                                                            
+            
+            
+            
+            <exercise>
+                                                                                
+                
+                
+                
+                <exericeName>exerice name</exericeName>
+                                                                                
+                
+                
+                
+                <rest>2</rest>
+                                                                            
+            
+            
+            
+            </exercise>
+                                                        
+        
+        
+        
+        </workout>
+                                    
+    
+    
+    
+    </workouts>
+                
+    
+    
+    
+    <workouts>
+                                
+        
+        
+        <workout>
+                                                leg
+            
+            
+            
+            <nivel>1</nivel>
+                                                
+            
+            
+            <exerciseNumber>2</exerciseNumber>
+                                                
+            
+            
+            <exercise>
+                                                                
+                
+                
+                <exericeName>exerice name</exericeName>
+                                                                
+                
+                
+                <rest>2</rest>
+                                                            
+            
+            
+            </exercise>
+                                            
+        
+        
+        </workout>
+                            
+    
+    
+    </workouts>
+            
+    
+    
+    <workouts>
+                        
+        
+        <workout>
+                                    leg
+            
+            
+            <nivel>1</nivel>
+                                    
+            
+            <exerciseNumber>2</exerciseNumber>
+                                    
+            
+            <exercise>
+                                                
+                
+                <exericeName>exerice name</exericeName>
+                                                
+                
+                <rest>2</rest>
+                                            
+            
+            </exercise>
+                                
+        
+        </workout>
+                    
+    
+    </workouts>
+        
+    
+    <workouts>
+                
+        <workout>
+                        leg
+            
+            <nivel>1</nivel>
+                        
+            <exerciseNumber>2</exerciseNumber>
+                        
+            <exercise>
+                                
+                <exericeName>exerice name</exericeName>
+                                
+                <rest>2</rest>
+                            
+            </exercise>
+                    
+        </workout>
+            
+    </workouts>
+    
+    <workouts>
+        <workout>
+            leg
+            <nivel>1</nivel>
+            <exerciseNumber>2</exerciseNumber>
+            <exercise>
+                <exericeName>exerice name</exericeName>
+                <rest>2</rest>
+            </exercise>
+        </workout>
+    </workouts>
+</user>

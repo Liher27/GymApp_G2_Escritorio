@@ -53,7 +53,7 @@ public class ProfilePannel extends JPanel {
 	 */
 	public ProfilePannel() {
 
-		setBounds(0, 0, 1215, 666);
+		setBounds(0, 0, 1230, 700);
 		setBackground(new Color(0, 0, 0));
 		setLayout(null);
 
