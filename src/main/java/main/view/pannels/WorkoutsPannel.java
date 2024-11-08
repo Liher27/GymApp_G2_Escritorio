@@ -82,7 +82,7 @@ public class WorkoutsPannel extends JPanel {
 				}
 			});
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, null, "No hay workouts...", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No hay workouts...", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		workoutScrollPane.setViewportView(table);
@@ -153,7 +153,8 @@ public class WorkoutsPannel extends JPanel {
 					fillWorkoutTable(workoutTable, workouts);
 
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se ha podido cargar la informacion...", "Error...",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -168,7 +169,8 @@ public class WorkoutsPannel extends JPanel {
 				workoutTable.addRow(line);
 			}
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, null, "No se ha podido llenar la tabla...", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No se ha podido llenar la tabla...", "Error...",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
