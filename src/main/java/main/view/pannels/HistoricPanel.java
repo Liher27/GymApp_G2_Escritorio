@@ -88,7 +88,7 @@ public class HistoricPanel extends JPanel {
 					historicList = backUpsController.getBackUpsList(userProfile);
 					fillExercisePanel(historyTbale, historicList);
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, null, "No se hay historicos...", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se hay historicos...", "Error...", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

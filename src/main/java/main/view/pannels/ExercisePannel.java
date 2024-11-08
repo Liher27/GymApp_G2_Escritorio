@@ -85,7 +85,7 @@ public class ExercisePannel extends JPanel {
 				}
 			});
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
+			JOptionPane.showMessageDialog(null, "No se ha podido cargar la informacion...", "Error!",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		workoutCronoLbl = new JLabel("00:00:00");
@@ -101,7 +101,6 @@ public class ExercisePannel extends JPanel {
 		workoutPauseBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				workoutCro.pauseTime();
-
 			}
 		});
 
@@ -109,7 +108,6 @@ public class ExercisePannel extends JPanel {
 		endBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				workoutCro.stopTimer();
-
 			}
 		});
 		endBtn.setBounds(38, 615, 160, 34);
