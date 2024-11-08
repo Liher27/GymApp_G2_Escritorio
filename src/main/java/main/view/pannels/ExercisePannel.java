@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.List;
-
+import main.manager.ThreadsManager;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -56,6 +56,8 @@ public class ExercisePannel extends JPanel {
 	private Exercise exercise1 = null;
 	private List<Exercise> exercises = null;
 
+	private ThreadsManager workoutCro = null;
+
 	public ExercisePannel() {
 
 		setLayout(null);
@@ -94,15 +96,27 @@ public class ExercisePannel extends JPanel {
 		workoutCronoLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		workoutCronoLbl.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		workoutCronoLbl.setForeground(Color.white);
-		workoutCronoLbl.setBounds(64, 286, 176, 64);
+		workoutCronoLbl.setBounds(38, 290, 271, 64);
 		add(workoutCronoLbl);
 
 		workoutPauseBtn = new JButton("Pausar");
 		workoutPauseBtn.setBounds(164, 361, 76, 41);
 		add(workoutPauseBtn);
+		workoutPauseBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				workoutCro.pauseTime();
+				
+			}
+		});
 
 		endBtn = new JButton("Parar");
-		endBtn.setBounds(38, 640, 160, 34);
+		endBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				workoutCro.stopTimer();
+				
+			}
+		});
+		endBtn.setBounds(38, 615, 160, 34);
 		add(endBtn);
 
 		workoutTimeLbl = new JLabel("Cronometro Workout");
@@ -117,12 +131,15 @@ public class ExercisePannel extends JPanel {
 		workoutStartBtn = new JButton("Iniciar");
 		workoutStartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BackUpsController backUpsController = new BackUpsController();
-				workout = StatusSingleton.getInstance().getWorkout();
-				user = StatusSingleton.getInstance().getUser();
-				exercise1 = StatusSingleton.getInstance().getExercise();
-				backUpsController.userBackups(workout, user, exercise1);
+//				BackUpsController backUpsController = new BackUpsController();
+//				workout = StatusSingleton.getInstance().getWorkout();
+//				user = StatusSingleton.getInstance().getUser();
+//				exercise1 = StatusSingleton.getInstance().getExercise();
+//				backUpsController.userBackups(workout, user, exercise1);
+
+				runCronometro();
 			}
+
 		});
 		workoutStartBtn.setBounds(64, 361, 76, 40);
 		add(workoutStartBtn);
@@ -131,7 +148,7 @@ public class ExercisePannel extends JPanel {
 		lblExerciseName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblExerciseName.setForeground(new Color(255, 193, 7));
 		lblExerciseName.setFont(new Font("Segoe UI Semibold", Font.BOLD, 47));
-		lblExerciseName.setBounds(358, 138, 487, 56);
+		lblExerciseName.setBounds(319, 146, 576, 56);
 		add(lblExerciseName);
 
 		lblWorkoutName = new JLabel("WORKOUTNAME");
@@ -149,7 +166,7 @@ public class ExercisePannel extends JPanel {
 			}
 
 		});
-		exercisesBackButton.setBounds(1048, 640, 160, 34);
+		exercisesBackButton.setBounds(1045, 615, 160, 34);
 		add(exercisesBackButton);
 
 		seriesStartBtn = new JButton("Iniciar");
@@ -159,6 +176,8 @@ public class ExercisePannel extends JPanel {
 		seriesPauseBtn = new JButton("Pausar");
 		seriesPauseBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				workoutCronoLbl.setText("00:00:00");
 			}
 		});
 		seriesPauseBtn.setBounds(1093, 361, 76, 41);
@@ -220,6 +239,31 @@ public class ExercisePannel extends JPanel {
 			JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion de la tabla...",
 					JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	public void loadTime(String time) {
+		workoutCronoLbl.setText(time);
+	}
+	
+		
+	
+	public void changeButtonText() {
+		workoutPauseBtn.setText("Iniciar");
+	}
+	public void changeButtonTextTo() {
+		workoutPauseBtn.setText("Pausar");
+	}
+
+	private void runCronometro() {
+		if (workoutCro == null || !workoutCro.isAlive()) {
+			workoutCro = new ThreadsManager("WorkoutTimer", this);
+			workoutCro.start();
+		} else {
+			workoutCro.resumeTimer();
+		}
+	}
+	public void resetTimerFiled() {
+		workoutCronoLbl.setText("00:00:00");
 	}
 
 	private void clearTable() {
