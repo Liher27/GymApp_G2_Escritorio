@@ -148,7 +148,6 @@ public class WorkoutsPannel extends JPanel {
 					userProfile = StatusSingleton.getInstance().getUser();
 					int userLevel = userProfile.getUserLevel();
 					userLvlBtn.setText("NIVEL ACTUAL: " + userLevel);
-					System.out.println(userLevel);
 					welcomeUserLbl.setText("BIENVENIDO, " + userProfile.getName().toUpperCase());
 					workouts = workoutManager.getWorkoutsForUserLevel(userLevel);
 					fillWorkoutTable(workoutTable, workouts);

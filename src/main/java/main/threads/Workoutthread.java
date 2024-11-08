@@ -4,14 +4,14 @@ import javax.swing.SwingUtilities;
 
 import main.view.pannels.ExercisePannel;
 
-public class ExerciseThread extends Thread {
+public class Workoutthread extends Thread {
 	private boolean stopped = true;
 	private ExercisePannel exercisePannel;
 	private long programStart = System.currentTimeMillis();
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 
-	public ExerciseThread(String name, ExercisePannel exercisePannel) {
+	public Workoutthread(String name, ExercisePannel exercisePannel) {
 		super(name);
 		this.exercisePannel = exercisePannel;
 		setDaemon(true);
@@ -23,7 +23,7 @@ public class ExerciseThread extends Thread {
 			if (!stopped) {
 				long elapsed = System.currentTimeMillis() - programStart - pauseCount;
 				SwingUtilities.invokeLater(() -> {
-					exercisePannel.exerciseloadTime(format(elapsed));
+					exercisePannel.workoutloadTime(format(elapsed));
 				});
 			}
 			try {
@@ -35,7 +35,7 @@ public class ExerciseThread extends Thread {
 	}
 
 	private String format(long elapsed) {
-		int hour, minute, second , milli;
+		int hour, minute, second, milli;
 
 		milli = (int) (elapsed % 1000);
 		elapsed = elapsed / 1000;
@@ -60,7 +60,7 @@ public class ExerciseThread extends Thread {
 		pauseStart = programStart;
 		pauseCount = 0;
 		stopped = true;
-		exercisePannel.exerciseResetTimerFiled();
+		exercisePannel.workoutResetTimerFiled();
 	}
 
 	public void pauseTime() {
@@ -71,7 +71,7 @@ public class ExerciseThread extends Thread {
 		} else {
 			pauseStart = System.currentTimeMillis();
 			stopped = true;
-			exercisePannel.exerciseChangeButtonText();
+			exercisePannel.workoutChangeButtonTextTo();
 		}
 	}
 
