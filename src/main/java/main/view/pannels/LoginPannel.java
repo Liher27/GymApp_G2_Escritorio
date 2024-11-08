@@ -7,6 +7,7 @@ import javax.swing.SwingConstants;
 
 import main.controller.LoginController;
 import main.manager.StatusSingleton;
+import main.backups.BackupMaker;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -31,10 +32,12 @@ public class LoginPannel extends JPanel {
 	private JButton registerButton = null;
 	private JLabel noAccountLbl = null;
 
+	private BackupMaker backupMaker = null;
+
 	public LoginPannel() {
-		
+
 		setLayout(null);
-		setBackground(new Color(48,48,48));
+		setBackground(new Color(48, 48, 48));
 		setBounds(0, 0, 1230, 700);
 
 		logoImage = new JLabel();
@@ -84,12 +87,18 @@ public class LoginPannel extends JPanel {
 					if (userIsCorrect()) {
 						JOptionPane.showMessageDialog(null, "Bienvenido, cliente!", "Login OK!",
 								JOptionPane.INFORMATION_MESSAGE);
+						backupMaker = new BackupMaker();
+						backupMaker.doBackup();
 
 						StatusSingleton.getInstance().changeToWorkoutsPannel();
 					}
 				} catch (Exception exception) {
-					JOptionPane.showMessageDialog(null, "Ha habido un error en la base de datos", "Error!",
+					JOptionPane.showMessageDialog(null, "No hay internet, continuando con los backups...", "Error!",
 							JOptionPane.ERROR_MESSAGE);
+
+					backupMaker.getBackup();
+
+					StatusSingleton.getInstance().changeToWorkoutsPannel();
 				}
 			}
 		});
