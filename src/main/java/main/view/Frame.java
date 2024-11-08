@@ -24,7 +24,7 @@ public class Frame extends JFrame {
 	public Frame() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 1230, 700);
+		setBounds(0, 0, 1250, 700);
 		setResizable(false);
 		setTitle("GYMAPP G2");
 		setLocationRelativeTo(null);

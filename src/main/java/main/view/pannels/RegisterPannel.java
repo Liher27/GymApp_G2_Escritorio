@@ -4,11 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,7 +18,6 @@ import javax.swing.SwingConstants;
 import main.controller.RegisterController;
 import main.manager.StatusSingleton;
 import main.manager.pojo.User;
-import main.manager.pojo.Workout;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 
@@ -106,7 +102,7 @@ public class RegisterPannel extends JPanel {
 			GregorianCalendar calendar = (GregorianCalendar) datePicker.getModel().getValue();
 			selectedDate = calendar.getTime();
 		});
-		
+
 		add(datePicker);
 
 		emailTextField = new JTextField();
@@ -241,8 +237,5 @@ public class RegisterPannel extends JPanel {
 		confirmPassField.setText(null);
 		emailTextField.setText(null);
 	}
-	
-	public JPanel getRegisterPannel() {
-		return this;
-	}
+
 }

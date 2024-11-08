@@ -76,7 +76,6 @@ public class UserManager implements ManagerInterface<User> {
 		updates.put("pass", user.getPass());
 		updates.put("surname", user.getSurname());
 		updates.put("trainer", user.isTrainer());
-		updates.put("workouts", user.getWorkouts());
 
 		ApiFuture<WriteResult> writeResult = userRef.update(updates);
 
