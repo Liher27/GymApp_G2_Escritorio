@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import main.manager.StatusSingleton;
 import main.view.pannels.ExercisePannel;
 import main.view.pannels.HistoricPannel;
+import main.view.pannels.HistoryPanel;
 import main.view.pannels.LoginPannel;
 import main.view.pannels.ProfilePannel;
 import main.view.pannels.RegisterPannel;
@@ -58,10 +59,10 @@ public class Frame extends JFrame {
 		add(profilePannel);
 
 		// 4
-		HistoricPannel historicPannel = StatusSingleton.getInstance().getHistoricPannel();
-		historicPannel.setVisible(false);
-		contentPanel.add(historicPannel);
-		add(historicPannel);
+		HistoryPanel historyPannel = StatusSingleton.getInstance().getHistoryPannel();
+		historyPannel.setVisible(false);
+		contentPanel.add(historyPannel);
+		add(historyPannel);
 
 		// 5
 		ExercisePannel exercisePannel = StatusSingleton.getInstance().getExercisePannel();

@@ -96,6 +96,11 @@ public class WorkoutsPannel extends JPanel {
         add(lblNewLabel_2);
         
         JButton btnHistorial = new JButton("HISTORIAL");
+        btnHistorial.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		  StatusSingleton.getInstance().changeToHistoricPannel();
+        	}
+        });
         btnHistorial.setBounds(167, 583, 131, 64);
         add(btnHistorial);
         

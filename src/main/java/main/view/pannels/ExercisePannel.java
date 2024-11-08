@@ -135,6 +135,7 @@ public class ExercisePannel extends JPanel {
 		add(btnVolver);
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
+				exerciseTable.setRowCount(0);
 				try {
 					String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
 					exercise = exerciseManager.getExercisesForWorkout(id);
@@ -148,6 +149,7 @@ public class ExercisePannel extends JPanel {
 	}
 
 	private void fillExercisePanel(DefaultTableModel exerciseTable, List<Exercise> exercises) {
+		
 		try {
 			if (exerciseTable.getRowCount() == 0) {
 				for (Exercise exercise : exercises) {

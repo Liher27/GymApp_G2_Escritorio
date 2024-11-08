@@ -5,9 +5,10 @@ import java.util.Objects;
 
 public class Workout {
 
+	
+	private String workoutUID = null;
 	private int level = 0;
 	private String workoutName = null;
-	private String workoutUID = null;
 	private int exerciseNumber = 0;
 	private String video = null;
 	private List<Exercise> exercises;
