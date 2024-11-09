@@ -1,87 +1,72 @@
 package main.manager.pojo;
 
+import java.util.Date;
 import java.util.Objects;
 
-public class Historic {
+public class Historic extends Workout {
 
-	private int level = 0;
-	private String workoutName = null;
-	private int exerciseNumber = 0;
-	private String exerciseName = null;
-	private int seriesNumber = 0;
-	private int restTime = 0;
+	private int providedTime = 0;
+	private int totalTime = 0;
+	private Date finishDate = null;
+	private String exercisePercent = null;
 
-	public int getLevel() {
-		return level;
+	public int getProvidedTime() {
+		return providedTime;
 	}
 
-	public void setLevel(int level) {
-		this.level = level;
+	public void setProvidedTime(int providedTime) {
+		this.providedTime = providedTime;
 	}
 
-	public String getWorkoutName() {
-		return workoutName;
+	public int getTotalTime() {
+		return totalTime;
 	}
 
-	public void setWorkoutName(String workoutName) {
-		this.workoutName = workoutName;
+	public void setTotalTime(int totalTime) {
+		this.totalTime = totalTime;
 	}
 
-	public int getExerciseNumber() {
-		return exerciseNumber;
+	public Date getFinishDate() {
+		return finishDate;
 	}
 
-	public void setExerciseNumber(int exerciseNumber) {
-		this.exerciseNumber = exerciseNumber;
+	public void setFinishDate(Date finishDate) {
+		this.finishDate = finishDate;
 	}
 
-	public String getExerciseName() {
-		return exerciseName;
+	public String getExercisePercent() {
+		return exercisePercent;
 	}
 
-	public void setExerciseName(String exerciseName) {
-		this.exerciseName = exerciseName;
-	}
-
-	public int getSeriesNumber() {
-		return seriesNumber;
-	}
-
-	public void setSeriesNumber(int seriesNumber) {
-		this.seriesNumber = seriesNumber;
-	}
-
-	public int getRestTime() {
-		return restTime;
-	}
-
-	public void setRestTime(int restTime) {
-		this.restTime = restTime;
+	public void setExercisePercent(String exercisePercent) {
+		this.exercisePercent = exercisePercent;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(exerciseName, exerciseNumber, level, restTime, seriesNumber, workoutName);
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(exercisePercent, finishDate, providedTime, totalTime);
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Historic other = (Historic) obj;
-		return Objects.equals(exerciseName, other.exerciseName) && exerciseNumber == other.exerciseNumber
-				&& level == other.level && restTime == other.restTime && seriesNumber == other.seriesNumber
-				&& Objects.equals(workoutName, other.workoutName);
+		return Objects.equals(exercisePercent, other.exercisePercent) && Objects.equals(finishDate, other.finishDate)
+				&& providedTime == other.providedTime && totalTime == other.totalTime;
 	}
 
 	@Override
 	public String toString() {
-		return "Historic [level=" + level + ", workoutName=" + workoutName + ", exerciseNumber=" + exerciseNumber
-				+ ", exerciseName=" + exerciseName + ", seriesNumber=" + seriesNumber + ", restTime=" + restTime + "]";
+		return "Historic [providedTime=" + providedTime + ", totalTime=" + totalTime + ", finishDate=" + finishDate
+				+ ", exercisePercent=" + exercisePercent + ", toString()=" + super.toString() + "]";
 	}
 
 }

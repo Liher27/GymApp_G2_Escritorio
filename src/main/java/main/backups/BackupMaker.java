@@ -1,13 +1,17 @@
 package main.backups;
 
-public class BackupMaker extends AbstractBackup {
+import java.io.IOException;
 
-	public void doBackup() {
+public class BackupMaker extends AbstractBackupMaker {
 
+	public void doBackup() throws IOException {
+		ProcessBuilder processBuilder = new ProcessBuilder(processName, "/c", writeCommand);
+		Process process = processBuilder.start();
 	}
 
-	public void getBackup() {
-
+	public void getBackup() throws IOException {
+		ProcessBuilder processBuilder = new ProcessBuilder(processName, "/c", readCommand);
+		Process process = processBuilder.start();
 	}
 
 }

@@ -1,9 +1,8 @@
 package main.backups;
 
-public class BackupReaderExecutable {
+public class BackupReaderExecutable extends AbstractBackupMaker{
 
-	public void doBackup() {
-		// TODO Auto-generated method stub
+	public void readDocuments() {
 		
 	}
 

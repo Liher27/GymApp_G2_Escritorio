@@ -23,23 +23,29 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class HistoricPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JTable table;
-	private DefaultTableModel historyTbale = null;
+	private DefaultTableModel historicTable = null;
 	private JButton historicBackBtn = null;
-	
+
 	private JLabel historicTitle = null;
 	private JScrollPane historyScrollPane = null;
 
 	private User userProfile = null;
 	private List<Historic> historicList = null;
 
+	private BackUpsController backUpsController = null;
+
 	private JLabel logoImage = null;
 
 	public HistoricPanel() {
+		setBackground(new Color(48, 48, 48));
+		setForeground(new Color(0, 0, 0));
 		setBounds(0, 0, 1230, 700);
 		setLayout(null);
 
@@ -49,7 +55,9 @@ public class HistoricPanel extends JPanel {
 		add(logoImage);
 
 		historicTitle = new JLabel("Historial de entrenamientos");
-		historicTitle.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 64));
+		historicTitle.setForeground(new Color(255, 193, 7));
+		historicTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		historicTitle.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 60));
 		historicTitle.setBounds(253, 61, 801, 55);
 		add(historicTitle);
 
@@ -57,15 +65,15 @@ public class HistoricPanel extends JPanel {
 		historyScrollPane.setBounds(319, 233, 576, 199);
 		add(historyScrollPane);
 
-		historyTbale = new DefaultTableModel();
-		historyTbale.addColumn("WorkoutName");
-		historyTbale.addColumn("Nivel");
-		historyTbale.addColumn("ExerciseNumber");
-		historyTbale.addColumn("ExerciseName");
-		historyTbale.addColumn("Rest");
-		historyTbale.addColumn("SerieNumber");
+		historicTable = new DefaultTableModel();
+		historicTable.addColumn("WorkoutName");
+		historicTable.addColumn("Nivel");
+		historicTable.addColumn("ExerciseNumber");
+		historicTable.addColumn("ExerciseName");
+		historicTable.addColumn("Rest");
+		historicTable.addColumn("SerieNumber");
 
-		table = new JTable(historyTbale);
+		table = new JTable(historicTable);
 
 		historyScrollPane.setViewportView(table);
 
@@ -80,26 +88,38 @@ public class HistoricPanel extends JPanel {
 
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
-				historyTbale.setRowCount(0);
+				historicTable.setRowCount(0);
 				try {
 					historicList = new ArrayList<>();
 					userProfile = StatusSingleton.getInstance().getUser();
-					BackUpsController backUpsController = new BackUpsController();
+					backUpsController = new BackUpsController();
 					historicList = backUpsController.getBackUpsList(userProfile);
-					fillExercisePanel(historyTbale, historicList);
+					fillExercisePanel(historicTable, historicList);
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "No se hay historicos...", "Error...", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se hay historicos...", "Error...",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 	}
 
-	private void fillExercisePanel(DefaultTableModel historicTable, List<Historic> historic) {
+	private void fillExercisePanel(DefaultTableModel historicTable, List<Historic> historics) {
 		if (historicTable.getRowCount() == 0) {
-			for (Historic historics : historic) {
-				Object[] line = { historics.getWorkoutName(), historics.getLevel(), historics.getExerciseNumber(),
-						historics.getExerciseName(), historics.getRestTime(), historics.getSeriesNumber() };
-				historicTable.addRow(line);
+			for (int i = 0; i < historics.size(); i++) {
+				Historic historic = historics.get(i);
+				for (int j = 0; j < historic.getExercises().size(); j++) {
+					String exerciseName = null;
+					int restTime = 0;
+					int seriesNumber = 0;
+
+					exerciseName = historic.getExercises().get(j).getExerciseName();
+					restTime = historic.getExercises().get(j).getRestTime();
+					seriesNumber = historic.getExercises().get(j).getSeriesNumber();
+
+					Object[] line = { historic.getWorkoutName(), historic.getLevel(), historic.getExerciseNumber(),
+							exerciseName, restTime, seriesNumber };
+					historicTable.addRow(line);
+				}
 			}
 		}
 	}

@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class LoginPannel extends JPanel {
 
@@ -96,7 +97,12 @@ public class LoginPannel extends JPanel {
 					JOptionPane.showMessageDialog(null, "No hay internet, continuando con los backups...", "Error!",
 							JOptionPane.ERROR_MESSAGE);
 
-					backupMaker.getBackup();
+					try {
+						backupMaker.getBackup();
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Ha habido un error con los backups...", "Error!",
+								JOptionPane.ERROR_MESSAGE);
+					}
 
 					StatusSingleton.getInstance().changeToWorkoutsPannel();
 				}
