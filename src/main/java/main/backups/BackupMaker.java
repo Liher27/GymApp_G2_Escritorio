@@ -23,7 +23,6 @@ public class BackupMaker extends AbstractBackupMaker {
 
 	public void doBackup() throws Exception {
 		writeDocuments();
-
 	}
 
 	public void getBackup() throws IOException, InterruptedException {
@@ -32,6 +31,9 @@ public class BackupMaker extends AbstractBackupMaker {
 
 		int exitCode = process.waitFor();
 		if (exitCode != 0) {
+			System.out.println("Bien!!!");
+		} else {
+			System.out.println(new IOException().getMessage());
 		}
 
 	}
