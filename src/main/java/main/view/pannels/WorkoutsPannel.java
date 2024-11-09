@@ -101,7 +101,7 @@ public class WorkoutsPannel extends JPanel {
 		exitBtn = new JButton("Cerrar sesion");
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, null, "Adios!!", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Adios!!", "Adios!!", JOptionPane.INFORMATION_MESSAGE);
 				StatusSingleton.getInstance().changeToLoginPannel();
 			}
 		});

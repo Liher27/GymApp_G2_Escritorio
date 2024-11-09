@@ -98,6 +98,7 @@ public class ExercisePannel extends JPanel {
 		workoutPauseBtn.setBounds(160, 392, 76, 41);
 		add(workoutPauseBtn);
 		workoutPauseBtn.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				workoutCro.pauseTime();
 			}
@@ -208,14 +209,22 @@ public class ExercisePannel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				exerciseTable.setRowCount(0);
-				try {
-					String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
-					exercises = exerciseController.getExercisesForWorkout(id);
+				if (!StatusSingleton.getInstance().offline) {
+					try {
+						String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
+						exercises = exerciseController.getExercisesForWorkout(id);
+						fillExercisePanel(exerciseTable, exercises);
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					exercises = StatusSingleton.getInstance().getBackupedWorkouts()
+							.get(StatusSingleton.getInstance().getSelectedRow()).getExercises();
 					fillExercisePanel(exerciseTable, exercises);
-				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
-							JOptionPane.ERROR_MESSAGE);
+
 				}
+
 			}
 		});
 
@@ -236,23 +245,23 @@ public class ExercisePannel extends JPanel {
 		}
 	}
 
-	public void exerciseloadTime(String time) {
+	public void loadExerciseTime(String time) {
 		exerciseCronoLbl.setText(time);
 	}
 
-	public void exerciseChangeButtonText() {
+	public void changeExerciseButtonText() {
 		exerciseCronoLbl.setText("Iniciar");
 	}
 
-	public void exerciseChangeButtonTextTo() {
+	public void changeExerciseButtonTextTo() {
 		exerciseCronoLbl.setText("Pausar");
 	}
 
-	public void workoutloadTime(String time) {
+	public void loadWorkoutTime(String time) {
 		workoutCronoLbl.setText(time);
 	}
 
-	public void workoutChangeButtonTextTo() {
+	public void changeWorkoutButtonTextTo() {
 		workoutPauseBtn.setText("Pausar");
 	}
 
@@ -274,16 +283,11 @@ public class ExercisePannel extends JPanel {
 		}
 	}
 
-	public void workoutResetTimerFiled() {
+	public void resetWorkoutTime() {
 		workoutCronoLbl.setText("00:00:00");
 	}
 
-	public void exerciseResetTimerFiled() {
+	public void resetExerciseTime() {
 		exerciseCronoLbl.setText("00:00:00");
 	}
-
-	public void workoutChangeButtonText() {
-		workoutCronoLbl.setText("Pausar");
-	}
-
 }

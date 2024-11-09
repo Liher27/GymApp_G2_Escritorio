@@ -23,7 +23,7 @@ public class ExerciseThread extends Thread {
 			if (!stopped) {
 				long elapsed = System.currentTimeMillis() - programStart - pauseCount;
 				SwingUtilities.invokeLater(() -> {
-					exercisePannel.exerciseloadTime(format(elapsed));
+					exercisePannel.loadExerciseTime(format(elapsed));
 				});
 			}
 			try {
@@ -60,18 +60,18 @@ public class ExerciseThread extends Thread {
 		pauseStart = programStart;
 		pauseCount = 0;
 		stopped = true;
-		exercisePannel.exerciseResetTimerFiled();
+		exercisePannel.resetExerciseTime();
 	}
 
 	public void pauseTime() {
 		if (stopped = true) {
 			pauseCount += (System.currentTimeMillis() - pauseStart);
 			stopped = false;
-			exercisePannel.workoutChangeButtonText();
+			exercisePannel.changeExerciseButtonText();
 		} else {
 			pauseStart = System.currentTimeMillis();
 			stopped = true;
-			exercisePannel.exerciseChangeButtonText();
+			exercisePannel.changeExerciseButtonText();
 		}
 	}
 

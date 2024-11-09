@@ -59,7 +59,6 @@ public class ProfilePannel extends JPanel {
 
 			public void componentShown(ComponentEvent c) {
 				try {
-					StatusSingleton.getInstance().getUser().toString();
 					showUserInfor();
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "Error en el programa", "Error", JOptionPane.ERROR_MESSAGE);
@@ -197,66 +196,75 @@ public class ProfilePannel extends JPanel {
 	}
 
 	private void changeUserData(String option) {
-		newInfoToInsert = JOptionPane.showInputDialog("Ingrese el nuevo nombre de usuario: ");
-		newInfoConfirm = JOptionPane.showInputDialog("Por favor, repita el nuevo nombre de usuario: ");
-		try {
-			if (newInfoToInsert.equals(newInfoConfirm)) {
+		if (!StatusSingleton.getInstance().offline) {
+			newInfoToInsert = JOptionPane.showInputDialog("Ingrese el nuevo nombre de usuario: ");
+			newInfoConfirm = JOptionPane.showInputDialog("Por favor, repita el nuevo nombre de usuario: ");
+			try {
+				if (newInfoToInsert.equals(newInfoConfirm)) {
 
-				switch (option) {
-				case ("name"):
-					userProfile.setName(newInfoConfirm);
-					break;
-				case ("pass"):
-					userProfile.setPass(newInfoConfirm);
-					break;
-				case ("mail"):
-					userProfile.setMail(newInfoConfirm);
-					break;
-				case ("surname"):
-					userProfile.setSurname(newInfoConfirm);
+					switch (option) {
+					case ("name"):
+						userProfile.setName(newInfoConfirm);
+						break;
+					case ("pass"):
+						userProfile.setPass(newInfoConfirm);
+						break;
+					case ("mail"):
+						userProfile.setMail(newInfoConfirm);
+						break;
+					case ("surname"):
+						userProfile.setSurname(newInfoConfirm);
 
-				}
+					}
 
-				if (userController.changeUser(userProfile)) {
-					JOptionPane.showMessageDialog(null, "Nombre de usuario cambiado correctamente", "OK!!",
-							JOptionPane.INFORMATION_MESSAGE);
-				}
+					if (userController.changeUser(userProfile)) {
+						JOptionPane.showMessageDialog(null, "Nombre de usuario cambiado correctamente", "OK!!",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 
-			} else
-				JOptionPane.showMessageDialog(null, "No se ha introducido la misma contraseña en los dos campos",
-						"Error", JOptionPane.ERROR_MESSAGE);
-		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(null, "No se ha podido cambiar la contraseña", "Error",
+				} else
+					JOptionPane.showMessageDialog(null, "No se ha introducido la misma contraseña en los dos campos",
+							"Error", JOptionPane.ERROR_MESSAGE);
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "No se ha podido cambiar la contraseña", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "No hay conexion, no se pueden cambiar los datos.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	private void changeDate() {
+		if (!StatusSingleton.getInstance().offline) {
+			UtilDateModel model = new UtilDateModel();
 
-		UtilDateModel model = new UtilDateModel();
+			JDatePickerImpl datePicker = new JDatePickerImpl(new JDatePanelImpl(model));
 
-		JDatePickerImpl datePicker = new JDatePickerImpl(new JDatePanelImpl(model));
+			int result = JOptionPane.showConfirmDialog(null, datePicker, "Selecciona una fecha",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-		int result = JOptionPane.showConfirmDialog(null, datePicker, "Selecciona una fecha",
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			if (result == JOptionPane.OK_OPTION) {
+				Date selectedDate = (Date) datePicker.getModel().getValue();
 
-		if (result == JOptionPane.OK_OPTION) {
-			Date selectedDate = (Date) datePicker.getModel().getValue();
+				if (selectedDate != null) {
+					userProfile.setBirthDate(selectedDate);
 
-			if (selectedDate != null) {
-				userProfile.setBirthDate(selectedDate);
-
-				try {
-					if (userController.changeUser(userProfile)) {
-						JOptionPane.showMessageDialog(null, "Fecha cambiada correctamente", "OK!!",
-								JOptionPane.INFORMATION_MESSAGE);
+					try {
+						if (userController.changeUser(userProfile)) {
+							JOptionPane.showMessageDialog(null, "Fecha cambiada correctamente", "OK!!",
+									JOptionPane.INFORMATION_MESSAGE);
+						}
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "No se ha podido cambiar la fecha", "Error",
+								JOptionPane.ERROR_MESSAGE);
 					}
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "No se ha podido cambiar la fecha", "Error",
+				} else {
+					JOptionPane.showMessageDialog(null, "Por favor, selecciona una fecha válida", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Por favor, selecciona una fecha válida", "Error",
+				JOptionPane.showMessageDialog(null, "No hay conexion, no se pueden cambiar los datos.", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
