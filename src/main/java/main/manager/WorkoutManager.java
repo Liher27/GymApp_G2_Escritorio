@@ -59,31 +59,30 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 
 	@Override
 	public boolean insert(Workout workout) throws Exception {
-		// TODO Auto-generated method stub
 		return false;
 	}
+
 	public List<Workout> getWorkoutsForUserLevel(int userLevel) throws ExecutionException, InterruptedException {
 
-	    CollectionReference workoutsRef = db.collection("workouts");
-	    Query query = workoutsRef.whereLessThanOrEqualTo("level", userLevel);
+		CollectionReference workoutsRef = db.collection("workouts");
+		Query query = workoutsRef.whereLessThanOrEqualTo("level", userLevel);
 
-	    List<QueryDocumentSnapshot> workoutDocuments = query.get().get().getDocuments();
-	    List<Workout> workouts = new ArrayList<>();
+		List<QueryDocumentSnapshot> workoutDocuments = query.get().get().getDocuments();
+		List<Workout> workouts = new ArrayList<>();
 
-	    for (QueryDocumentSnapshot document : workoutDocuments) {
-	        Workout workout = document.toObject(Workout.class);
+		for (QueryDocumentSnapshot document : workoutDocuments) {
+			Workout workout = document.toObject(Workout.class);
 			workout.setWorkoutUID(document.getId());
-	        workout.setWorkoutName(document.getString("workoutName"));
-	        workout.setLevel(((Number) document.get("level")).intValue());
-	        workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
-	        workout.setVideo(document.getString("video"));
-	        workouts.add(workout);
-	    }
+			workout.setWorkoutName(document.getString("workoutName"));
+			workout.setLevel(((Number) document.get("level")).intValue());
+			workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
+			workout.setVideo(document.getString("video"));
+			workouts.add(workout);
+		}
 
-	    return workouts;
+		return workouts;
 	}
-	
-	
+
 	@Override
 	public Workout getOne(Workout workout) throws Exception {
 		DocumentReference getUserRef = db.collection("workouts").document(workout.getWorkoutName());

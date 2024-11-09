@@ -13,7 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import main.manager.ExerciseManager;
+
+import main.controller.ExerciseController;
 import main.manager.StatusSingleton;
 import main.manager.pojo.Exercise;
 import main.threads.ExerciseThread;
@@ -47,12 +48,11 @@ public class ExercisePannel extends JPanel {
 	private JButton seriesStartBtn = null;
 	private JButton seriesPauseBtn = null;
 
-	private ExerciseManager exerciseManager;
 	private List<Exercise> exercises = null;
+	private ExerciseController exerciseController = null;
 
 	private WorkoutThread workoutCro = null;
-	private ExerciseThread exerciseCro= null;
-
+	private ExerciseThread exerciseCro = null;
 
 	public ExercisePannel() {
 
@@ -70,7 +70,7 @@ public class ExercisePannel extends JPanel {
 		add(logoImage);
 
 		try {
-			exerciseManager = new ExerciseManager();
+			exerciseController = new ExerciseController();
 			exerciseTable = new DefaultTableModel();
 			exerciseTable.addColumn("Exercise Name");
 			exerciseTable.addColumn("Image");
@@ -81,7 +81,6 @@ public class ExercisePannel extends JPanel {
 			table.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					StatusSingleton.getInstance().setExercise(exercises.get(table.getSelectedRow()));
-
 				}
 			});
 		} catch (Exception e) {
@@ -211,7 +210,7 @@ public class ExercisePannel extends JPanel {
 				exerciseTable.setRowCount(0);
 				try {
 					String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
-					exercises = exerciseManager.getExercisesForWorkout(id);
+					exercises = exerciseController.getExercisesForWorkout(id);
 					fillExercisePanel(exerciseTable, exercises);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
@@ -236,6 +235,7 @@ public class ExercisePannel extends JPanel {
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
 	public void exerciseloadTime(String time) {
 		exerciseCronoLbl.setText(time);
 	}
@@ -247,7 +247,7 @@ public class ExercisePannel extends JPanel {
 	public void exerciseChangeButtonTextTo() {
 		exerciseCronoLbl.setText("Pausar");
 	}
-	
+
 	public void workoutloadTime(String time) {
 		workoutCronoLbl.setText(time);
 	}
@@ -255,7 +255,7 @@ public class ExercisePannel extends JPanel {
 	public void workoutChangeButtonTextTo() {
 		workoutPauseBtn.setText("Pausar");
 	}
-	
+
 	private void runExerciseCrono() {
 		if (exerciseCro == null || !exerciseCro.isAlive()) {
 			exerciseCro = new ExerciseThread("ExerciseTimer", this);
@@ -264,6 +264,7 @@ public class ExercisePannel extends JPanel {
 			exerciseCro.resumeTimer();
 		}
 	}
+
 	private void runWorkoutCrono() {
 		if (workoutCro == null || !workoutCro.isAlive()) {
 			workoutCro = new WorkoutThread("WorkoutTimer", this);
@@ -276,6 +277,7 @@ public class ExercisePannel extends JPanel {
 	public void workoutResetTimerFiled() {
 		workoutCronoLbl.setText("00:00:00");
 	}
+
 	public void exerciseResetTimerFiled() {
 		exerciseCronoLbl.setText("00:00:00");
 	}

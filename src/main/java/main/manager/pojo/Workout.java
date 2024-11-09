@@ -1,10 +1,12 @@
 package main.manager.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Workout {
+public class Workout implements Serializable {
 
+	private static final long serialVersionUID = 6334434094001570294L;
 	
 	private String workoutUID = null;
 	private int level = 0;

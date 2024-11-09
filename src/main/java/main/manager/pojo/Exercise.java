@@ -1,9 +1,12 @@
 package main.manager.pojo;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Exercise {
+public class Exercise implements Serializable {
 
+	private static final long serialVersionUID = -8609530128554102709L;
+	
 	private String exerciseName = null;
 	private int seriesNumber = 0;
 	private String image = null;

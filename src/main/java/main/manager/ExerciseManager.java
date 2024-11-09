@@ -12,7 +12,6 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
@@ -105,7 +104,7 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 
 	}
 
-	public List<Exercise> getExercisesFromWorkout(int userLevel) throws Exception {
+	public List<Exercise> getExercisesWithLevel(int userLevel) throws Exception {
 		List<Exercise> allExercises = new ArrayList<>();
 		try {
 			CollectionReference workoutsRef = db.collection("workouts");

@@ -90,21 +90,24 @@ public class LoginPannel extends JPanel {
 								JOptionPane.INFORMATION_MESSAGE);
 						backupMaker = new BackupMaker();
 						backupMaker.doBackup();
-
 						StatusSingleton.getInstance().changeToWorkoutsPannel();
 					}
 				} catch (Exception exception) {
 					JOptionPane.showMessageDialog(null, "No hay internet, continuando con los backups...", "Error!",
 							JOptionPane.ERROR_MESSAGE);
-
 					try {
 						backupMaker.getBackup();
+						StatusSingleton.getInstance().offline = true;
 					} catch (IOException e1) {
-						JOptionPane.showMessageDialog(null, "Ha habido un error con los backups...", "Error!",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Ha habido un error escribiendo/leyendo los backups...",
+								"Error!", JOptionPane.ERROR_MESSAGE);
+					} catch (InterruptedException e1) {
+						JOptionPane.showMessageDialog(null, "Ha habido un error en el proceso de los backups...",
+								"Error!", JOptionPane.ERROR_MESSAGE);
 					}
 
 					StatusSingleton.getInstance().changeToWorkoutsPannel();
+					exception.printStackTrace();
 				}
 			}
 		});

@@ -1,5 +1,7 @@
 package main.manager;
 
+import java.util.List;
+
 import main.manager.pojo.Exercise;
 import main.manager.pojo.User;
 import main.manager.pojo.Workout;
@@ -23,6 +25,8 @@ public class StatusSingleton {
 	private Workout workout = null;
 	private Exercise exercise = null;
 	private int selectedRow = 0;
+	private List<Workout> backupedWorkouts = null;
+	public boolean offline = false;
 
 	public StatusSingleton() {
 		exercisePannel = new ExercisePannel();
@@ -36,6 +40,14 @@ public class StatusSingleton {
 		exercise = new Exercise();
 	}
 
+	public List<Workout> getBackupedWorkouts() {
+		return backupedWorkouts;
+	}
+
+	public void setBackupedWorkouts(List<Workout> backupedWorkouts) {
+		this.backupedWorkouts = backupedWorkouts;
+	}
+
 	public Exercise getExercise() {
 		return exercise;
 	}
@@ -43,7 +55,6 @@ public class StatusSingleton {
 	public void setExercise(Exercise exercise) {
 		this.exercise = exercise;
 	}
-	
 
 	public HistoricPanel getHistoryPannel() {
 		return historicPannel;
@@ -59,7 +70,7 @@ public class StatusSingleton {
 		}
 		return statusSingleton;
 	}
-	
+
 	public int getSelectedRow() {
 		return selectedRow;
 	}
@@ -131,7 +142,7 @@ public class StatusSingleton {
 		getExercisePannel().setVisible(false);
 		getProfilePannel().setVisible(false);
 		getHistoryPannel().setVisible(false);
-		
+
 	}
 
 	public void changeToRegisterPannel() {

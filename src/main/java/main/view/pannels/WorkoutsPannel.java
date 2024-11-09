@@ -12,8 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import main.controller.WorkoutController;
 import main.manager.StatusSingleton;
-import main.manager.WorkoutManager;
 import main.manager.pojo.User;
 import main.manager.pojo.Workout;
 
@@ -47,7 +47,7 @@ public class WorkoutsPannel extends JPanel {
 	private JScrollPane workoutScrollPane = null;
 	private DefaultTableModel workoutTable = null;
 
-	private WorkoutManager workoutManager = null;
+	private WorkoutController workoutController = null;
 
 	private User userProfile = null;
 	private List<Workout> workouts = null;
@@ -67,7 +67,7 @@ public class WorkoutsPannel extends JPanel {
 		add(workoutScrollPane);
 
 		try {
-			workoutManager = new WorkoutManager();
+			workoutController = new WorkoutController();
 			workoutTable = new DefaultTableModel();
 			workoutTable.addColumn("Workout Name");
 			workoutTable.addColumn("Exercise Number");
@@ -144,18 +144,27 @@ public class WorkoutsPannel extends JPanel {
 
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
-				try {
-					userProfile = StatusSingleton.getInstance().getUser();
-					int userLevel = userProfile.getUserLevel();
-					userLvlBtn.setText("NIVEL ACTUAL: " + userLevel);
-					welcomeUserLbl.setText("BIENVENIDO, " + userProfile.getName().toUpperCase());
-					workouts = workoutManager.getWorkoutsForUserLevel(userLevel);
-					fillWorkoutTable(workoutTable, workouts);
+				// Seteamos la informacion general que se consigue del mismo lugar
+				userProfile = StatusSingleton.getInstance().getUser();
+				int userLevel = userProfile.getUserLevel();
+				userLvlBtn.setText("NIVEL ACTUAL: " + userLevel);
+				welcomeUserLbl.setText("BIENVENIDO, " + userProfile.getName().toUpperCase());
+				
+				// Si esta online, la informacion se recogera de un sitio distinto
+				if (!StatusSingleton.getInstance().offline) {
+					try {
+						workouts = workoutController.getWorkoutsForUserLevel(userLevel);
+						fillWorkoutTable(workoutTable, workouts);
 
-				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "No se ha podido cargar la informacion...", "Error...",
-							JOptionPane.ERROR_MESSAGE);
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "No se ha podido cargar la informacion...", "Error...",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					workouts = StatusSingleton.getInstance().getBackupedWorkouts();
+					fillWorkoutTable(workoutTable, workouts);
 				}
+
 			}
 		});
 	}
