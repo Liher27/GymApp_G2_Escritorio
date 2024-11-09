@@ -17,7 +17,7 @@ import main.manager.ExerciseManager;
 import main.manager.StatusSingleton;
 import main.manager.pojo.Exercise;
 import main.threads.ExerciseThread;
-import main.threads.Workoutthread;
+import main.threads.WorkoutThread;
 
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
@@ -50,7 +50,7 @@ public class ExercisePannel extends JPanel {
 	private ExerciseManager exerciseManager;
 	private List<Exercise> exercises = null;
 
-	private Workoutthread workoutCro = null;
+	private WorkoutThread workoutCro = null;
 	private ExerciseThread exerciseCro= null;
 
 
@@ -266,7 +266,7 @@ public class ExercisePannel extends JPanel {
 	}
 	private void runWorkoutCrono() {
 		if (workoutCro == null || !workoutCro.isAlive()) {
-			workoutCro = new Workoutthread("WorkoutTimer", this);
+			workoutCro = new WorkoutThread("WorkoutTimer", this);
 			workoutCro.start();
 		} else {
 			workoutCro.resumeTimer();

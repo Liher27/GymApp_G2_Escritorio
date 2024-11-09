@@ -4,14 +4,14 @@ import javax.swing.SwingUtilities;
 
 import main.view.pannels.ExercisePannel;
 
-public class Workoutthread extends Thread {
+public class WorkoutThread extends Thread {
 	private boolean stopped = true;
 	private ExercisePannel exercisePannel;
 	private long programStart = System.currentTimeMillis();
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 
-	public Workoutthread(String name, ExercisePannel exercisePannel) {
+	public WorkoutThread(String name, ExercisePannel exercisePannel) {
 		super(name);
 		this.exercisePannel = exercisePannel;
 		setDaemon(true);
