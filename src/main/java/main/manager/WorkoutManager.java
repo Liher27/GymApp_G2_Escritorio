@@ -41,7 +41,6 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		try {
 			for (QueryDocumentSnapshot document : documents) {
 				Workout workout = new Workout();
-				System.out.println(document.getId());
 				workout.setWorkoutUID(document.getId());
 				workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
 				workout.setLevel(((Number) document.get("level")).intValue());

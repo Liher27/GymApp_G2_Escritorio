@@ -107,7 +107,6 @@ public class LoginPannel extends JPanel {
 					}
 
 					StatusSingleton.getInstance().changeToWorkoutsPannel();
-					exception.printStackTrace();
 				}
 			}
 		});

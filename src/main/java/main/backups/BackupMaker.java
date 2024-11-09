@@ -23,6 +23,7 @@ public class BackupMaker extends AbstractBackupMaker {
 
 	public void doBackup() throws Exception {
 		writeDocuments();
+
 	}
 
 	public void getBackup() throws IOException, InterruptedException {
@@ -31,7 +32,6 @@ public class BackupMaker extends AbstractBackupMaker {
 
 		int exitCode = process.waitFor();
 		if (exitCode != 0) {
-			System.out.println(exitCode);
 		}
 
 	}
@@ -41,12 +41,10 @@ public class BackupMaker extends AbstractBackupMaker {
 		exerciseController = new ExerciseController();
 		user = StatusSingleton.getInstance().getUser();
 		workouts = workoutController.getAllWorkouts();
-
 		for (Workout workout : workouts) {
 			exercises = exerciseController.getExercisesForWorkout(workout.getWorkoutUID());
 			workout.setExercises(exercises);
 		}
-
 		writeUser(user);
 		writeWorkouts(workouts);
 	}
