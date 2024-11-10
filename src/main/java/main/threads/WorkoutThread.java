@@ -21,13 +21,13 @@ public class WorkoutThread extends Thread {
 	public void run() {
 		while (!Thread.currentThread().isInterrupted()) {
 			if (!stopped) {
-				long elapsed = System.currentTimeMillis() - programStart - pauseCount;
+				long elapsed = (System.currentTimeMillis() - programStart - pauseCount) /1000;
 				SwingUtilities.invokeLater(() -> {
 					exercisePannel.loadWorkoutTime(format(elapsed));
 				});
 			}
 			try {
-				sleep(1);
+				sleep(1000);
 			} catch (InterruptedException e) {
 				return;
 			}
@@ -35,11 +35,7 @@ public class WorkoutThread extends Thread {
 	}
 
 	private String format(long elapsed) {
-		int hour, minute, second, milli;
-
-		milli = (int) (elapsed % 1000);
-		elapsed = elapsed / 1000;
-
+		int hour, minute, second;
 		second = (int) (elapsed % 60);
 		elapsed = elapsed / 60;
 
@@ -48,7 +44,7 @@ public class WorkoutThread extends Thread {
 
 		hour = (int) (elapsed % 60);
 
-		return String.format("%02d:%02d:%02d %03d", hour, minute, second, milli);
+		return String.format("%02d:%02d:%02d", hour, minute, second);
 	}
 
 	public void resumeTimer() {
@@ -63,16 +59,15 @@ public class WorkoutThread extends Thread {
 		exercisePannel.resetWorkoutTime();
 	}
 
-	public void pauseTime() {
-		if (stopped = true) {
-			pauseCount += (System.currentTimeMillis() - pauseStart);
-			stopped = false;
-			exercisePannel.changeWorkoutButtonTextTo();
-		} else {
-			pauseStart = System.currentTimeMillis();
-			stopped = true;
-			exercisePannel.changeWorkoutButtonTextTo();
-		}
-	}
+	   public void pauseTime() {
+	        if (!stopped) {
+	            pauseStart = System.currentTimeMillis();  
+	            stopped = true;
+	        } else {
+	            resumeTimer();
+	            exercisePannel.changeExerciseButtonText();
+	        }
+	    }
+	
 
 }

@@ -1,5 +1,7 @@
 package main.threads;
 
-public class RestThread {
+public class RestThread extends Thread {
+	
+	
 
 }
