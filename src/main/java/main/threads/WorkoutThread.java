@@ -1,7 +1,10 @@
 package main.threads;
 
+import java.util.List;
+
 import javax.swing.SwingUtilities;
 
+import main.manager.pojo.Exercise;
 import main.view.pannels.ExercisePannel;
 
 public class WorkoutThread extends Thread {
@@ -10,18 +13,35 @@ public class WorkoutThread extends Thread {
 	private long programStart = System.currentTimeMillis();
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
+	private ExerciseThread exeThread;
+	private List<Exercise> exercises;
+	private long elapsed = 0;
 
-	public WorkoutThread(String name, ExercisePannel exercisePannel) {
+	public WorkoutThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel) {
 		super(name);
 		this.exercisePannel = exercisePannel;
-		setDaemon(true);
+		this.exercises = exercises;
 	}
 
 	@Override
 	public void run() {
-		while (!Thread.currentThread().isInterrupted()) {
+		exeThread = new ExerciseThread("exercises", exercises, exercisePannel);
+		exeThread.start();
+		startWorkout();
+		try {
+			exeThread.join();
+			System.out.println();
+			pauseTime();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void startWorkout() {
+		while (true) {
 			if (!stopped) {
-				long elapsed = (System.currentTimeMillis() - programStart - pauseCount) /1000;
+				elapsed = (System.currentTimeMillis() - programStart - pauseCount) /1000;
 				SwingUtilities.invokeLater(() -> {
 					exercisePannel.loadWorkoutTime(format(elapsed));
 				});
@@ -64,8 +84,8 @@ public class WorkoutThread extends Thread {
 	            pauseStart = System.currentTimeMillis();  
 	            stopped = true;
 	        } else {
-	            resumeTimer();
-	            exercisePannel.changeExerciseButtonText();
+	            pauseCount += (System.currentTimeMillis() - pauseStart);  
+                stopped = false;  
 	        }
 	    }
 	
