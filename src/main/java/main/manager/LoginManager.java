@@ -19,8 +19,7 @@ public class LoginManager implements ManagerInterface<User> {
 	private Firestore db = null;
 
 	public LoginManager() throws Exception {
-		FileInputStream serviceAccount = new FileInputStream(
-				"src/main/resources/reto-1-grupo-2.json");
+		FileInputStream serviceAccount = new FileInputStream("src/main/resources/reto-1-grupo-2.json");
 
 		FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
 				.setProjectId("reto-1-grupo-2").setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
@@ -34,22 +33,28 @@ public class LoginManager implements ManagerInterface<User> {
 		ApiFuture<QuerySnapshot> query = usersRef.whereEqualTo("name", user.getName()).get();
 		List<QueryDocumentSnapshot> documents = query.get().getDocuments();
 
-		if (!documents.isEmpty()) {
-			QueryDocumentSnapshot document = documents.get(0);
+		try {
+			if (!documents.isEmpty()) {
+				QueryDocumentSnapshot document = documents.get(0);
 
-			String storedPassword = document.getString("pass");
+				String storedPassword = document.getString("pass");
 
-			if (storedPassword.equals(user.getPass())) {
-				user.setBirthDate(document.getDate("birthDate"));
-				user.setMail(document.getString("mail"));
-				user.setName(document.getString("name"));
-				user.setPass(document.getString("pass"));
-				user.setSurname(document.getString("surname"));
-				user.setTrainer(document.getBoolean("trainer"));
-				user.setUserLevel(document.getLong("userLevel").intValue());
-				StatusSingleton.getInstance().setUser(user);
-				return true;
+				if (storedPassword.equals(user.getPass())) {
+					user.setBirthDate(document.getDate("birthDate"));
+					user.setMail(document.getString("mail"));
+					user.setName(document.getString("name"));
+					user.setPass(document.getString("pass"));
+					user.setSurname(document.getString("surname"));
+					user.setTrainer(document.getBoolean("trainer"));
+					user.setUserLevel(document.getLong("userLevel").intValue());
+					StatusSingleton.getInstance().setUser(user);
+					return true;
+				}
 			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			db.close();
 		}
 		return false;
 

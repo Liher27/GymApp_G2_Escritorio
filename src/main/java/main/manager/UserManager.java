@@ -42,22 +42,28 @@ public class UserManager implements ManagerInterface<User> {
 
 	@Override
 	public User getOne(User user) throws Exception {
-	    DocumentReference getUserRef = db.collection("users").document(user.getName());
-	    ApiFuture<DocumentSnapshot> future = getUserRef.get();
-	    DocumentSnapshot document = future.get();
+		DocumentReference getUserRef = db.collection("users").document(user.getName());
+		ApiFuture<DocumentSnapshot> future = getUserRef.get();
+		DocumentSnapshot document = future.get();
 
-	    if (document.exists()) {
-	        user.setName(document.getString("name"));
-	        user.setBirthDate(document.getDate("birthDate"));
-	        user.setMail(document.getString("mail"));
-	        user.setPass(document.getString("pass"));
-	        user.setSurname(document.getString("surname"));
-	        user.setUserLevel(((Number) document.get("userLevel")).intValue());
-	        
-	    } else {
-	        throw new Exception("User not found");
-	    }
-	    return user;
+		try {
+			if (document.exists()) {
+				user.setName(document.getString("name"));
+				user.setBirthDate(document.getDate("birthDate"));
+				user.setMail(document.getString("mail"));
+				user.setPass(document.getString("pass"));
+				user.setSurname(document.getString("surname"));
+				user.setUserLevel(((Number) document.get("userLevel")).intValue());
+
+			} else {
+				throw new Exception("User not found");
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			db.close();
+		}
+		return user;
 	}
 
 	@Override

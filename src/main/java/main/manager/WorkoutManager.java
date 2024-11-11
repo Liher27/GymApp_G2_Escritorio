@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -52,6 +51,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
+			db.close();
 		}
 		return ret;
 	}
@@ -61,22 +61,27 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		return false;
 	}
 
-	public List<Workout> getWorkoutsForUserLevel(int userLevel) throws ExecutionException, InterruptedException {
+	public List<Workout> getWorkoutsForUserLevel(int userLevel) throws Exception {
 
 		CollectionReference workoutsRef = db.collection("workouts");
 		Query query = workoutsRef.whereLessThanOrEqualTo("level", userLevel);
 
 		List<QueryDocumentSnapshot> workoutDocuments = query.get().get().getDocuments();
 		List<Workout> workouts = new ArrayList<>();
-
-		for (QueryDocumentSnapshot document : workoutDocuments) {
-			Workout workout = document.toObject(Workout.class);
-			workout.setWorkoutUID(document.getId());
-			workout.setWorkoutName(document.getString("workoutName"));
-			workout.setLevel(((Number) document.get("level")).intValue());
-			workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
-			workout.setVideo(document.getString("video"));
-			workouts.add(workout);
+		try {
+			for (QueryDocumentSnapshot document : workoutDocuments) {
+				Workout workout = document.toObject(Workout.class);
+				workout.setWorkoutUID(document.getId());
+				workout.setWorkoutName(document.getString("workoutName"));
+				workout.setLevel(((Number) document.get("level")).intValue());
+				workout.setExerciseNumber(((Number) document.get("exerciseNumber")).intValue());
+				workout.setVideo(document.getString("video"));
+				workouts.add(workout);
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			db.close();
 		}
 
 		return workouts;
@@ -113,6 +118,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
+			db.close();
 		}
 		return workout;
 	}
