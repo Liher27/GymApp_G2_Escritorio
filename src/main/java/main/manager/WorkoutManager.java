@@ -51,7 +51,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			db.close();
+			db.shutdown();
 		}
 		return ret;
 	}
@@ -81,7 +81,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			db.close();
+			db.shutdown();
 		}
 
 		return workouts;
@@ -118,7 +118,7 @@ public class WorkoutManager implements ManagerInterface<Workout> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			db.close();
+			db.shutdown();
 		}
 		return workout;
 	}

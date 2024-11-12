@@ -45,7 +45,6 @@ public class HistoricPanel extends JPanel {
 
 	public HistoricPanel() {
 		setBackground(new Color(48, 48, 48));
-		setForeground(new Color(0, 0, 0));
 		setBounds(0, 0, 1230, 700);
 		setLayout(null);
 

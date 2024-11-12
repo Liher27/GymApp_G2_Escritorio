@@ -54,7 +54,7 @@ public class LoginManager implements ManagerInterface<User> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			db.close();
+			db.shutdown();
 		}
 		return false;
 

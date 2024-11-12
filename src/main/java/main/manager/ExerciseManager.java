@@ -21,9 +21,17 @@ import main.manager.pojo.Exercise;
 public class ExerciseManager implements ManagerInterface<Exercise> {
 	private Firestore db = null;
 
+	public ExerciseManager() throws IOException {
+		FileInputStream serviceAccount = new FileInputStream("src/main/resources/reto-1-grupo-2.json");
+
+		FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
+				.setProjectId("reto-1-grupo-2").setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+
+		db = firestoreOptions.getService();
+	}
+
 	@Override
 	public List<Exercise> getAll() throws Exception {
-		openDatabase();
 		List<Exercise> ret = new ArrayList<Exercise>();
 		try {
 			DocumentReference workout = db.collection("workouts").document("workout_1");
@@ -43,31 +51,39 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
+			db.shutdown();
 		}
 		return ret;
 	}
 
-	public List<Exercise> getExercisesForWorkout(String workoutId) throws ExecutionException, InterruptedException, IOException {
-		openDatabase();
-		CollectionReference workoutsRef = db.collection("workouts");
-
-		DocumentReference workoutExercisesRef = workoutsRef.document(workoutId);
-
-		CollectionReference a = workoutExercisesRef.collection("workoutExercises");
-
-		List<QueryDocumentSnapshot> exerciseDocuments = a.get().get().getDocuments();
-
+	public List<Exercise> getExercisesForWorkout(String workoutId)
+			throws IOException, InterruptedException, ExecutionException {
 		List<Exercise> exercises = new ArrayList<>();
+		try {
+			CollectionReference workoutsRef = db.collection("workouts");
 
-		for (QueryDocumentSnapshot document : exerciseDocuments) {
-			Exercise exercise = document.toObject(Exercise.class);
+			DocumentReference workoutExercisesRef = workoutsRef.document(workoutId);
 
-			exercise.setExerciseName((String) document.get("exerciseName"));
-			exercise.setSeriesNumber(((Number) document.get("seriesNumber")).intValue());
-			exercise.setRestTime(((Number) document.get("restTime")).intValue());
-			exercise.setImage((String) document.get("image"));
+			CollectionReference collectionReference = workoutExercisesRef.collection("workoutExercises");
 
-			exercises.add(exercise);
+			List<QueryDocumentSnapshot> exerciseDocuments = collectionReference.get().get().getDocuments();
+
+			for (QueryDocumentSnapshot document : exerciseDocuments) {
+				Exercise exercise = document.toObject(Exercise.class);
+
+				exercise.setExerciseName((String) document.get("exerciseName"));
+				exercise.setSeriesNumber(((Number) document.get("seriesNumber")).intValue());
+				exercise.setRestTime(((Number) document.get("restTime")).intValue());
+				exercise.setImage((String) document.get("image"));
+
+				exercises.add(exercise);
+			}
+		} catch (InterruptedException e) {
+			throw e;
+		} catch (ExecutionException e) {
+			throw e;
+		} finally {
+			db.shutdown();
 		}
 
 		return exercises;
@@ -97,7 +113,6 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 	}
 
 	public List<Exercise> getExercisesWithLevel(int userLevel) throws Exception {
-		openDatabase();
 		List<Exercise> allExercises = new ArrayList<>();
 		try {
 			CollectionReference workoutsRef = db.collection("workouts");
@@ -125,16 +140,8 @@ public class ExerciseManager implements ManagerInterface<Exercise> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
+			db.shutdown();
 		}
 		return allExercises;
-	}
-
-	private void openDatabase() throws IOException {
-		FileInputStream serviceAccount = new FileInputStream("src/main/resources/reto-1-grupo-2.json");
-
-		FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
-				.setProjectId("reto-1-grupo-2").setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
-
-		db = firestoreOptions.getService();
 	}
 }

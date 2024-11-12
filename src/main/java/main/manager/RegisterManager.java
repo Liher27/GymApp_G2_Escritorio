@@ -36,10 +36,10 @@ public class RegisterManager implements ManagerInterface<User> {
 		ApiFuture<WriteResult> writeResult = db.collection("users").document(user.getName()).create(user);
 
 		if (null != writeResult.get()) {
-			db.close();
+			db.shutdown();
 			return true;
 		} else
-			db.close();
+			db.shutdown();
 
 		return false;
 

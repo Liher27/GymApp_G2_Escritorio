@@ -52,7 +52,7 @@ public class ProfilePannel extends JPanel {
 	public ProfilePannel() {
 
 		setBounds(0, 0, 1230, 700);
-		setBackground(new Color(0, 0, 0));
+		setBackground(new Color(48, 48, 48));
 		setLayout(null);
 
 		addComponentListener(new ComponentAdapter() {
@@ -73,7 +73,7 @@ public class ProfilePannel extends JPanel {
 
 		lblProfileTitle = new JLabel("DATOS DEL PERFIL");
 		lblProfileTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblProfileTitle.setForeground(new Color(200, 40, 255));
+		lblProfileTitle.setForeground(new Color(255, 193, 7));
 		lblProfileTitle.setFont(new Font("Segoe UI Black", Font.BOLD, 37));
 		lblProfileTitle.setBounds(328, 32, 490, 64);
 		add(lblProfileTitle);
@@ -95,7 +95,7 @@ public class ProfilePannel extends JPanel {
 
 		lblPersonalOpt = new JLabel("DATOS PERSONALES: ");
 		lblPersonalOpt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPersonalOpt.setForeground(new Color(190, 30, 255));
+		lblPersonalOpt.setForeground(new Color(255, 193, 7));
 		lblPersonalOpt.setFont(new Font("Segoe UI Black", Font.PLAIN, 30));
 		lblPersonalOpt.setBounds(80, 218, 365, 64);
 		add(lblPersonalOpt);
@@ -141,7 +141,7 @@ public class ProfilePannel extends JPanel {
 
 		lblCountOpt = new JLabel("DATOS DE LA CUENTA: ");
 		lblCountOpt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCountOpt.setForeground(new Color(190, 30, 255));
+		lblCountOpt.setForeground(new Color(255, 193, 7));
 		lblCountOpt.setFont(new Font("Segoe UI Black", Font.PLAIN, 30));
 		lblCountOpt.setBounds(669, 218, 365, 64);
 		add(lblCountOpt);

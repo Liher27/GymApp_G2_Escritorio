@@ -61,7 +61,7 @@ public class UserManager implements ManagerInterface<User> {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			db.close();
+			db.shutdown();
 		}
 		return user;
 	}
@@ -84,10 +84,10 @@ public class UserManager implements ManagerInterface<User> {
 		ApiFuture<WriteResult> writeResult = userRef.update(updates);
 
 		if (null != writeResult.get()) {
-			db.close();
+			db.shutdown();
 			return true;
 		} else
-			db.close();
+			db.shutdown();
 
 		return false;
 	}
