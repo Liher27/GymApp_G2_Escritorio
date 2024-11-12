@@ -16,8 +16,8 @@ public class ExerciseThread extends Thread {
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 	private long currentSecond = 0;
-	private int[] count = { 0, 1, 2, 3, 4 , 5 };
-	private WorkoutThread workoutThread;
+	private int[] count = { 0, 1, 2, 3, 4, 5 };
+	private RestThread restThread;
 
 	public ExerciseThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel) {
 		super(name);
@@ -44,6 +44,9 @@ public class ExerciseThread extends Thread {
 					currentSecond = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
 					SwingUtilities.invokeLater(() -> exercisePannel.loadExerciseTime(format(currentSecond)));
 					exercisePannel.loadExerciseNameAndSerie(this.exercises.get(contador).getExerciseName(), (i + 1));
+					restThread = new RestThread("restThread", exercises, exercisePannel, null);
+					restThread.countdown(this.exercises.get(contador).getRestTime());
+
 					if (currentSecond >= 4) {
 						stopped = true;
 						exercisePannel.resetExerciseTime();
@@ -60,7 +63,9 @@ public class ExerciseThread extends Thread {
 			contador++;
 		}
 		JOptionPane.showMessageDialog(null, "Has terminado todos los ejercicios");
+
 		stopTimer();
+
 //		workoutThread.stopTimer();
 	}
 
@@ -111,4 +116,5 @@ public class ExerciseThread extends Thread {
 
 		}
 	}
+
 }

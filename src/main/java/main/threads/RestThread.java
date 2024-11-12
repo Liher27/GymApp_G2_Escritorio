@@ -1,9 +1,8 @@
 package main.threads;
 
 import java.util.List;
-
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import main.manager.pojo.Exercise;
 import main.view.pannels.ExercisePannel;
 
@@ -13,81 +12,81 @@ public class RestThread extends Thread {
 	private long programStart = System.currentTimeMillis();
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
-	private RestThread restThread;
 	private List<Exercise> exercises;
-	private long elapsed = 0;
+	private ExerciseThread exerciseThread;
 
-	public RestThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel) {
+	public RestThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel,
+			ExerciseThread exerciseThread) {
 		super(name);
 		this.exercisePannel = exercisePannel;
 		this.exercises = exercises;
+		this.exerciseThread = exerciseThread;
 	}
 
 	@Override
 	public void run() {
-		restThread = new RestThread("restThread", exercises, exercisePannel);
-		restThread.start();
 		startRest();
-		try {
-			restThread.join();
-			System.out.println();
-			pauseTime();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 	private void startRest() {
-		while (true) {
-			if (!stopped) {
-				elapsed = (System.currentTimeMillis() - programStart - pauseCount) /1000;
-				SwingUtilities.invokeLater(() -> {
-					exercisePannel.loadRestTime(format(elapsed));
-				});
-			}
+		for (Exercise exercise : exercises) {
+			int restTime = exercise.getRestTime();
+			countdown(restTime);
+			exerciseThread.pauseTime();
 			try {
-				sleep(1000);
+				sleep(restTime * 1000);
 			} catch (InterruptedException e) {
-				return;
+				Thread.currentThread().interrupt();
 			}
+			exerciseThread.resumeTimer();
 		}
 	}
 
-	private String format(long elapsed) {
-		int hour, minute, second;
-		second = (int) (elapsed % 60);
-		elapsed = elapsed / 60;
+	public void countdown(int restTime) {
+		int remainingTime = restTime;
+		while (remainingTime >= 0) {
+			int finalRemainingTime = remainingTime;
 
-		minute = (int) (elapsed % 60);
-		elapsed = elapsed / 60;
+			SwingUtilities.invokeLater(() -> exercisePannel.loadRestTime(finalRemainingTime));
 
-		hour = (int) (elapsed % 60);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
+			}
 
-		return String.format("%02d:%02d:%02d", hour, minute, second);
+			remainingTime--;
+		}
+		SwingUtilities.invokeLater(() -> {
+			exercisePannel.loadRestTime(0);
+			JOptionPane.showMessageDialog(null, "Tiempo de descanso terminado", null, JOptionPane.ERROR_MESSAGE);
+		});
 	}
 
-	public void resumeTimer() {
+	public void pauseRestTimer() {
+		stopped = true;
+	}
+
+	public void resumeRestTimer() {
 		stopped = false;
 		programStart = System.currentTimeMillis() - pauseCount;
 	}
 
-	public void stopTimer() {
+	public void stopRestTimer() {
 		pauseStart = programStart;
 		pauseCount = 0;
 		stopped = true;
 		exercisePannel.resetRestTimer();
 	}
 
-	   public void pauseTime() {
-	        if (!stopped) {
-	            pauseStart = System.currentTimeMillis();  
-	            stopped = true;
-	        } else {
-	            pauseCount += (System.currentTimeMillis() - pauseStart);  
-                stopped = false;  
-	        }
-	    }
-	
-
+	public void pauseTime() {
+		if (!stopped) {
+			pauseStart = System.currentTimeMillis();
+			stopped = true;
+		} else {
+			pauseCount += (System.currentTimeMillis() - pauseStart);
+			stopped = false;
+		}
+	}
 }

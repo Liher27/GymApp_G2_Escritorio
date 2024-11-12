@@ -15,13 +15,11 @@ public class WorkoutThread extends Thread {
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 	private ExerciseThread exeThread;
-	private List<Exercise> exercises;
 	private long elapsed = 0;
 
 	public WorkoutThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel) {
 		super(name);
 		this.exercisePannel = exercisePannel;
-		this.exercises = exercises;
 	}
 
 	@Override
