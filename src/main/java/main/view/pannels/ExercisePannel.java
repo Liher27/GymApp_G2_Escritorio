@@ -52,7 +52,7 @@ public class ExercisePannel extends JPanel {
 
 	private WorkoutThread workoutCro = null;
 	private ExerciseThread exerciseCro = null;
-	private JLabel countDown = null;
+	private JLabel coolDown;
 
 	public ExercisePannel() {
 
@@ -101,7 +101,6 @@ public class ExercisePannel extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				workoutCro.pauseTime();
-				
 			}
 		});
 
@@ -151,7 +150,7 @@ public class ExercisePannel extends JPanel {
 		lblWorkoutName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWorkoutName.setForeground(new Color(255, 193, 7));
 		lblWorkoutName.setFont(new Font("Segoe UI Semibold", Font.BOLD, 64));
-		lblWorkoutName.setBounds(324, 27, 532, 56);
+		lblWorkoutName.setBounds(324, 27, 532, 75);
 		add(lblWorkoutName);
 
 		exercisesBackButton = new JButton("Volver");
@@ -217,18 +216,19 @@ public class ExercisePannel extends JPanel {
 		exerciseNumber.setBounds(905, 197, 331, 56);
 		add(exerciseNumber);
 		
-		countDown = new JLabel("");
-		countDown.setHorizontalAlignment(SwingConstants.CENTER);
-		countDown.setForeground(new Color(255, 193, 7));
-		countDown.setFont(new Font("Segoe UI Semibold", Font.BOLD, 27));
-		countDown.setBounds(905, 130, 331, 56);
-		add(countDown);
+		coolDown = new JLabel("");
+		coolDown.setHorizontalAlignment(SwingConstants.CENTER);
+		coolDown.setForeground(new Color(255, 193, 7));
+		coolDown.setFont(new Font("Segoe UI Semibold", Font.BOLD, 27));
+		coolDown.setBounds(905, 130, 331, 56);
+		add(coolDown);
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				exerciseTable.setRowCount(0);
 				if (!StatusSingleton.getInstance().offline) {
 					try {
 						String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
+						lblWorkoutName.setText("Workout: " + StatusSingleton.getInstance().getWorkout().getWorkoutName());
 						exercises = exerciseController.getExercisesForWorkout(id);
 						fillExercisePanel(exerciseTable, exercises);
 					} catch (Exception e1) {
@@ -265,22 +265,17 @@ public class ExercisePannel extends JPanel {
 	public void loadExerciseTime(String time) {
 		exerciseCronoLbl.setText(time);
 	}
-
-	public void changeExerciseButtonText() {
-		exerciseCronoLbl.setText("Iniciar");
-	}
-
-	public void changeExerciseButtonTextTo() {
-		exerciseCronoLbl.setText("Pausar");
-	}
-
+	
 	public void loadWorkoutTime(String time) {
 		workoutCronoLbl.setText(time);
+	}
+	public void loadRestTime(String time) {
+		restTimeCronoLbl.setText(time);
 	}
 	
 	public void loadExerciseNameAndSerie(String exerciseName,int serieNumber) {
 		lblExerciseName.setText(exerciseName);
-		exerciseNumber.setText(String.valueOf(serieNumber));
+		exerciseNumber.setText("Numero de la serie: "+ String.valueOf(serieNumber));
 	}
 
 
@@ -310,6 +305,10 @@ public class ExercisePannel extends JPanel {
 		exerciseCronoLbl.setText("00:00:00");
 	}
 	public void setCountDown(int seconds) {
-		countDown.setText("" +seconds );
+		coolDown.setText("Cuenta atras: " + seconds );
+	}
+
+	public void resetRestTimer() {
+		restTimeCronoLbl.setText("00:00:00");
 	}
 }

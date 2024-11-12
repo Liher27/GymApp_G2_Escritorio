@@ -16,7 +16,8 @@ public class ExerciseThread extends Thread {
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 	private long currentSecond = 0;
-	private int[] count = { 1, 2, 3, 4, 5 };
+	private int[] count = { 0, 1, 2, 3, 4 , 5 };
+	private WorkoutThread workoutThread;
 
 	public ExerciseThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel) {
 		super(name);
@@ -31,7 +32,7 @@ public class ExerciseThread extends Thread {
 
 	public void startExercise() {
 		int contador = 0;
-		
+
 		while (contador < this.exercises.size()) {
 			fiveSCount();
 			int serieSet = this.exercises.get(contador).getSeriesNumber();
@@ -60,7 +61,7 @@ public class ExerciseThread extends Thread {
 		}
 		JOptionPane.showMessageDialog(null, "Has terminado todos los ejercicios");
 		stopTimer();
-
+//		workoutThread.stopTimer();
 	}
 
 	private String format(long elapsed) {
@@ -105,10 +106,8 @@ public class ExerciseThread extends Thread {
 				Thread.sleep(1000);
 				exercisePannel.setCountDown(count[i]);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 
 		}
 	}

@@ -8,6 +8,7 @@ import main.manager.pojo.Exercise;
 import main.view.pannels.ExercisePannel;
 
 public class WorkoutThread extends Thread {
+
 	private boolean stopped = true;
 	private ExercisePannel exercisePannel;
 	private long programStart = System.currentTimeMillis();
@@ -25,8 +26,9 @@ public class WorkoutThread extends Thread {
 
 	@Override
 	public void run() {
-		exeThread = new ExerciseThread("exercises", exercises, exercisePannel);
-		exeThread.start();
+		// Esto para que yifey?
+		// exeThread = new ExerciseThread("exercises", exercises, exercisePannel);
+		//exeThread.start();
 		startWorkout();
 		try {
 			exeThread.join();
@@ -35,13 +37,13 @@ public class WorkoutThread extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void startWorkout() {
 		while (true) {
 			if (!stopped) {
-				elapsed = (System.currentTimeMillis() - programStart - pauseCount) /1000;
+				elapsed = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
 				SwingUtilities.invokeLater(() -> {
 					exercisePannel.loadWorkoutTime(format(elapsed));
 				});
@@ -79,15 +81,14 @@ public class WorkoutThread extends Thread {
 		exercisePannel.resetWorkoutTime();
 	}
 
-	   public void pauseTime() {
-	        if (!stopped) {
-	            pauseStart = System.currentTimeMillis();  
-	            stopped = true;
-	        } else {
-	            pauseCount += (System.currentTimeMillis() - pauseStart);  
-                stopped = false;  
-	        }
-	    }
-	
+	public void pauseTime() {
+		if (!stopped) {
+			pauseStart = System.currentTimeMillis();
+			stopped = true;
+		} else {
+			pauseCount += (System.currentTimeMillis() - pauseStart);
+			stopped = false;
+		}
+	}
 
 }
