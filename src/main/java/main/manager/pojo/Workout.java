@@ -7,13 +7,22 @@ import java.util.Objects;
 public class Workout implements Serializable {
 
 	private static final long serialVersionUID = 6334434094001570294L;
-	
+
 	private String workoutUID = null;
 	private int level = 0;
 	private String workoutName = null;
 	private int exerciseNumber = 0;
 	private String video = null;
 	private List<Exercise> exercises;
+	private String workoutId = null;
+
+	public String getWorkoutId() {
+		return workoutId;
+	}
+
+	public void setWorkoutId(String workoutId) {
+		this.workoutId = workoutId;
+	}
 
 	public String getWorkoutUID() {
 		return workoutUID;
@@ -64,14 +73,8 @@ public class Workout implements Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "Workout [level=" + level + ", workoutName=" + workoutName + ", exerciseNumber=" + exerciseNumber
-				+ ", video=" + video + ", exercises=" + exercises + "]";
-	}
-
-	@Override
 	public int hashCode() {
-		return Objects.hash(exerciseNumber, exercises, level, video, workoutName);
+		return Objects.hash(exerciseNumber, exercises, level, video, workoutId, workoutName, workoutUID);
 	}
 
 	@Override
@@ -85,7 +88,15 @@ public class Workout implements Serializable {
 		Workout other = (Workout) obj;
 		return exerciseNumber == other.exerciseNumber && Objects.equals(exercises, other.exercises)
 				&& level == other.level && Objects.equals(video, other.video)
-				&& Objects.equals(workoutName, other.workoutName);
+				&& Objects.equals(workoutId, other.workoutId) && Objects.equals(workoutName, other.workoutName)
+				&& Objects.equals(workoutUID, other.workoutUID);
+	}
+
+	@Override
+	public String toString() {
+		return "Workout [workoutUID=" + workoutUID + ", level=" + level + ", workoutName=" + workoutName
+				+ ", exerciseNumber=" + exerciseNumber + ", video=" + video + ", exercises=" + exercises
+				+ ", workoutId=" + workoutId + "]";
 	}
 
 }

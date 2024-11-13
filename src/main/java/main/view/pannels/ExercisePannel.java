@@ -113,22 +113,21 @@ public class ExercisePannel extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				workoutCro.pauseTime();
-				
+
 			}
 		});
 
 		endBtn = new JButton("Parar");
 		endBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				try {
 					workoutCro.stopTimer();
 					workout = StatusSingleton.getInstance().getWorkout();
 					user = StatusSingleton.getInstance().getUser();
 					historic = workoutCro.getLastWorkoutInfo();
-					backUpsController.userBackups(workout, user,historic);
+					backUpsController.userBackups(workout, user, historic);
 				} catch (ParserConfigurationException | SAXException | IOException | TransformerException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -148,10 +147,7 @@ public class ExercisePannel extends JPanel {
 		workoutStartBtn = new JButton("Iniciar");
 		workoutStartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				runWorkoutCrono();
-					
-			
 //				runExerciseCrono();
 			}
 
@@ -163,14 +159,14 @@ public class ExercisePannel extends JPanel {
 		lblExerciseName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblExerciseName.setForeground(new Color(255, 193, 7));
 		lblExerciseName.setFont(new Font("Segoe UI Semibold", Font.BOLD, 47));
-		lblExerciseName.setBounds(319, 146, 576, 56);
+		lblExerciseName.setBounds(319, 130, 576, 72);
 		add(lblExerciseName);
 
 		lblWorkoutName = new JLabel("WORKOUTNAME");
 		lblWorkoutName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWorkoutName.setForeground(new Color(255, 193, 7));
 		lblWorkoutName.setFont(new Font("Segoe UI Semibold", Font.BOLD, 64));
-		lblWorkoutName.setBounds(324, 27, 532, 56);
+		lblWorkoutName.setBounds(324, 11, 532, 108);
 		add(lblWorkoutName);
 
 		exercisesBackButton = new JButton("Volver");
@@ -187,7 +183,7 @@ public class ExercisePannel extends JPanel {
 		seriesStartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				runExerciseCrono();
-				
+
 			}
 		});
 		seriesStartBtn.setBounds(999, 392, 76, 40);
@@ -212,7 +208,7 @@ public class ExercisePannel extends JPanel {
 		exerciseTimeLbl = new JLabel("Cronometro Serie");
 		exerciseTimeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		exerciseTimeLbl.setForeground(Color.WHITE);
-		
+
 		exerciseTimeLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		exerciseTimeLbl.setBounds(1004, 276, 157, 46);
 		add(exerciseTimeLbl);
@@ -230,14 +226,14 @@ public class ExercisePannel extends JPanel {
 		restTimeLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		restTimeLbl.setBounds(513, 544, 189, 46);
 		add(restTimeLbl);
-		
+
 		exerciseNumber = new JLabel("");
 		exerciseNumber.setHorizontalAlignment(SwingConstants.CENTER);
 		exerciseNumber.setForeground(new Color(255, 193, 7));
 		exerciseNumber.setFont(new Font("Segoe UI Semibold", Font.BOLD, 27));
 		exerciseNumber.setBounds(905, 197, 331, 56);
 		add(exerciseNumber);
-		
+
 		countDown = new JLabel("");
 		countDown.setHorizontalAlignment(SwingConstants.CENTER);
 		countDown.setForeground(new Color(255, 193, 7));
@@ -251,6 +247,8 @@ public class ExercisePannel extends JPanel {
 					try {
 						String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
 						exercises = exerciseController.getExercisesForWorkout(id);
+						lblWorkoutName
+								.setText("Workout: " + StatusSingleton.getInstance().getWorkout().getWorkoutName());
 						fillExercisePanel(exerciseTable, exercises);
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
@@ -283,32 +281,44 @@ public class ExercisePannel extends JPanel {
 		}
 	}
 
+	// Exercise crono
+
 	public void loadExerciseTime(String time) {
 		exerciseCronoLbl.setText(time);
 	}
 
-	public void loadWorkoutTime(String time) {
-		workoutCronoLbl.setText(time);
-	}
-	
-	public void loadExerciseNameAndSerie(String exerciseName,int serieNumber) {
+	public void loadExerciseNameAndSerie(String exerciseName, int serieNumber) {
 		lblExerciseName.setText(exerciseName);
-		exerciseNumber.setText(String.valueOf(serieNumber));
+		exerciseNumber.setText(String.valueOf("Repeticiones: " + serieNumber));
 	}
-
 
 	private void runExerciseCrono() {
 		if (exerciseCro == null || !exerciseCro.isAlive()) {
-			exerciseCro = new ExerciseThread("ExerciseTimer",exercises, this,workoutCro);
+			exerciseCro = new ExerciseThread("ExerciseTimer", exercises, this, workoutCro);
 			exerciseCro.start();
 		} else {
 			exerciseCro.resumeTimer();
 		}
 	}
 
+	public void resetExerciseTime() {
+		exerciseCronoLbl.setText("00:00:00");
+
+	}
+
+	public void setCountDown(int seconds) {
+		countDown.setText("Cuenta atras: " + seconds);
+	}
+
+	// Workout crono
+	
+	public void loadWorkoutTime(String time) {
+		workoutCronoLbl.setText(time);
+	}
+
 	private void runWorkoutCrono() {
 		if (workoutCro == null || !workoutCro.isAlive()) {
-			workoutCro = new WorkoutThread("WorkoutTimer", exercises, this,exerciseCro);
+			workoutCro = new WorkoutThread("WorkoutTimer", exercises, this, exerciseCro);
 			workoutCro.start();
 		} else {
 			workoutCro.resumeTimer();
@@ -319,15 +329,12 @@ public class ExercisePannel extends JPanel {
 		workoutCronoLbl.setText("00:00:00");
 	}
 
-	public void resetExerciseTime() {
-		exerciseCronoLbl.setText("00:00:00");
-	}
-	public void setCountDown(int seconds) {
-		countDown.setText("" +seconds );
-	}
+	// Rest Crono
+	
 	public void loadRestTime(int time) {
-		restTimeCronoLbl.setText(""+time);
+		restTimeCronoLbl.setText("00:00:" + time);
 	}
+
 	public void resetRestTimer() {
 		restTimeCronoLbl.setText("00:00:00");
 	}
