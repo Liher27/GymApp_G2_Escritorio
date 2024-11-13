@@ -17,7 +17,7 @@ public class ExerciseThread extends Thread {
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 	private long currentSecond = 0;
-	private int[] count = { 1, 2, 3, 4, 5 };
+	private int[] count = { 0, 1, 2, 3, 4, 5 };
 	private WorkoutThread workoutThread;
 
 	public ExerciseThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel,
@@ -61,13 +61,13 @@ public class ExerciseThread extends Thread {
 				}
 				stopped = false;
 				setRestTime(exercises.get(contador).getRestTime());
-				int user = StatusSingleton.getInstance().getUser().getUserLevel();
-				
-				StatusSingleton.getInstance().getUser().setUserLevel(user + 1);
 			}
 			contador++;
 
 		}
+		int user = StatusSingleton.getInstance().getUser().getUserLevel();
+		StatusSingleton.getInstance().getUser().setUserLevel(user + 1);
+
 		workoutThread.pauseWorkoutTimer();
 		JOptionPane.showMessageDialog(null, "Has terminado todos los ejercicios");
 		stopTimer();
