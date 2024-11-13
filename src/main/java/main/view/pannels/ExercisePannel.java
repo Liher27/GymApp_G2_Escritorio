@@ -149,7 +149,7 @@ public class ExercisePannel extends JPanel {
 		workoutStartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-					runWorkoutCrono();
+				runWorkoutCrono();
 					
 			
 //				runExerciseCrono();
@@ -187,6 +187,7 @@ public class ExercisePannel extends JPanel {
 		seriesStartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				runExerciseCrono();
+				
 			}
 		});
 		seriesStartBtn.setBounds(999, 392, 76, 40);
@@ -284,14 +285,6 @@ public class ExercisePannel extends JPanel {
 
 	public void loadExerciseTime(String time) {
 		exerciseCronoLbl.setText(time);
-	}
-
-	public void changeExerciseButtonText() {
-		exerciseCronoLbl.setText("Iniciar");
-	}
-
-	public void changeExerciseButtonTextTo() {
-		exerciseCronoLbl.setText("Pausar");
 	}
 
 	public void loadWorkoutTime(String time) {

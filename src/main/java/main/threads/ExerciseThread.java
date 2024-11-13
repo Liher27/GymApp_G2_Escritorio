@@ -95,13 +95,13 @@ public class ExerciseThread extends Thread {
 	
 
 	public void pauseTime() {
-		if (!stopped) {
-			pauseStart = System.currentTimeMillis();
-			stopped = true;
-		} else {
-			pauseCount += (System.currentTimeMillis() - pauseStart);
-			stopped = false;
-		}
+	    if (stopped) {  
+            pauseCount += (System.currentTimeMillis() - pauseStart);  
+            stopped = false;  
+        } else {  
+            pauseStart = System.currentTimeMillis();  
+            stopped = true;  
+        }  
 	}
 
 	public void fiveSCount() {
@@ -126,8 +126,9 @@ public class ExerciseThread extends Thread {
 			try {
 				Thread.sleep(1000);
 			}catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
+				exercisePannel.loadRestTime(0);
+				return;
 			}
 
 			remainingTime--;

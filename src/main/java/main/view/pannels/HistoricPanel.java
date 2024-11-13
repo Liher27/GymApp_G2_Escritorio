@@ -117,10 +117,23 @@ public class HistoricPanel extends JPanel {
 				for (int j = 0; j < historics.size(); j++) {
 					 SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy");
 			            String formattedDate = targetFormat.format(historics.get(j).getFinishDate());
-					Object[] line = { historics.get(j).getWorkoutName(), historics.get(j).getLevel(),historics.get(j).getTotalTime()
-							 ,historics.get(j).getProvidedTime(),formattedDate
+					Object[] line = { historics.get(j).getWorkoutName(), historics.get(j).getLevel(),format(historics.get(j).getTotalTime())
+							 ,format(historics.get(j).getProvidedTime()),formattedDate
 							 ,historics.get(j).getExercisePercent()};
 					historicTable.addRow(line);
 	}
 }
+	private String format(int  elapsed) {
+		int hour, minute, second;
+
+		second = (elapsed % 60);
+		elapsed = elapsed / 60;
+
+		minute = (elapsed % 60);
+		elapsed = elapsed / 60;
+
+		hour = (elapsed % 60);
+
+		return String.format("%02d:%02d:%02d", hour, minute, second);
+	}
 }

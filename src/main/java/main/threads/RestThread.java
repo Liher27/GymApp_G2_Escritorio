@@ -44,7 +44,8 @@ public class RestThread extends Thread {
 
 	public void countdown(int restTime) {
 		int remainingTime = restTime;
-		while (remainingTime >= 0) {
+	
+		while (remainingTime >= 0 && !stopped) {
 			int finalRemainingTime = remainingTime;
 
 			SwingUtilities.invokeLater(() -> exercisePannel.loadRestTime(finalRemainingTime));
