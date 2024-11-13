@@ -93,30 +93,32 @@ public class WorkoutThread extends Thread {
 		pauseCount = 0;
 		stopped = true;
 		exercisePannel.resetWorkoutTime();
-		exeThread.stopTimer();
+		exeThread.interrupt();
+	
 	}
 	
 	public Historic getLastWorkoutInfo() {
-		pauseWorkoutTimer();
-		Historic historic = new Historic();
+	    pauseWorkoutTimer();
+	    Historic historic = new Historic();
 
-		workout = StatusSingleton.getInstance().getWorkout();
-		LocalDate currentDate = LocalDate.now();  
-
-        Date date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        int intvalue = (int)elapsed;
-       
-        historic.setWorkoutName(workout.getWorkoutName());
-		historic.setLevel(workout.getLevel());
-		historic.setTotalTime(intvalue);
-		historic.setProvidedTime(20);
-		historic.setFinishDate(date);
-		historic.setExercisePercent("30%");
-		 System.out.println(elapsed);
-		return historic;
-		
-	}
+	    workout = StatusSingleton.getInstance().getWorkout();
+	    LocalDate currentDate = LocalDate.now();  
+	    Date date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	    int intvalue = (int)elapsed;
+	    double percentage = ((double) intvalue / 200) * 100;
 	
+	    String percentageString = String.format("%.2f", percentage);
+
+	    historic.setWorkoutName(workout.getWorkoutName());
+	    historic.setLevel(workout.getLevel());
+	    historic.setTotalTime(intvalue);
+	    historic.setProvidedTime(200);
+	    historic.setFinishDate(date);
+	    historic.setExercisePercent(percentageString +"%");
+
+	    System.out.println("Formatted percentage: " + percentageString);
+	    return historic;
+	}
 	public void pauseWorkoutTimer() {
         stopped = true;
         pauseCount += System.currentTimeMillis() - programStart; 
@@ -129,7 +131,9 @@ public class WorkoutThread extends Thread {
 	            pauseCount += (System.currentTimeMillis() - pauseStart);  
                 stopped = false;  
 	        }
+	        exeThread.pauseTime();
 	    }
+	
 	
 
 }

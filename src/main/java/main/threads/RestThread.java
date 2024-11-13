@@ -68,6 +68,7 @@ public class RestThread extends Thread {
 		stopped = true;
 	}
 
+
 	public void resumeRestTimer() {
 		stopped = false;
 		programStart = System.currentTimeMillis() - pauseCount;
