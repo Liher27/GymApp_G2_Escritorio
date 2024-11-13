@@ -53,7 +53,7 @@ public class HistoricPanel extends JPanel {
 		setBackground(new Color(48, 48, 48));
 		setBounds(0, 0, 1230, 700);
 		setLayout(null);
-		
+
 		logoImage = new JLabel();
 		logoImage.setIcon(new ImageIcon("src/main/resources/logo.png"));
 		logoImage.setBounds(38, 27, 112, 112);
@@ -94,36 +94,30 @@ public class HistoricPanel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				historicTable.setRowCount(0);
-			
-				
-					try {
-						historicList = new ArrayList<>();
-						userProfile = StatusSingleton.getInstance().getUser();
-						historicList = backUpsController.getBackUpsList(userProfile);
-						System.out.println(historicList.toString());
-						fillExercisePanel(historicTable, historicList);
-					} catch (ParserConfigurationException | SAXException | IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-				
+
+				historicList = new ArrayList<>();
+				userProfile = StatusSingleton.getInstance().getUser();
+				historicList = backUpsController.getBackUpsList(userProfile);
+				System.out.println(historicList.toString());
+				fillExercisePanel(historicTable, historicList);
+
 			}
 		});
 	}
 
 	private void fillExercisePanel(DefaultTableModel historicTable, List<Historic> historics) {
-		 historicTable.setRowCount(0);
-				for (int j = 0; j < historics.size(); j++) {
-					 SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy");
-			            String formattedDate = targetFormat.format(historics.get(j).getFinishDate());
-					Object[] line = { historics.get(j).getWorkoutName(), historics.get(j).getLevel(),format(historics.get(j).getTotalTime())
-							 ,format(historics.get(j).getProvidedTime()),formattedDate
-							 ,historics.get(j).getExercisePercent()};
-					historicTable.addRow(line);
+		historicTable.setRowCount(0);
+		for (int j = 0; j < historics.size(); j++) {
+			SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy");
+			String formattedDate = targetFormat.format(historics.get(j).getFinishDate());
+			Object[] line = { historics.get(j).getWorkoutName(), historics.get(j).getLevel(),
+					format(historics.get(j).getTotalTime()), format(historics.get(j).getProvidedTime()), formattedDate,
+					historics.get(j).getExercisePercent() };
+			historicTable.addRow(line);
+		}
 	}
-}
-	private String format(int  elapsed) {
+
+	private String format(int elapsed) {
 		int hour, minute, second;
 
 		second = (elapsed % 60);

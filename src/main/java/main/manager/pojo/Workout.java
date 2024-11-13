@@ -9,12 +9,12 @@ public class Workout implements Serializable {
 	private static final long serialVersionUID = 6334434094001570294L;
 
 	private String workoutUID = null;
+	private String workoutId = null;
 	private int level = 0;
 	private String workoutName = null;
 	private int exerciseNumber = 0;
 	private String video = null;
 	private List<Exercise> exercises;
-	private String workoutId = null;
 
 	public String getWorkoutId() {
 		return workoutId;

@@ -53,7 +53,6 @@ public class WorkoutThread extends Thread {
 	private void startWorkout() {
         stopped = false;
         new Thread(() -> {  
-            programStart = System.currentTimeMillis();
             while (!stopped) {
                 elapsed = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
                 SwingUtilities.invokeLater(() -> {
@@ -115,8 +114,6 @@ public class WorkoutThread extends Thread {
 	    historic.setProvidedTime(200);
 	    historic.setFinishDate(date);
 	    historic.setExercisePercent(percentageString +"%");
-
-	    System.out.println("Formatted percentage: " + percentageString);
 	    return historic;
 	}
 	public void pauseWorkoutTimer() {
