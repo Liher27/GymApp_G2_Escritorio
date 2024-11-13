@@ -7,12 +7,17 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import main.controller.BackUpsController;
 import main.manager.StatusSingleton;
@@ -44,10 +49,11 @@ public class HistoricPanel extends JPanel {
 	private JLabel logoImage = null;
 
 	public HistoricPanel() {
+		backUpsController = new BackUpsController();
 		setBackground(new Color(48, 48, 48));
 		setBounds(0, 0, 1230, 700);
 		setLayout(null);
-
+		
 		logoImage = new JLabel();
 		logoImage.setIcon(new ImageIcon("src/main/resources/logo.png"));
 		logoImage.setBounds(38, 27, 112, 112);
@@ -65,12 +71,12 @@ public class HistoricPanel extends JPanel {
 		add(historyScrollPane);
 
 		historicTable = new DefaultTableModel();
-		historicTable.addColumn("WorkoutName");
+		historicTable.addColumn("WorkoutNombre");
 		historicTable.addColumn("Nivel");
-		historicTable.addColumn("ExerciseNumber");
-		historicTable.addColumn("ExerciseName");
-		historicTable.addColumn("Rest");
-		historicTable.addColumn("SerieNumber");
+		historicTable.addColumn("TiempoTotal");
+		historicTable.addColumn("TiempoPrevisto");
+		historicTable.addColumn("Fecha");
+		historicTable.addColumn("Porcentaje");
 
 		table = new JTable(historicTable);
 
@@ -88,38 +94,33 @@ public class HistoricPanel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				historicTable.setRowCount(0);
-				try {
-					historicList = new ArrayList<>();
-					userProfile = StatusSingleton.getInstance().getUser();
-					backUpsController = new BackUpsController();
-					historicList = backUpsController.getBackUpsList(userProfile);
-					fillExercisePanel(historicTable, historicList);
-				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "No se hay historicos...", "Error...",
-							JOptionPane.ERROR_MESSAGE);
-				}
+			
+				
+					try {
+						historicList = new ArrayList<>();
+						userProfile = StatusSingleton.getInstance().getUser();
+						historicList = backUpsController.getBackUpsList(userProfile);
+						System.out.println(historicList.toString());
+						fillExercisePanel(historicTable, historicList);
+					} catch (ParserConfigurationException | SAXException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				
 			}
 		});
 	}
 
 	private void fillExercisePanel(DefaultTableModel historicTable, List<Historic> historics) {
-		if (historicTable.getRowCount() == 0) {
-			for (int i = 0; i < historics.size(); i++) {
-				Historic historic = historics.get(i);
-				for (int j = 0; j < historic.getExercises().size(); j++) {
-					String exerciseName = null;
-					int restTime = 0;
-					int seriesNumber = 0;
-
-					exerciseName = historic.getExercises().get(j).getExerciseName();
-					restTime = historic.getExercises().get(j).getRestTime();
-					seriesNumber = historic.getExercises().get(j).getSeriesNumber();
-
-					Object[] line = { historic.getWorkoutName(), historic.getLevel(), historic.getExerciseNumber(),
-							exerciseName, restTime, seriesNumber };
+		 historicTable.setRowCount(0);
+				for (int j = 0; j < historics.size(); j++) {
+					 SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy");
+			            String formattedDate = targetFormat.format(historics.get(j).getFinishDate());
+					Object[] line = { historics.get(j).getWorkoutName(), historics.get(j).getLevel(),historics.get(j).getTotalTime()
+							 ,historics.get(j).getProvidedTime(),formattedDate
+							 ,historics.get(j).getExercisePercent()};
 					historicTable.addRow(line);
-				}
-			}
-		}
 	}
+}
 }

@@ -60,7 +60,7 @@ public class RestThread extends Thread {
 		}
 		SwingUtilities.invokeLater(() -> {
 			exercisePannel.loadRestTime(0);
-			JOptionPane.showMessageDialog(null, "Tiempo de descanso terminado", null, JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Tiempo de descanso terminado");
 		});
 	}
 

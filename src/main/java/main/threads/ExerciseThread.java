@@ -9,30 +9,31 @@ import main.manager.pojo.Exercise;
 import main.view.pannels.ExercisePannel;
 
 public class ExerciseThread extends Thread {
-	private boolean stopped = true;
+	private volatile boolean stopped = true;
 	private ExercisePannel exercisePannel;
 	private List<Exercise> exercises;
 	private long programStart = System.currentTimeMillis();
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 	private long currentSecond = 0;
-	private int[] count = { 0, 1, 2, 3, 4, 5 };
-	private RestThread restThread;
-
-	public ExerciseThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel) {
+	private int[] count = { 1, 2, 3, 4, 5 };
+	 private WorkoutThread workoutThread;
+	public ExerciseThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel,WorkoutThread workoutThread) {
 		super(name);
 		this.exercisePannel = exercisePannel;
 		this.exercises = exercises;
+		this.workoutThread = workoutThread;
 	}
 
 	@Override
 	public void run() {
 		startExercise();
+		
 	}
 
 	public void startExercise() {
 		int contador = 0;
-
+		
 		while (contador < this.exercises.size()) {
 			fiveSCount();
 			int serieSet = this.exercises.get(contador).getSeriesNumber();
@@ -44,9 +45,6 @@ public class ExerciseThread extends Thread {
 					currentSecond = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
 					SwingUtilities.invokeLater(() -> exercisePannel.loadExerciseTime(format(currentSecond)));
 					exercisePannel.loadExerciseNameAndSerie(this.exercises.get(contador).getExerciseName(), (i + 1));
-					restThread = new RestThread("restThread", exercises, exercisePannel, null);
-					restThread.countdown(this.exercises.get(contador).getRestTime());
-
 					if (currentSecond >= 4) {
 						stopped = true;
 						exercisePannel.resetExerciseTime();
@@ -59,14 +57,15 @@ public class ExerciseThread extends Thread {
 					}
 				}
 				stopped = false;
+				setRestTime(exercises.get(contador).getRestTime());
 			}
 			contador++;
+			
 		}
+		workoutThread.pauseWorkoutTimer();
 		JOptionPane.showMessageDialog(null, "Has terminado todos los ejercicios");
-
 		stopTimer();
 
-//		workoutThread.stopTimer();
 	}
 
 	private String format(long elapsed) {
@@ -82,7 +81,6 @@ public class ExerciseThread extends Thread {
 
 		return String.format("%02d:%02d:%02d", hour, minute, second);
 	}
-
 	public void resumeTimer() {
 		stopped = false;
 		programStart = System.currentTimeMillis() - pauseCount;
@@ -94,6 +92,7 @@ public class ExerciseThread extends Thread {
 		stopped = true;
 		exercisePannel.resetExerciseTime();
 	}
+	
 
 	public void pauseTime() {
 		if (!stopped) {
@@ -111,10 +110,29 @@ public class ExerciseThread extends Thread {
 				Thread.sleep(1000);
 				exercisePannel.setCountDown(count[i]);
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 
 		}
 	}
+	public void setRestTime(int restTime) {
+		int remainingTime = restTime;
+		while (remainingTime >= 0) {
+			int finalRemainingTime = remainingTime;
+			exercisePannel.loadRestTime(finalRemainingTime);
 
+			try {
+				Thread.sleep(1000);
+			}catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			remainingTime--;
+		}
+		exercisePannel.loadRestTime(0);
+		JOptionPane.showMessageDialog(null, "Tiempo de descanso terminado");
+	}
 }

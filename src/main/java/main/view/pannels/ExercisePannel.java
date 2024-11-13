@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,10 +14,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
+import org.xml.sax.SAXException;
+
+import main.controller.BackUpsController;
 import main.controller.ExerciseController;
 import main.manager.StatusSingleton;
 import main.manager.pojo.Exercise;
+import main.manager.pojo.Historic;
+import main.manager.pojo.User;
+import main.manager.pojo.Workout;
 import main.threads.ExerciseThread;
 import main.threads.WorkoutThread;
 
@@ -46,16 +55,19 @@ public class ExercisePannel extends JPanel {
 	private JButton exercisesBackButton = null;
 	private JButton seriesStartBtn = null;
 	private JButton seriesPauseBtn = null;
-
+	private Workout workout = null;
+	private User user = null;
+	private Historic historic = null;
 	private List<Exercise> exercises = null;
 	private ExerciseController exerciseController = null;
 
 	private WorkoutThread workoutCro = null;
 	private ExerciseThread exerciseCro = null;
-	private JLabel coolDown;
+	private JLabel countDown = null;
+	private BackUpsController backUpsController;
 
 	public ExercisePannel() {
-
+		backUpsController = new BackUpsController();
 		setLayout(null);
 		setBounds(0, 0, 1230, 700);
 		setBackground(new Color(47, 47, 47));
@@ -101,14 +113,24 @@ public class ExercisePannel extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				workoutCro.pauseTime();
+				
 			}
 		});
 
 		endBtn = new JButton("Parar");
 		endBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				workoutCro.stopTimer();
-				exerciseCro.stopTimer();
+				
+				try {
+					workoutCro.stopTimer();
+					workout = StatusSingleton.getInstance().getWorkout();
+					user = StatusSingleton.getInstance().getUser();
+					historic = workoutCro.getLastWorkoutInfo();
+					backUpsController.userBackups(workout, user,historic);
+				} catch (ParserConfigurationException | SAXException | IOException | TransformerException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		endBtn.setBounds(38, 615, 160, 34);
@@ -126,12 +148,10 @@ public class ExercisePannel extends JPanel {
 		workoutStartBtn = new JButton("Iniciar");
 		workoutStartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				BackUpsController backUpsController = new BackUpsController();
-//				workout = StatusSingleton.getInstance().getWorkout();
-//				user = StatusSingleton.getInstance().getUser();
-//				exercise1 = StatusSingleton.getInstance().getExercise();
-//				backUpsController.userBackups(workout, user, exercise1);
-				runWorkoutCrono();
+				
+					runWorkoutCrono();
+					
+			
 //				runExerciseCrono();
 			}
 
@@ -150,7 +170,7 @@ public class ExercisePannel extends JPanel {
 		lblWorkoutName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWorkoutName.setForeground(new Color(255, 193, 7));
 		lblWorkoutName.setFont(new Font("Segoe UI Semibold", Font.BOLD, 64));
-		lblWorkoutName.setBounds(324, 27, 532, 75);
+		lblWorkoutName.setBounds(324, 27, 532, 56);
 		add(lblWorkoutName);
 
 		exercisesBackButton = new JButton("Volver");
@@ -191,6 +211,7 @@ public class ExercisePannel extends JPanel {
 		exerciseTimeLbl = new JLabel("Cronometro Serie");
 		exerciseTimeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		exerciseTimeLbl.setForeground(Color.WHITE);
+		
 		exerciseTimeLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		exerciseTimeLbl.setBounds(1004, 276, 157, 46);
 		add(exerciseTimeLbl);
@@ -208,28 +229,26 @@ public class ExercisePannel extends JPanel {
 		restTimeLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		restTimeLbl.setBounds(513, 544, 189, 46);
 		add(restTimeLbl);
-
+		
 		exerciseNumber = new JLabel("");
 		exerciseNumber.setHorizontalAlignment(SwingConstants.CENTER);
 		exerciseNumber.setForeground(new Color(255, 193, 7));
 		exerciseNumber.setFont(new Font("Segoe UI Semibold", Font.BOLD, 27));
 		exerciseNumber.setBounds(905, 197, 331, 56);
 		add(exerciseNumber);
-
-		coolDown = new JLabel("");
-		coolDown.setHorizontalAlignment(SwingConstants.CENTER);
-		coolDown.setForeground(new Color(255, 193, 7));
-		coolDown.setFont(new Font("Segoe UI Semibold", Font.BOLD, 27));
-		coolDown.setBounds(905, 130, 331, 56);
-		add(coolDown);
+		
+		countDown = new JLabel("");
+		countDown.setHorizontalAlignment(SwingConstants.CENTER);
+		countDown.setForeground(new Color(255, 193, 7));
+		countDown.setFont(new Font("Segoe UI Semibold", Font.BOLD, 27));
+		countDown.setBounds(905, 130, 331, 56);
+		add(countDown);
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				exerciseTable.setRowCount(0);
 				if (!StatusSingleton.getInstance().offline) {
 					try {
 						String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
-						lblWorkoutName
-								.setText("Workout: " + StatusSingleton.getInstance().getWorkout().getWorkoutName());
 						exercises = exerciseController.getExercisesForWorkout(id);
 						fillExercisePanel(exerciseTable, exercises);
 					} catch (Exception e1) {
@@ -267,26 +286,27 @@ public class ExercisePannel extends JPanel {
 		exerciseCronoLbl.setText(time);
 	}
 
+	public void changeExerciseButtonText() {
+		exerciseCronoLbl.setText("Iniciar");
+	}
+
+	public void changeExerciseButtonTextTo() {
+		exerciseCronoLbl.setText("Pausar");
+	}
+
 	public void loadWorkoutTime(String time) {
 		workoutCronoLbl.setText(time);
 	}
-
-	public void loadRestTime(String time) {
-		restTimeCronoLbl.setText(time);
-	}
-
-	public void loadExerciseNameAndSerie(String exerciseName, int serieNumber) {
+	
+	public void loadExerciseNameAndSerie(String exerciseName,int serieNumber) {
 		lblExerciseName.setText(exerciseName);
-		exerciseNumber.setText("Numero de la serie: " + String.valueOf(serieNumber));
+		exerciseNumber.setText(String.valueOf(serieNumber));
 	}
 
-	public void loadRestTime(int restTime) {
-		restTimeCronoLbl.setText("00:" + restTime + ":00");
-	}
 
 	private void runExerciseCrono() {
 		if (exerciseCro == null || !exerciseCro.isAlive()) {
-			exerciseCro = new ExerciseThread("ExerciseTimer", exercises, this);
+			exerciseCro = new ExerciseThread("ExerciseTimer",exercises, this,workoutCro);
 			exerciseCro.start();
 		} else {
 			exerciseCro.resumeTimer();
@@ -295,7 +315,7 @@ public class ExercisePannel extends JPanel {
 
 	private void runWorkoutCrono() {
 		if (workoutCro == null || !workoutCro.isAlive()) {
-			workoutCro = new WorkoutThread("WorkoutTimer", exercises, this);
+			workoutCro = new WorkoutThread("WorkoutTimer", exercises, this,exerciseCro);
 			workoutCro.start();
 		} else {
 			workoutCro.resumeTimer();
@@ -309,11 +329,12 @@ public class ExercisePannel extends JPanel {
 	public void resetExerciseTime() {
 		exerciseCronoLbl.setText("00:00:00");
 	}
-
 	public void setCountDown(int seconds) {
-		coolDown.setText("Cuenta atras: " + seconds);
+		countDown.setText("" +seconds );
 	}
-
+	public void loadRestTime(int time) {
+		restTimeCronoLbl.setText(""+time);
+	}
 	public void resetRestTimer() {
 		restTimeCronoLbl.setText("00:00:00");
 	}
