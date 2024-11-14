@@ -1,24 +1,26 @@
 package main.threads;
 
 import java.util.List;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import main.manager.StatusSingleton;
+import main.manager.UserManager;
 import main.manager.pojo.Exercise;
+import main.manager.pojo.User;
 import main.view.pannels.ExercisePannel;
 
 public class ExerciseThread extends Thread {
 	private volatile boolean stopped = true;
 	private ExercisePannel exercisePannel;
+	private WorkoutThread workoutThread;
 	private List<Exercise> exercises;
 	private long programStart = System.currentTimeMillis();
 	private long pauseStart = programStart;
 	private long pauseCount = 0;
 	private long currentSecond = 0;
 	private int[] count = { 0, 1, 2, 3, 4, 5 };
-	private WorkoutThread workoutThread;
+	private User user;
 
 	public ExerciseThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel,
 			WorkoutThread workoutThread) {
@@ -65,11 +67,20 @@ public class ExerciseThread extends Thread {
 			contador++;
 
 		}
-		int user = StatusSingleton.getInstance().getUser().getUserLevel();
-		StatusSingleton.getInstance().getUser().setUserLevel(user + 1);
+		user = StatusSingleton.getInstance().getUser();
+	    user.setUserLevel(user.getUserLevel() + 1);
 
+	    try {
+	        UserManager userManager = new UserManager();
+	        if (!userManager.modify(user)) {
+	        	JOptionPane.showMessageDialog(null, "no se ha cobectado a la base datos", "Error!",
+						JOptionPane.ERROR_MESSAGE);
+	        }
+	    } catch (Exception e) {
+	    	JOptionPane.showMessageDialog(null, "No se ha actualizado el user level", "Error!",
+					JOptionPane.ERROR_MESSAGE);
+	    }
 		workoutThread.pauseWorkoutTimer();
-		JOptionPane.showMessageDialog(null, "Has terminado todos los ejercicios");
 		stopTimer();
 
 	}
