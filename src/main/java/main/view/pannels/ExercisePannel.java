@@ -21,7 +21,9 @@ import org.xml.sax.SAXException;
 
 import main.controller.BackUpsController;
 import main.controller.ExerciseController;
+import main.controller.UserController;
 import main.manager.StatusSingleton;
+import main.manager.UserManager;
 import main.manager.pojo.Exercise;
 import main.manager.pojo.Historic;
 import main.manager.pojo.User;
@@ -65,9 +67,12 @@ public class ExercisePannel extends JPanel {
 	private ExerciseThread exerciseCro = null;
 	private JLabel countDown = null;
 	private BackUpsController backUpsController;
+	private UserController userController;
+	
 
 	public ExercisePannel() {
 		backUpsController = new BackUpsController();
+		userController = new UserController();
 		setLayout(null);
 		setBounds(0, 0, 1230, 700);
 		setBackground(new Color(47, 47, 47));
@@ -127,6 +132,7 @@ public class ExercisePannel extends JPanel {
 					user = StatusSingleton.getInstance().getUser();
 					historic = workoutCro.getLastWorkoutInfo();
 					backUpsController.userBackups(workout, user, historic);
+					userController.insertWorkoutHistory(historic, user);
 				} catch (ParserConfigurationException | SAXException | IOException | TransformerException e1) {
 					e1.printStackTrace();
 				}

@@ -8,11 +8,14 @@ import java.util.Map;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
+
+import main.manager.pojo.Historic;
 import main.manager.pojo.User;
 
 public class UserManager implements ManagerInterface<User> {
@@ -97,6 +100,25 @@ public class UserManager implements ManagerInterface<User> {
 	public void delete(User user) throws SQLException, Exception {
 		// TODO Auto-generated method stub
 
+	}
+	public void addWorkoutHistroyToBase(Historic historic, User user) {
+		
+		DocumentReference workoutReference = db.collection("workouts").document("workout_"+historic.getLevel());
+		CollectionReference userhistoryReference = db
+	            .collection("users")     
+	            .document(user.getName())            
+	            .collection("userHistory_0");
+		
+		 Map<String, Object> data = new HashMap<>();
+	        data.put("workoutName",workoutReference);
+	        data.put("workoutLevel", workoutReference);
+	        data.put("providedTime", historic.getProvidedTime());
+	        data.put("totalTime", historic.getTotalTime());
+	        data.put("finishDate", historic.getFinishDate());
+	        data.put("exercisePercent", historic.getExercisePercent());
+	        DocumentReference customDocumentReference = userhistoryReference.document("Lv"+historic.getLevel());
+	        customDocumentReference.set(data);
+	        
 	}
 
 }

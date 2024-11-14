@@ -102,9 +102,8 @@ public class WorkoutThread extends Thread {
 		LocalDate currentDate = LocalDate.now();
 		Date date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		int intvalue = (int) elapsed;
-		double percentage = ((double) intvalue / 200) * 100;
 
-		String percentageString = String.format("%.2f", percentage);
+		String percentageString = String.format("%.2f", StatusSingleton.getInstance().getPercent());
 
 		historic.setWorkoutName(workout.getWorkoutName());
 		historic.setLevel(workout.getLevel());

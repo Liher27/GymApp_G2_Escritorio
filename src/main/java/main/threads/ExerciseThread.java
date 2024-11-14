@@ -11,6 +11,7 @@ import main.view.pannels.ExercisePannel;
 
 public class ExerciseThread extends Thread {
 	private volatile boolean stopped = true;
+	private boolean isPaused = false;
 	private ExercisePannel exercisePannel;
 	private List<Exercise> exercises;
 	private long programStart = System.currentTimeMillis();
@@ -35,45 +36,62 @@ public class ExerciseThread extends Thread {
 	}
 
 	public void startExercise() {
-		int contador = 0;
+	    int contador = 0;
 
-		while (contador < this.exercises.size()) {
-			fiveSCount();
-			int serieSet = this.exercises.get(contador).getSeriesNumber();
-			for (int i = 0; i < serieSet; i++) {
-				stopped = false;
-				programStart = System.currentTimeMillis();
-				currentSecond = 0;
-				while (!stopped) {
-					currentSecond = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
-					SwingUtilities.invokeLater(() -> exercisePannel.loadExerciseTime(format(currentSecond)));
-					exercisePannel.loadExerciseNameAndSerie(this.exercises.get(contador).getExerciseName(), (i + 1));
-					if (currentSecond >= 4) {
-						stopped = true;
-						exercisePannel.resetExerciseTime();
-					}
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
-						return;
-					}
-				}
-				stopped = false;
-				setRestTime(exercises.get(contador).getRestTime());
-			}
-			contador++;
+	    while (contador < this.exercises.size()) {
+	        fiveSCount();
+	        int serieSet = this.exercises.get(contador).getSeriesNumber();
+	        for (int i = 0; i < serieSet; i++) {
+	            stopped = false;
+	            programStart = System.currentTimeMillis();
+	            currentSecond = 0;
+	            while (!stopped) { 
+	                if (isPaused) {
+	                    try {
+	                        Thread.sleep(100);
+	                        continue;
+	                    } catch (InterruptedException e) {
+	                        Thread.currentThread().interrupt();
+	                        return;
+	                    }
+	                }
+	                currentSecond = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
+	                SwingUtilities.invokeLater(() -> exercisePannel.loadExerciseTime(format(currentSecond)));
+	                exercisePannel.loadExerciseNameAndSerie(this.exercises.get(contador).getExerciseName(), (i + 1));
+	                if (currentSecond >= 4) {
+	                    stopped = true; 
+	                    exercisePannel.resetExerciseTime();
+	                    
+	                    
+	                }
 
-		}
-		int user = StatusSingleton.getInstance().getUser().getUserLevel();
-		StatusSingleton.getInstance().getUser().setUserLevel(user + 1);
+	                try {
+	                    Thread.sleep(1000);
+	                } catch (InterruptedException e) {
+	                    Thread.currentThread().interrupt();
+	                    return;
+	                }
+	            }
+	            stopped = false; 
+	            setRestTime(exercises.get(contador).getRestTime());
+	            double percentage = ((double) (i + 1) / serieSet) * 100;
+                StatusSingleton.getInstance().setPercent(percentage);
+                System.out.println(percentage);
+	        }
+	        
+	        contador++;
+	    }
 
-		workoutThread.pauseWorkoutTimer();
-		JOptionPane.showMessageDialog(null, "Has terminado todos los ejercicios");
-		stopTimer();
+	    int user = StatusSingleton.getInstance().getUser().getUserLevel();
+	    StatusSingleton.getInstance().getUser().setUserLevel(user + 1);
 
+	    workoutThread.pauseWorkoutTimer();
+	    JOptionPane.showMessageDialog(null, "has terminado a todos los ejercicios");
+	    stopTimer();
 	}
-
+	
+	
+	
 	private String format(long elapsed) {
 		int hour, minute, second;
 
@@ -101,13 +119,13 @@ public class ExerciseThread extends Thread {
 	}
 
 	public void pauseTime() {
-		if (stopped) {
-			pauseCount += (System.currentTimeMillis() - pauseStart);
-			stopped = false;
-		} else {
-			pauseStart = System.currentTimeMillis();
-			stopped = true;
-		}
+	    if (isPaused) {
+	        pauseCount += (System.currentTimeMillis() - pauseStart);
+	        isPaused = false;
+	    } else {
+	        pauseStart = System.currentTimeMillis();
+	        isPaused = true; 
+	    }
 	}
 
 	public void fiveSCount() {

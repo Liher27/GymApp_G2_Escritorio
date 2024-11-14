@@ -27,6 +27,7 @@ public class StatusSingleton {
 	private int selectedRow = 0;
 	private List<Workout> backupedWorkouts = null;
 	public boolean offline = false;
+	public double percent = 0;
 
 	public StatusSingleton() {
 		exercisePannel = new ExercisePannel();
@@ -39,6 +40,18 @@ public class StatusSingleton {
 		workout = new Workout();
 		exercise = new Exercise();
 	}
+	
+	public double getPercent() {
+		return percent;
+	}
+
+
+
+	public void setPercent(double percent) {
+		this.percent = percent;
+	}
+
+
 
 	public List<Workout> getBackupedWorkouts() {
 		return backupedWorkouts;
