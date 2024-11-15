@@ -10,9 +10,15 @@ public class UserController {
 		return new UserManager().modify(userProfile);
 	}
 
-	public void insertWorkoutHistory(Historic historic, User user) throws Exception {
-		new UserManager().addWorkoutHistroyToBase(historic, user);
-	}
+public void insertWorkoutHistory(Historic historic,User user) {
+		
+		try {
+			new UserManager().addWorkoutHistroyToBase(historic, user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+}
 
 	public boolean modify(User user) throws Exception {
 		return new UserManager().modify(user);

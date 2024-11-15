@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 
 import main.controller.UserController;
 import main.manager.StatusSingleton;
+import main.manager.UserManager;
 import main.manager.pojo.Exercise;
 import main.manager.pojo.User;
 import main.view.pannels.ExercisePannel;
@@ -76,14 +77,13 @@ public class ExerciseThread extends Thread {
 				setRestTime(exercises.get(contador).getRestTime());
 				double percentage = ((double) (contador + 1) / this.exercises.size()) * 100;
 				StatusSingleton.getInstance().setPercent(percentage);
-				System.out.println(percentage);
+				
 			}
 
 			contador++;
 		}
 		int workoutLevel = StatusSingleton.getInstance().getWorkout().getLevel();
 		int currentUserLevel = StatusSingleton.getInstance().getUser().getUserLevel();
-
 		if (workoutLevel == currentUserLevel) {
 			try {
 				user = StatusSingleton.getInstance().getUser();
@@ -98,8 +98,8 @@ public class ExerciseThread extends Thread {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		workoutThread.pauseWorkoutTimer();
 		stopTimer();
+		workoutThread.pauseTime();
 	}
 
 	private String format(long elapsed) {
@@ -160,6 +160,7 @@ public class ExerciseThread extends Thread {
 			remainingTime--;
 		}
 		exercisePannel.loadRestTime(0);
+		exercisePannel.userUsedRestTime(restTime);
 		JOptionPane.showMessageDialog(null, "Tiempo de descanso terminado");
 	}
 }

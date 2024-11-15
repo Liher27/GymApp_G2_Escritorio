@@ -93,7 +93,6 @@ public class HistoricPanel extends JPanel {
 				historicList = new ArrayList<>();
 				userProfile = StatusSingleton.getInstance().getUser();
 				historicList = backUpsController.getBackUpsList(userProfile);
-				System.out.println(historicList.toString());
 				fillExercisePanel(historicTable, historicList);
 
 			}
