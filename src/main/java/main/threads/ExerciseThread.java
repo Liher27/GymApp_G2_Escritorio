@@ -60,7 +60,7 @@ public class ExerciseThread extends Thread {
 						}
 					}
 					currentSecond = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
-					SwingUtilities.invokeLater(() -> exercisePannel.loadExerciseTime(format(currentSecond)));
+					SwingUtilities.invokeLater(() -> exercisePannel.loadSerieTime(format(currentSecond)));
 					exercisePannel.loadExerciseNameAndSerie(this.exercises.get(contador).getExerciseName(), (i + 1));
 					if (currentSecond >= 4) {
 						stopped = true;
