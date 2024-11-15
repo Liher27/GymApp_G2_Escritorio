@@ -128,9 +128,10 @@ public class ExercisePannel extends JPanel {
 		endBtn = new JButton("Parar");
 		endBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					if(workoutCro.isAlive() || !(exerciseCro == null)) {
+					if(workoutCro != null && exerciseCro != null && serieCro !=null) {
 					workoutCro.interrupt();;
 					exerciseCro.interrupt();
+					serieCro.interrupt();
 					}else {
 						JOptionPane.showMessageDialog(null, "nigun ejercicio esta en curso");
 					}
