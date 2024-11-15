@@ -1,5 +1,6 @@
 package main.manager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.manager.pojo.Exercise;
@@ -36,6 +37,7 @@ public class StatusSingleton {
 		registerPannel = new RegisterPannel();
 		workoutsPannel = new WorkoutsPannel();
 		historicPannel = new HistoricPanel();
+		backupedWorkouts = new ArrayList<Workout>();
 		user = new User();
 		workout = new Workout();
 		exercise = new Exercise();

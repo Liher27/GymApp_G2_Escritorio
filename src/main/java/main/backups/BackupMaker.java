@@ -3,8 +3,11 @@ package main.backups;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import main.controller.ExerciseController;
 import main.controller.WorkoutController;
@@ -31,9 +34,15 @@ public class BackupMaker extends AbstractBackupMaker {
 
 		int exitCode = process.waitFor();
 		if (exitCode != 0) {
-			System.out.println("Bien!!!");
+			System.out.println("Bien!!");
+			int index = 0;
+			InputStream inputStream = process.getInputStream();
+			while ((index = inputStream.read()) != -1) {
+				System.out.print((char) index);
+			}
 		} else {
-			System.out.println(new IOException().getMessage());
+			JOptionPane.showMessageDialog(null, "No se ha leido correctamente el fichero de backups", "Error!",
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
@@ -42,7 +51,7 @@ public class BackupMaker extends AbstractBackupMaker {
 		workoutController = new WorkoutController();
 		exerciseController = new ExerciseController();
 		user = StatusSingleton.getInstance().getUser();
-		workouts = workoutController.getAllWorkouts();
+		workouts = workoutController.getWorkoutsForUserLevel(user.getUserLevel());
 		for (Workout workout : workouts) {
 			exercises = exerciseController.getExercisesForWorkout(workout.getWorkoutUID());
 			workout.setExercises(exercises);

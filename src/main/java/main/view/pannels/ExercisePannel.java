@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.IOException;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,16 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.xml.sax.SAXException;
 
 import main.controller.BackUpsController;
 import main.controller.ExerciseController;
 import main.controller.UserController;
 import main.manager.StatusSingleton;
-import main.manager.UserManager;
 import main.manager.pojo.Exercise;
 import main.manager.pojo.Historic;
 import main.manager.pojo.User;
@@ -68,7 +62,6 @@ public class ExercisePannel extends JPanel {
 	private JLabel countDown = null;
 	private BackUpsController backUpsController;
 	private UserController userController;
-	
 
 	public ExercisePannel() {
 		backUpsController = new BackUpsController();
@@ -126,18 +119,22 @@ public class ExercisePannel extends JPanel {
 		endBtn = new JButton("Parar");
 		endBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					if(workoutCro.isAlive() ||exerciseCro.isAlive()) {
+				if (workoutCro.isAlive() || exerciseCro.isAlive()) {
 					workoutCro.stopTimer();
 					exerciseCro.interrupt();
-					}else {
-						JOptionPane.showMessageDialog(null, "el workout no esta en curso");
-					}
-					workout = StatusSingleton.getInstance().getWorkout();
-					user = StatusSingleton.getInstance().getUser();
-					historic = workoutCro.getLastWorkoutInfo();
-					backUpsController.userBackups(workout, user, historic);
+				} else {
+					JOptionPane.showMessageDialog(null, "el workout no esta en curso");
+				}
+				workout = StatusSingleton.getInstance().getWorkout();
+				user = StatusSingleton.getInstance().getUser();
+				historic = workoutCro.getLastWorkoutInfo();
+				backUpsController.userBackups(workout, user, historic);
+				try {
 					userController.insertWorkoutHistory(historic, user);
-				
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "", "", JOptionPane.ERROR_MESSAGE);
+				}
+
 			}
 		});
 		endBtn.setBounds(38, 615, 160, 34);
@@ -251,25 +248,16 @@ public class ExercisePannel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				exerciseTable.setRowCount(0);
-				if (!StatusSingleton.getInstance().offline) {
-					try {
-						runWorkoutCrono();
-						String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
-						exercises = exerciseController.getExercisesForWorkout(id);
-						lblWorkoutName
-								.setText("Workout: " + StatusSingleton.getInstance().getWorkout().getWorkoutName());
-						fillExercisePanel(exerciseTable, exercises);
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, null, "No se ha podido cargar la informacion...",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				} else {
-					exercises = StatusSingleton.getInstance().getBackupedWorkouts()
-							.get(StatusSingleton.getInstance().getSelectedRow()).getExercises();
+				try {
+					runWorkoutCrono();
+					String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
+					exercises = exerciseController.getExercisesForWorkout(id);
+					lblWorkoutName.setText("Workout: " + StatusSingleton.getInstance().getWorkout().getWorkoutName());
 					fillExercisePanel(exerciseTable, exercises);
-					
+				} catch (Exception e1) {
+					exercises = StatusSingleton.getInstance().getWorkout().getExercises();
+					fillExercisePanel(exerciseTable, exercises);
 				}
-
 			}
 		});
 
@@ -302,10 +290,10 @@ public class ExercisePannel extends JPanel {
 	}
 
 	private void runExerciseCrono() {
-		
-			exerciseCro = new ExerciseThread("ExerciseTimer", exercises, this, workoutCro);
-			exerciseCro.start();
-		
+
+		exerciseCro = new ExerciseThread("ExerciseTimer", exercises, this, workoutCro);
+		exerciseCro.start();
+
 	}
 
 	public void resetExerciseTime() {
@@ -318,16 +306,16 @@ public class ExercisePannel extends JPanel {
 	}
 
 	// Workout crono
-	
+
 	public void loadWorkoutTime(String time) {
 		workoutCronoLbl.setText(time);
 	}
 
 	private void runWorkoutCrono() {
-		
-			workoutCro = new WorkoutThread("WorkoutTimer", exercises, this, exerciseCro);
-			workoutCro.start();
-		
+
+		workoutCro = new WorkoutThread("WorkoutTimer", exercises, this, exerciseCro);
+		workoutCro.start();
+
 	}
 
 	public void resetWorkoutTime() {
@@ -335,7 +323,7 @@ public class ExercisePannel extends JPanel {
 	}
 
 	// Rest Crono
-	
+
 	public void loadRestTime(int time) {
 		restTimeCronoLbl.setText("00:00:" + time);
 	}

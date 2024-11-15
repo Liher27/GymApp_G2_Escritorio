@@ -53,6 +53,7 @@ public class WorkoutsPannel extends JPanel {
 	private List<Workout> workouts = null;
 
 	public WorkoutsPannel() {
+
 		setLayout(null);
 		setBackground(new Color(48, 48, 48));
 		setBounds(0, 0, 1230, 700);
@@ -144,12 +145,14 @@ public class WorkoutsPannel extends JPanel {
 
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
+				System.out.println(StatusSingleton.getInstance().offline);
+				System.out.println(StatusSingleton.getInstance().getBackupedWorkouts().toString());
 				// Seteamos la informacion general que se consigue del mismo lugar
 				userProfile = StatusSingleton.getInstance().getUser();
 				int userLevel = userProfile.getUserLevel();
 				userLvlBtn.setText("NIVEL ACTUAL: " + userLevel);
 				welcomeUserLbl.setText("BIENVENIDO, " + userProfile.getName().toUpperCase());
-				
+
 				// Si esta online, la informacion se recogera de un sitio distinto
 				if (!StatusSingleton.getInstance().offline) {
 					try {
@@ -160,7 +163,7 @@ public class WorkoutsPannel extends JPanel {
 						JOptionPane.showMessageDialog(null, "No se ha podido cargar la informacion...", "Error...",
 								JOptionPane.ERROR_MESSAGE);
 					}
-				} else {
+				} else if (StatusSingleton.getInstance().offline) {
 					workouts = StatusSingleton.getInstance().getBackupedWorkouts();
 					fillWorkoutTable(workoutTable, workouts);
 				}

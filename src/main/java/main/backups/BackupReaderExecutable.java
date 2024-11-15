@@ -27,6 +27,11 @@ public class BackupReaderExecutable extends AbstractBackupMaker {
 		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
 		User user = null;
+		int index = 0;
+		while ((index = fileInputStream.read()) != -1) {
+			System.out.print((char) index);
+		}
+		fileInputStream.close();
 		while (fileInputStream.getChannel().position() < fileInputStream.getChannel().size()) {
 			user = (User) objectInputStream.readObject();
 		}
@@ -40,13 +45,17 @@ public class BackupReaderExecutable extends AbstractBackupMaker {
 		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
 		Workout workout = null;
+		int index = 0;
+		while ((index = fileInputStream.read()) != -1) {
+			System.out.print((char) index);
+		}
+		fileInputStream.close();
 		while (fileInputStream.getChannel().position() < fileInputStream.getChannel().size()) {
 			workout = (Workout) objectInputStream.readObject();
 			workouts.add(workout);
 		}
 		objectInputStream.close();
+		System.out.println(workouts.toString());
 		StatusSingleton.getInstance().setBackupedWorkouts(workouts);
-
 	}
-
 }

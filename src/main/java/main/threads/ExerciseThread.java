@@ -3,8 +3,9 @@ package main.threads;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import main.controller.UserController;
 import main.manager.StatusSingleton;
-import main.manager.UserManager;
 import main.manager.pojo.Exercise;
 import main.manager.pojo.User;
 import main.view.pannels.ExercisePannel;
@@ -21,7 +22,7 @@ public class ExerciseThread extends Thread {
 	private int[] count = { 0, 1, 2, 3, 4, 5 };
 	private WorkoutThread workoutThread;
 	private User user;
-	private UserManager userManager;
+	private UserController userController;
 
 	public ExerciseThread(String name, List<Exercise> exercises, ExercisePannel exercisePannel,
 			WorkoutThread workoutThread) {
@@ -81,16 +82,14 @@ public class ExerciseThread extends Thread {
 			contador++;
 		}
 		int workoutLevel = StatusSingleton.getInstance().getWorkout().getLevel();
-		System.err.println(workoutLevel);
 		int currentUserLevel = StatusSingleton.getInstance().getUser().getUserLevel();
-		System.out.println(currentUserLevel);
 
 		if (workoutLevel == currentUserLevel) {
 			try {
 				user = StatusSingleton.getInstance().getUser();
 				user.setUserLevel(user.getUserLevel() + 1);
-				userManager = new UserManager();
-				if (!userManager.modify(user)) {
+				userController = new UserController();
+				if (!userController.modify(user)) {
 					JOptionPane.showMessageDialog(null, "no se ha coectado a la base datos", "Error!",
 							JOptionPane.ERROR_MESSAGE);
 				}

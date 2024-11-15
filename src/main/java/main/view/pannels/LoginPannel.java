@@ -96,6 +96,7 @@ public class LoginPannel extends JPanel {
 					JOptionPane.showMessageDialog(null, "No hay internet, continuando con los backups...", "Error!",
 							JOptionPane.ERROR_MESSAGE);
 					try {
+						backupMaker = new BackupMaker();
 						backupMaker.getBackup();
 						StatusSingleton.getInstance().offline = true;
 					} catch (IOException e1) {
