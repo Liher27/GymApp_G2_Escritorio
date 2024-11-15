@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
@@ -69,30 +71,35 @@ public class UserManager implements ManagerInterface<User> {
 	}
 
 	@Override
-	public boolean modify(User user) throws Exception {
+	public boolean modify(User user) throws InterruptedException, ExecutionException {
 
 		DocumentReference userRef = db.collection("users").document(user.getName());
 		ApiFuture<WriteResult> initialResult = userRef.set(user);
-		initialResult.get();
+		try {
+			initialResult.get();
 
-		Map<String, Object> updates = new HashMap<>();
-		updates.put("birthDate", user.getBirthDate());
-		updates.put("mail", user.getMail());
-		updates.put("name", user.getName());
-		updates.put("pass", user.getPass());
-		updates.put("surname", user.getSurname());
-		updates.put("trainer", user.isTrainer());
-		updates.put("userLevel", user.getUserLevel());
-		
-		ApiFuture<WriteResult> writeResult = userRef.update(updates);
+			Map<String, Object> updates = new HashMap<>();
+			updates.put("birthDate", user.getBirthDate());
+			updates.put("mail", user.getMail());
+			updates.put("name", user.getName());
+			updates.put("pass", user.getPass());
+			updates.put("surname", user.getSurname());
+			updates.put("trainer", user.isTrainer());
+			updates.put("userLevel", user.getUserLevel());
 
-		if (null != writeResult.get()) {
+			ApiFuture<WriteResult> writeResult = userRef.update(updates);
+
+			if (null != writeResult.get()) {
+				return true;
+			} else
+				return false;
+		} catch (InterruptedException e) {
+			throw e;
+		} catch (ExecutionException e) {
+			throw e;
+		} finally {
 			db.shutdown();
-			return true;
-		} else
-			db.shutdown();
-
-		return false;
+		}
 	}
 
 	@Override
@@ -100,24 +107,23 @@ public class UserManager implements ManagerInterface<User> {
 		// TODO Auto-generated method stub
 
 	}
+
 	public void addWorkoutHistroyToBase(Historic historic, User user) {
-		
-		DocumentReference workoutReference = db.collection("workouts").document("workout_"+historic.getLevel());
-		CollectionReference userhistoryReference = db
-	            .collection("users")     
-	            .document(user.getName())            
-	            .collection("userHistory_0");
-		
-		 Map<String, Object> data = new HashMap<>();
-	        data.put("workoutName",workoutReference);
-	        data.put("workoutLevel", workoutReference);
-	        data.put("providedTime", historic.getProvidedTime());
-	        data.put("totalTime", historic.getTotalTime());
-	        data.put("finishDate", historic.getFinishDate());
-	        data.put("exercisePercent", historic.getExercisePercent());
-	        DocumentReference customDocumentReference = userhistoryReference.document("Lv"+historic.getLevel());
-	        customDocumentReference.set(data);
-	        
+
+		DocumentReference workoutReference = db.collection("workouts").document("workout_" + historic.getLevel());
+		CollectionReference userhistoryReference = db.collection("users").document(user.getName())
+				.collection("userHistory_0");
+		Map<String, Object> data = new HashMap<>();
+		data.put("workoutName", workoutReference);
+		data.put("workoutLevel", workoutReference);
+		data.put("providedTime", historic.getProvidedTime());
+		data.put("totalTime", historic.getTotalTime());
+		data.put("finishDate", historic.getFinishDate());
+		data.put("exercisePercent", historic.getExercisePercent());
+		DocumentReference customDocumentReference = userhistoryReference.document("Lv" + historic.getLevel());
+		customDocumentReference.set(data);
+
+		db.shutdown();
 	}
 
 }

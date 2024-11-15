@@ -102,7 +102,11 @@ public class LoginPannel extends JPanel {
 					} catch (IOException e1) {
 						JOptionPane.showMessageDialog(null, "Ha habido un error escribiendo/leyendo los backups...",
 								"Error!", JOptionPane.ERROR_MESSAGE);
+						e1.printStackTrace();
 					} catch (InterruptedException e1) {
+						JOptionPane.showMessageDialog(null, "Ha habido un error en el proceso de los backups...",
+								"Error!", JOptionPane.ERROR_MESSAGE);
+					} catch (ClassNotFoundException e1) {
 						JOptionPane.showMessageDialog(null, "Ha habido un error en el proceso de los backups...",
 								"Error!", JOptionPane.ERROR_MESSAGE);
 					}

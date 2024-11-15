@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
@@ -28,22 +29,17 @@ public class BackupMaker extends AbstractBackupMaker {
 		writeDocuments();
 	}
 
-	public void getBackup() throws IOException, InterruptedException {
+	public void getBackup() throws IOException, InterruptedException, ClassNotFoundException {
 		ProcessBuilder processBuilder = new ProcessBuilder(processName, "/C", readCommand);
 		Process process = processBuilder.start();
 
-		int exitCode = process.waitFor();
-		if (exitCode != 0) {
-			System.out.println("Bien!!");
-			int index = 0;
-			InputStream inputStream = process.getInputStream();
-			while ((index = inputStream.read()) != -1) {
-				System.out.print((char) index);
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "No se ha leido correctamente el fichero de backups", "Error!",
-					JOptionPane.ERROR_MESSAGE);
-		}
+		ObjectInputStream objectInputStream = new ObjectInputStream(process.getInputStream());
+
+		workouts = (List<Workout>) objectInputStream.readObject();
+
+		StatusSingleton.getInstance().setBackupedWorkouts(workouts);
+
+		objectInputStream.close();
 
 	}
 
@@ -56,7 +52,6 @@ public class BackupMaker extends AbstractBackupMaker {
 			exercises = exerciseController.getExercisesForWorkout(workout.getWorkoutUID());
 			workout.setExercises(exercises);
 		}
-		writeUser(user);
 		writeWorkouts(workouts);
 	}
 
@@ -67,21 +62,8 @@ public class BackupMaker extends AbstractBackupMaker {
 
 		objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
-		for (Workout workout : workouts) {
-			objectOutputStream.writeObject(workout);
-		}
-
-		objectOutputStream.close();
-		fileOutputStream.close();
-	}
-
-	private void writeUser(User user) throws IOException {
-		File file = new File(userFileName);
-		FileOutputStream fileOutputStream = new FileOutputStream(file);
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
-		objectOutputStream.writeObject(user);
-
+		objectOutputStream.writeObject(workouts);
+		
 		objectOutputStream.close();
 		fileOutputStream.close();
 	}
