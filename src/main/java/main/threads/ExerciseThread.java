@@ -22,6 +22,7 @@ public class ExerciseThread extends Thread {
 		this.exercisePannel = exercisePannel;
 		this.exercises = exercises;
 		this.workoutThread = workoutThread;
+		
 	}
 	@Override
 	public void run() {
@@ -63,7 +64,7 @@ public class ExerciseThread extends Thread {
 	            }
 	            stopped = false;
 	            setRestTime(exercises.get(contador).getRestTime());
-	            double percentage = ((double) (i + 1) / serieSet) * 100;
+	            double percentage = ((double) (contador + 1) / this.exercises.size()) * 100;
                StatusSingleton.getInstance().setPercent(percentage);
                System.out.println(percentage);
 	        }

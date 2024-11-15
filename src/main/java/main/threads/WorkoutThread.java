@@ -15,6 +15,7 @@ import main.view.pannels.ExercisePannel;
 
 public class WorkoutThread extends Thread {
 	private volatile boolean stopped = true;
+	private boolean isPaused = false;
 	private ExercisePannel exercisePannel;
 	private long programStart = System.currentTimeMillis();
 	private long pauseStart = programStart;
@@ -35,28 +36,20 @@ public class WorkoutThread extends Thread {
 	@Override
 	public void run() {
 		startWorkout();
-		exeThread = new ExerciseThread("exercises", exercises, exercisePannel, this);
-		exeThread.start();
-
-		try {
-			exeThread.join();
-			System.out.println();
-			pauseTime();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		pauseWorkoutTimer();
-
 	}
 
 	private void startWorkout() {
 		stopped = false;
 		new Thread(() -> {
 			while (!stopped) {
+				if(!isPaused) {
 				elapsed = (System.currentTimeMillis() - programStart - pauseCount) / 1000;
 				SwingUtilities.invokeLater(() -> {
 					exercisePannel.loadWorkoutTime(format(elapsed));
 				});
+				}else {
+					
+				}
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -80,17 +73,13 @@ public class WorkoutThread extends Thread {
 		return String.format("%02d:%02d:%02d", hour, minute, second);
 	}
 
-	public void resumeTimer() {
-		stopped = false;
-		programStart = System.currentTimeMillis() - pauseCount;
-	}
+
 
 	public void stopTimer() {
 		pauseStart = programStart;
 		pauseCount = 0;
 		stopped = true;
 		exercisePannel.resetWorkoutTime();
-		exeThread.interrupt();
 
 	}
 
@@ -120,14 +109,13 @@ public class WorkoutThread extends Thread {
 	}
 
 	public void pauseTime() {
-		if (!stopped) {
-			pauseStart = System.currentTimeMillis();
-			stopped = true;
-		} else {
-			pauseCount += (System.currentTimeMillis() - pauseStart);
-			stopped = false;
-		}
-		exeThread.pauseTime();
+	    if (isPaused) {
+	        pauseCount += (System.currentTimeMillis() - pauseStart);
+	        isPaused = false;
+	    } else {
+	        pauseStart = System.currentTimeMillis();
+	        System.out.println(pauseStart);
+	        isPaused = true;
+	    }
 	}
-
 }

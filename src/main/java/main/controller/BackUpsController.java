@@ -37,7 +37,7 @@ public class BackUpsController {
 	private ArrayList<Historic> historicList = new ArrayList<>();
 
 	public void userBackups(Workout workout, User user, Historic historic)
-			throws ParserConfigurationException, SAXException, IOException, TransformerException {
+			 {
 		try {
 			File file = new File("C:\\Trastero\\" + user.getName() + ".xml");
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -107,15 +107,10 @@ public class BackUpsController {
 				StreamResult result = new StreamResult(file);
 				transformer.transform(source, result);
 			}
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e1) {
-			e1.printStackTrace();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		} catch (TransformerException e3) {
-			e3.printStackTrace();
 		}
+			catch (ParserConfigurationException | SAXException | IOException | TransformerException e1) {
+				JOptionPane.showMessageDialog(null, "No se ha podido agregar");
+			}
 	}
 
 	public List<Historic> getBackUpsList(User user) {

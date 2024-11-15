@@ -118,6 +118,7 @@ public class ExercisePannel extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				workoutCro.pauseTime();
+				exerciseCro.pauseTime();
 
 			}
 		});
@@ -125,17 +126,18 @@ public class ExercisePannel extends JPanel {
 		endBtn = new JButton("Parar");
 		endBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				try {
+					if(workoutCro.isAlive() ||exerciseCro.isAlive()) {
 					workoutCro.stopTimer();
+					exerciseCro.interrupt();
+					}else {
+						JOptionPane.showMessageDialog(null, "el workout no esta en curso");
+					}
 					workout = StatusSingleton.getInstance().getWorkout();
 					user = StatusSingleton.getInstance().getUser();
 					historic = workoutCro.getLastWorkoutInfo();
 					backUpsController.userBackups(workout, user, historic);
 					userController.insertWorkoutHistory(historic, user);
-				} catch (ParserConfigurationException | SAXException | IOException | TransformerException e1) {
-					e1.printStackTrace();
-				}
+				
 			}
 		});
 		endBtn.setBounds(38, 615, 160, 34);
@@ -251,6 +253,7 @@ public class ExercisePannel extends JPanel {
 				exerciseTable.setRowCount(0);
 				if (!StatusSingleton.getInstance().offline) {
 					try {
+						runWorkoutCrono();
 						String id = StatusSingleton.getInstance().getWorkout().getWorkoutUID();
 						exercises = exerciseController.getExercisesForWorkout(id);
 						lblWorkoutName
@@ -264,7 +267,7 @@ public class ExercisePannel extends JPanel {
 					exercises = StatusSingleton.getInstance().getBackupedWorkouts()
 							.get(StatusSingleton.getInstance().getSelectedRow()).getExercises();
 					fillExercisePanel(exerciseTable, exercises);
-
+					
 				}
 
 			}
@@ -299,12 +302,10 @@ public class ExercisePannel extends JPanel {
 	}
 
 	private void runExerciseCrono() {
-		if (exerciseCro == null || !exerciseCro.isAlive()) {
+		
 			exerciseCro = new ExerciseThread("ExerciseTimer", exercises, this, workoutCro);
 			exerciseCro.start();
-		} else {
-			exerciseCro.resumeTimer();
-		}
+		
 	}
 
 	public void resetExerciseTime() {
@@ -323,12 +324,10 @@ public class ExercisePannel extends JPanel {
 	}
 
 	private void runWorkoutCrono() {
-		if (workoutCro == null || !workoutCro.isAlive()) {
+		
 			workoutCro = new WorkoutThread("WorkoutTimer", exercises, this, exerciseCro);
 			workoutCro.start();
-		} else {
-			workoutCro.resumeTimer();
-		}
+		
 	}
 
 	public void resetWorkoutTime() {
